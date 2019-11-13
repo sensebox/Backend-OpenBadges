@@ -8,10 +8,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-
-
+const passport = require('passport');
 
 var app = express();
+
+//reads in configuration from a .env file
+require('dotenv').config();
 
 
 function connectMongoDB() {
@@ -36,6 +38,11 @@ function connectMongoDB() {
 connectMongoDB();
 
 
+// imports our configuration file which holds our verification callbacks and things like the secret for signing.
+require('./config/passport')(passport);
+// initializes the passport configuration.
+app.use(passport.initialize());
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -44,18 +51,19 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.static(path.join(__dirname, 'public')));
+// make packages available for client using statics
+app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var pictureRouter = require('./routes/picture');
-
+var secretRouter = require('./routes/secret');
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/picture', pictureRouter);
+app.use('/user', usersRouter);
+app.use('/secret', passport.authenticate('jwt', {failureRedirect: '/user/login', session: false}), secretRouter);
 
 
 // catch 404 and forward to error handler

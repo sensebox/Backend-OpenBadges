@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+
+  form#login(method='POST' action='/user/login')
+    label.labelRegister(for='username') Benutzername:
+    br
+    input(name='username' type='text' required='' style='width: 100%')
+    br
+    label.labelRegister(for='password') Passwort:
+    br
+    input(name='password' type='password' required='' style='width: 100%')
+
+  button(onclick='submit()') Anmelden
