@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  form(action='picture/upload' method='POST' enctype='multipart/form-data')
+    p
+      label.labelRegister(for='picture_recept') Foto:
+      br
+      input(type='file' name='picture_recept' accept='image/')
+    p
+      label.labelRegister(for='description') Beschreibung (optional):
+      br
+      input(type='text' name='description' style='width: 100%')
+    button.btn-delucse(type='submit') Foto hochladen
