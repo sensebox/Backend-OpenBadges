@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+/**
+*   routes/index.js
+*   @see https://medium.com/@sesitamakloe/how-we-structure-our-express-js-routes-58933d02e491
+*/
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+module.exports = function(app){
+  app.use('/api', require('./api'));
+  app.use('/', require('./main'));
+};

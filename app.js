@@ -57,13 +57,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var secretRouter = require('./routes/secret');
+// var indexRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
+// var secretRouter = require('./routes/secret');
+//
+// app.use('/', indexRouter);
+// app.use('/user', usersRouter);
+// app.use('/secret', passport.authenticate('jwt', {failureRedirect: '/user/login', session: false}), secretRouter);
 
-app.use('/', indexRouter);
-app.use('/user', usersRouter);
-app.use('/secret', passport.authenticate('jwt', {failureRedirect: '/user/login', session: false}), secretRouter);
+// setup routes
+// @see https://medium.com/@sesitamakloe/how-we-structure-our-express-js-routes-58933d02e491
+require('./routes')(app);
+
 
 
 // catch 404 and forward to error handler

@@ -2,24 +2,17 @@
 // jshint node: true
 "use strict";
 
-const express = require("express");
-const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
-const User = require('../models/user');
-const {registerValidation, loginValidation} = require('../config/validation');
+const User = require('../../../../models/user');
+const {registerValidation, loginValidation} = require('../../../../config/validation');
 
 
-router.get('/register', (req, res) => {
-  res.render('register', {
-    title: 'Registrieren'
-  });
-});
 
-
-router.post('/register', async (req, res) => {
+const postRegister = async function(req, res){
+// router.post('/register', async (req, res) => {
   // validate incoming data
   const {error} = registerValidation(req.body);
   if(error) return res.status(400).send({error: error.details[0].message});
@@ -49,16 +42,11 @@ router.post('/register', async (req, res) => {
   catch(err) {
     return res.status(400).send(err);
   }
-});
+};
 
 
-router.get('/login', async (req, res) => {
-  res.render('login', {
-    title: 'Login'
-  });
-});
-
-router.post('/login', async (req, res) => {
+const postLogin = async function(req, res){
+// router.post('/login', async (req, res) => {
   // validate incoming login-data
   const {error} = loginValidation(req.body);
   if(error) return res.status(400).send({error: error.details[0].message});
@@ -80,15 +68,16 @@ router.post('/login', async (req, res) => {
   catch(err) {
     return res.status(400).send(err);
   }
-});
+};
 
 
 const passport = require('passport');
-const invalidateJWT = require('../helper/jwt');
-const TokenBlacklist = require('../models/tokenBlacklist');
+const invalidateJWT = require('../../../../helper/jwt');
+const TokenBlacklist = require('../../../../models/tokenBlacklist');
 
 // access only if user is authenticated
-router.get('/logout', passport.authenticate('jwt', {failureRedirect: '/user/login', session: false}), async (req, res) => {
+const getLogout = async function(req, res){
+// router.get('/logout', passport.authenticate('jwt', {failureRedirect: '/user/login', session: false}), async (req, res) => {
   const rawAuthorizationHeader = req.header('authorization');
   const [, token] = rawAuthorizationHeader.split(' ');
   try {
@@ -103,6 +92,10 @@ router.get('/logout', passport.authenticate('jwt', {failureRedirect: '/user/logi
   catch(err){
     res.status(400).send('Error while logging out');
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  postRegister,
+  postLogin,
+  getLogout
+};
