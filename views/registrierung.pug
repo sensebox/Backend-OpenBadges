@@ -6,84 +6,75 @@ meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fi
 link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
 title Hello, world!
 // Navbar
-nav.navbar.navbar-expand-lg.navbar-dark.bg-dark(class='navbar-toggleable-*')
-    a.navbar-brand(href='#') Open Badges
-    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
-        span.navbar-toggler-icon
-    #navbarSupportedContent.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-            li.nav-item
-                a.nav-link(href='google.de') Starseite
-            li.nav-item
-                a.nav-link(href='amazon.de') Kursliste
-            li.nav-item
-                a.nav-link(href='amazon.de') Belegte Kurse
-            li.nav-item
-                a.nav-link(href='amazon.de') Admin Kontakt
-            li.nav-item
-                a.nav-link(href='amazon.de', style='color: red;') Logout
+// Keine Navbar im Register
 // Navbar ende
-form
-    .form-row
-        .form-group.col-auto
-            label(for='email') E-Mail
-            input#email.form-control(type='email', placeholder='example@mail.com', <='', div='')
-            .form-group.col-auto
-            label(for='passwort') Passwort
-                input#passwort.form-control(type='password', placeholder='Passwort')
-        .form-row
-            .form-group.col-auto
-                label(for='geburtstag') Geburtstag
-                select#geburtstag.form-control
-                    option(selected='')  1
-                    option 2
-                    option 3
-                    option 4
-                    option 5
-                    option 6
-                    option 7
-                    option 8
-                    option 9
-                    option 10
-                    option 11
-                    option 12
-                    option 13
-                    option 14
-                    option 15
-                    option 16
-                    option 17
-                    option 18
-                    option 19
-                    option 20
-                    option 21
-                    option 22
-                    option 23
-                    option 24
-                    option 25
-                    option 26
-                    option 27
-                    option 28
-                    option 29
-                    option 30
-                    option 31
-            .form-group.col-auto
-                label(for='geburtsmonat') Geburtsmonat
-                select#geburtsmonat.form-control
-                    option(selected='')  1
-                    option 2
-                    option 3
-                    option 4
-                    option 5
-                    option 6
-                    option 7
-                    option 8
-                    option 9
-                    option 10
-                    option 11
-                    option 12
-            .form-group
-                label(for='Geburtsjahr') Geburtsjahr
-                input#Geburtsjahr.form-control(type='number', min='0', max='10')
-        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
-        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
+.container-fluid
+    .row
+        .col-lg
+        .col-lg-6
+            h1 Open Badges Registrierung
+            br
+            form(action='#')
+                .form-row
+                    .form-group.col-auto
+                        label(for='inputEmail4') Email
+                        input#inputEmail4.form-control(type='email', placeholder='Email@example.com')
+                    .form-group.col-auto
+                        label(for='inputPassword') Passwort
+                        input#inputPassword.form-control(type='password', placeholder='Password')
+                    .form-group.col-auto
+                        label(for='inputPassword2') Passwort Bestätigen
+                        input#inputPassword2.form-control(type='password', placeholder='Password')
+                    .col-auto
+                        br
+                        p#pwtext(style='color:red; ')
+                .form-row
+                    .form-group.col-auto
+                        label(for='inputVoname') Vorname
+                        input#inputVoname.form-control(type='text', placeholder='Max')
+                    .form-group.col-auto
+                        label(for='inputNachnahme') Nachnahme
+                        input#inputNachnahme.form-control(type='text', placeholder='Mustermann')
+                .form-row
+                    .form-group.col-auto
+                        label(for='inputCity') Stadt
+                        input#inputCity.form-control(type='text', placeholder='Musterstadt')
+                    .form-group.col-auto
+                        label(for='inputZip') Postleitzahl
+                        input#inputZip.form-control(type='number', min='10000', max='99999', placeholder='00000')
+                .form-group.col-md-4
+                    label(for='inputDate') Geburtsdatum
+                    input#inputDate.form-control(type='date')
+                button.btn.btn-primary(type='submit', onclick='check();') Sign in
+        .col-lg
+script.
+    function check() {
+        pw1 = document.getElementById('inputPassword').value;
+        pw2 = document.getElementById('inputPassword2').value;
+        pwident = null;
+        pwshort = null;
+        if(pw1 != pw2){
+            pwident = true;
+        }else{
+            pwident = false;
+        }
+        if(pw1.length < 5){
+            pwshort = true;
+        }else{
+            pwshort = false;
+        }
+        if(!pwident && !pwshort){
+            return;
+        }else{
+            if (pwshort){
+                document.getElementById('pwtext').innerText = 'Passwort zu Kurz';
+                return;
+            }
+            if(pwident){
+                document.getElementById('pwtext').innerText = 'Passwörter stimmen nicht überein';
+            }
+        }
+    }
+script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
+script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
