@@ -1,0 +1,74 @@
+doctype html
+head
+    // Required meta tags
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    // Leaflet including
+    link(rel='stylesheet' href='https://unpkg.com/leaflet@1.3.4/dist/leaflet.css' integrity='sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==' crossorigin='')
+    // Bootstrap CSS
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
+    title Hello, world!
+    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous')
+
+//Navbar
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark(class='navbar-toggleable-*')
+    a.navbar-brand(href='#')
+        | Open Badges
+    button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+    #navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+            li.nav-item
+                a.nav-link(href='google.de')
+                    | Starseite
+            li.nav-item
+                a.nav-link(href='amazon.de')
+                    | Kursliste
+            li.nav-item
+                a.nav-link(href='amazon.de')
+                    | Belegte Kurse
+            li.nav-item
+                a.nav-link(href='amazon.de')
+                    | Admin Kontakt
+            li.nav-item
+                a.nav-link(href='amazon.de' style='color: red')
+                    | Logout
+//Navbar ende
+
+// Navbar filter
+nav.navbar.navbar-light.light-blue.lighten-4
+  // Navbar brand
+  a.navbar-brand(href='#') Filter
+  // Collapse button
+  button.navbar-toggler.toggler-example(type='button' data-toggle='collapse' data-target='#navbarSupportedContent1' aria-controls='navbarSupportedContent1' aria-expanded='false' aria-label='Toggle navigation')
+    span.dark-blue-text
+      i.fas.fa-bars.fa-1x
+  // Collapsible content
+  #navbarSupportedContent1.collapse.navbar-collapse
+    // Links
+    ul.navbar-nav.mr-auto
+      li.nav-item.active
+        a.nav-link(href='#')
+          | Home
+          span.sr-only (current)
+      li.nav-item
+        a.nav-link(href='#') Features
+      li.nav-item
+        a.nav-link(href='#') Pricing
+    // Links
+  // Collapsible content
+// /.Navbar
+
+| var map = L.map(&apos;map&apos;).setView([51.505, -0.09], 13);
+| L.tileLayer(&apos;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&apos;, {
+| attribution: &apos;&copy;
+a(href='https://www.openstreetmap.org/copyright') OpenStreetMap
+|  contributors&apos;
+| }).addTo(map);
+| L.marker([51.5, -0.09]).addTo(map)
+|     .bindPopup(&apos;A pretty CSS3 popup.
+br
+|  Easily customizable.&apos;)
+|     .openPopup();
