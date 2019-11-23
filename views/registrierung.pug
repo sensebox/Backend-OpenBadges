@@ -21,32 +21,32 @@ html
                         .form-row
                             .form-group.col-auto
                                 label(for='inputEmail4') Email
-                                input#inputEmail4.form-control(type='email', placeholder='Email@example.com')
+                                input#inputEmail4.form-control(type='email', placeholder='Email@example.com', data-toggle='tooltip', data-placement='top', title='Gültige Email Adresse')
                             .form-group.col-auto
                                 label(for='inputPassword') Passwort
-                                input#inputPassword.form-control(type='password', placeholder='Password')
+                                input#inputPassword.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Passwort mit mindestens 5 Zeichen')
                             .form-group.col-auto
                                 label(for='inputPassword2') Passwort Bestätigen
-                                input#inputPassword2.form-control(type='password', placeholder='Password')
+                                input#inputPassword2.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Identisches Passwort')
                                 span#pwtext.badge.badge-danger
                         .form-row
                             .form-group.col-auto
                                 label(for='inputVoname') Vorname
-                                input#inputVoname.form-control(type='text', placeholder='Max')
+                                input#inputVoname.form-control(type='text', placeholder='Max', data-toggle='tooltip', data-placement='top', title='Vorname')
                             .form-group.col-auto
                                 label(for='inputNachnahme') Nachnahme
-                                input#inputNachnahme.form-control(type='text', placeholder='Mustermann')
+                                input#inputNachnahme.form-control(type='text', placeholder='Mustermann', data-toggle='tooltip', data-placement='top', title='Nachnahme')
                         .form-row
                             .form-group.col-auto
                                 label(for='inputCity') Stadt
-                                input#inputCity.form-control(type='text', placeholder='Musterstadt')
+                                input#inputCity.form-control(type='text', placeholder='Musterstadt', data-toggle='tooltip', data-placement='top', title='Wohnort')
                             .form-group.col-auto
                                 label(for='inputZip') Postleitzahl
-                                input#inputZip.form-control(type='number', min='10000', max='99999', placeholder='00000')
+                                input#inputZip.form-control(type='number', min='10000', max='99999', placeholder='00000', data-toggle='tooltip', data-placement='top', title='Postleitzahl des Wohnortes')
                         .form-row
                             .form-group.col-auto
                                 label(for='inputDate') Geburtsdatum
-                                input#inputDate.form-control(type='date')
+                                input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
                         button.btn.btn-primary(type='submit', onclick='check();') Sign in
                 .col-lg
             br

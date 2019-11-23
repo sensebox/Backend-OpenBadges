@@ -20,3 +20,6 @@ router.get('/registrierung', function(req, res, next) {
 router.get('/Kursliste', function(req, res, next) {
   res.render('kursliste');
 });
+router.get('/login', function(req, res, next) {
+  res.render('login');
+});
