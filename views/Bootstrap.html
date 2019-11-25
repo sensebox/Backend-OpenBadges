@@ -1,104 +1,167 @@
 <!DOCTYPE html>
+<html lang="en">
 
 <head>
     <!-- Required meta tags-->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Hello, world!</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <title>Open Badges!</title>
+
 </head>
-<!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-toggleable-*"><a class="navbar-brand" href="#">Open Badges</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+<body onload="fadeIn()">
+
+
+<!-- WWU Logo Austauschen !-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-toggleable-* " ><a class="navbar-brand" href="#"><img src="data:image/png;base64,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" class="d-inline-block align-top" width="30px" height="30px"> Open
+    Badges</a>
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button"><span
+            class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="google.de">Starseite</a></li>
-            <li class="nav-item"><a class="nav-link" href="amazon.de">Kursliste</a></li>
-            <li class="nav-item"><a class="nav-link" href="amazon.de">Belegte Kurse</a></li>
-            <li class="nav-item"><a class="nav-link" href="amazon.de">Admin Kontakt</a></li>
-            <li class="nav-item"><a class="nav-link" href="amazon.de" style="color: red;">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Starseite</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Kursliste</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Belegte Kurse</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Admin Kontakt</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" style="color: red;">Logout</a></li>
         </ul>
     </div>
 </nav>
-<!--Navbar ende-->
 
-
-<form>
-    <div class="form-row">
+<div class="container bg-light mt-5 border fadein" id="#div1">
+    <form action="#">
         <div class="form-group col-auto">
-            <label for="email">E-Mail</label>
-            <input type="email" class="form-control" id="email" placeholder="example@mail.com"
-        </div>
-        <div class="form-group col-auto">
-            <label for="passwort">Passwort</label>
-            <input type="password" class="form-control" id="passwort" placeholder="Passwort">
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="geburtstag">Geburtstag</label>
-            <select id="geburtstag" class="form-control">
-                <option > 1 </option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-                <option>13</option>
-                <option>14</option>
-                <option>15</option>
-                <option>16</option>
-                <option>17</option>
-                <option>18</option>
-                <option>19</option>
-                <option>20</option>
-                <option>21</option>
-                <option>22</option>
-                <option>23</option>
-                <option>24</option>
-                <option>25</option>
-                <option>26</option>
-                <option>27</option>
-                <option>28</option>
-                <option>29</option>
-                <option>30</option>
-                <option>31</option>
+            <label for="Betreff">Anliegen</label>
+            <select class="form-control" id="Betreff" data-toggle='tooltip', data-placement='top', title='Wählen sie aus was ihr Anliegen am besten Beschreibt'>
+                <option>#1</option>
+                <option>#2</option>
             </select>
         </div>
-        <div class="form-group col-auto">
-            <label for="geburtsmonat">Geburtsmonat</label>
-            <select id="geburtsmonat" class="form-control">
-                <option selected> 1 </option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-            </select>
+        <div class="form-group col-auto" data-toggle='tooltip', data-placement='top', title='Beschreiben sie ihr Anliegen möglichst genau'>
+            <label for="Eingabe">Eingabefeld</label>
+            <textarea class="form-control " id="Eingabe"></textarea>
+            <span class="badge badge-danger" id="badge"></span>
         </div>
-        <div class="form-group ">
-            <label for="Geburtsjahr">Geburtsjahr</label>
-            <input type="number" class="form-control" id="Geburtsjahr" min="0" max="10">
-        </div>
-    </div>
-</form>
+        <button class="btn btn-primary col-auto" type="submit" onclick="compare()">Submit</button>
+    </form>
+    <div class="col-sm"></div>
+</div>
+
+
+<script crossorigin="anonymous"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="public/js/fadeIn.js"></script>
+<style>
+    .fadein {
+        opacity: 0;
+    }
+    .fadein.is-active {
+        opacity: 1;
+        transition: all ease 0.65s;
+    }
+</style>
+<script>
+
+    (function() {
+        var FX = {
+            easing: {
+                linear: function(progress) {
+                    return progress;
+                },
+                quadratic: function(progress) {
+                    return Math.pow(progress, 2);
+                },
+                swing: function(progress) {
+                    return 0.5 - Math.cos(progress * Math.PI) / 2;
+                },
+                circ: function(progress) {
+                    return 1 - Math.sin(Math.acos(progress));
+                },
+                back: function(progress, x) {
+                    return Math.pow(progress, 2) * ((x + 1) * progress - x);
+                },
+                bounce: function(progress) {
+                    for (var a = 0, b = 1, result; 1; a += b, b /= 2) {
+                        if (progress >= (7 - 4 * a) / 11) {
+                            return -Math.pow((11 - 6 * a - 11 * progress) / 4, 2) + Math.pow(b, 2);
+                        }
+                    }
+                },
+                elastic: function(progress, x) {
+                    return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * x / 3 * progress);
+                }
+            },
+            animate: function(options) {
+                var start = new Date;
+                var id = setInterval(function() {
+                    var timePassed = new Date - start;
+                    var progress = timePassed / options.duration;
+                    if (progress > 1) {
+                        progress = 1;
+                    }
+                    options.progress = progress;
+                    var delta = options.delta(progress);
+                    options.step(delta);
+                    if (progress == 1) {
+                        clearInterval(id);
+                        options.complete();
+                    }
+                }, options.delay || 10);
+            },
+            fadeOut: function(element, options) {
+                var to = 1;
+                this.animate({
+                    duration: options.duration,
+                    delta: function(progress) {
+                        progress = this.progress;
+                        return FX.easing.swing(progress);
+                    },
+                    complete: options.complete,
+                    step: function(delta) {
+                        element.style.opacity = to - delta;
+                    }
+                });
+            },
+            fadeIn: function(element, options) {
+                var to = 0;
+                this.animate({
+                    duration: options.duration,
+                    delta: function(progress) {
+                        progress = this.progress;
+                        return FX.easing.swing(progress);
+                    },
+                    complete: options.complete,
+                    step: function(delta) {
+                        element.style.opacity = to + delta;
+                    }
+                });
+            }
+        };
+        window.FX = FX;
+    })();
+
+    function fadeIn(){
+        FX.fadeIn(document.getElementById('#div1'), {
+            duration: 2000,
+        });
+    }
+
+</script>
 
 
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
