@@ -6,6 +6,8 @@ var express = require('express');
 var router = express.Router();
 const request = require('request');
 
+const {accessSecret, refreshToken, cookieExtractor} = require('../../helper/accessSecret');
+
 
 const getRegister = function(req, res){
 // router.get('/register', (req, res) => {
@@ -61,12 +63,13 @@ const postLogin = function(req, res){
           return res.status(400).send(JSON.parse(body));
         }
         // token is generated
-        // set cookie (name: "access") with token as content
+        // set cookies (name: "access" and "refresh") with token as content
         const cookieOptions = {
           httpOnly: true, // the cookie only accessible by the web server
         };
         res.cookie('access', (JSON.parse(body)).token, cookieOptions);
-        res.redirect('/secret');
+        res.cookie('refresh', (JSON.parse(body)).refreshToken, cookieOptions);
+        return res.redirect('/secret'); //homePage
       });
     })
     .on('error', function(err) {
@@ -74,20 +77,16 @@ const postLogin = function(req, res){
   });
 };
 
-var cookieExtractor = function(req) {
-  var token = null;
-  if (req && req.cookies){
-    // jwt-token stored in cookie "access"
-    token = req.cookies.access;
-  }
-  return token;
+
+const getSecret = function(req, res){
+  accessSecret(req, res);
 };
 
 
-const getSecret = function(req, res){
 
-  var token = cookieExtractor(req);
-  console.log(token);
+
+const getSignout = function(req, res){
+  var token = cookieExtractor(req, 'access');
   var options = {
     url: 'http://localhost:3000/api/v1/user/secret',
     headers: {
@@ -104,16 +103,16 @@ const getSecret = function(req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          return res.status(400).send('Fehlermeldung: '+ body);
+          return res.status(400).send(body);
         }
-        res.render('index', {
-          title: 'my secret'
-        });
+        res.clearCookie('access');
+        res.clearCookie('refresh');
+        res.redirect('/user/login');
       });
     })
     .on('error', function(err) {
-      return res.status(400).send("Error");
-    });
+      return res.status(400).send('Fehler');
+  });
 };
 
 
@@ -123,5 +122,6 @@ module.exports = {
   postLogin,
   getRegister,
   postRegister,
-  getSecret
+  getSignout,
+  getSecret,
 };

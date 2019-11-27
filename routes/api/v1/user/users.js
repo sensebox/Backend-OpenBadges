@@ -3,12 +3,13 @@
 "use strict";
 
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const User = require('../../../../models/user');
 const {registerValidation, loginValidation} = require('../../../../config/validation');
-
+const {createToken, isTokenValid, invalidateToken} = require('../../../../helper/jwt');
+const {hashJWT} = require('../../../../helper/refreshToken');
 
 
 const postRegister = async function(req, res){
@@ -33,7 +34,6 @@ const postRegister = async function(req, res){
     email: req.body.email,
     username: req.body.username,
     password: hashedPassword,
-    date: Date.now(),
   });
   try{
     const savedUser = await user.save();
@@ -57,13 +57,10 @@ const postLogin = async function(req, res){
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if(!validPassword) return res.status(400).send({error:'Email or password is wrong'});
 
-  // create and assign a token if everything is fine
-  const payload = {id: user._id};
-  const options = {expiresIn: process.env.JWT_expiresIn};
-
   try{
-    const token = jwt.sign(payload, process.env.JWT_Token, options);
-    return res.status(200).send({token: token});
+    // create JWT-Token and refresh-Token
+    const {token: token, refreshToken: refreshToken } = await createToken(user);
+    return res.status(200).send({token: token, refreshToken: refreshToken});
   }
   catch(err) {
     return res.status(400).send(err);
@@ -71,23 +68,38 @@ const postLogin = async function(req, res){
 };
 
 
-const passport = require('passport');
-const invalidateJWT = require('../../../../helper/jwt');
-const TokenBlacklist = require('../../../../models/tokenBlacklist');
+const postRefreshToken = async function(req, res){
+  var refreshToken = req.body.refreshToken;
+  const user = await User.findOne({refreshToken: refreshToken, refreshTokenExpiresIn: { $gte: moment.utc().toDate() } });
+
+  if (!user) {
+    return res.status(401).send('Refresh token invalid or too old. Please sign in with your username and password.');
+  }
+  try{
+    // invalidate old token
+    invalidateToken(refreshToken);
+    // create JWT-Token and refresh-Token
+    const {token: token, refreshToken: newRefreshToken } = await createToken(user);
+    return res.status(200).send({token: token, refreshToken: newRefreshToken, user});
+  }
+  catch(err){
+    return res.status(400).send('Error refreshing token');
+  }
+};
+
+
 
 // access only if user is authenticated
 const getLogout = async function(req, res){
-// router.get('/logout', passport.authenticate('jwt', {failureRedirect: '/user/login', session: false}), async (req, res) => {
   const rawAuthorizationHeader = req.header('authorization');
   const [, token] = rawAuthorizationHeader.split(' ');
   try {
-    // invalidateJWT(token);
-    console.log('logoutToken', token);
-    var newBlacklistedToken = new TokenBlacklist({
-        token: token
-    });
-    var invalidToken = await newBlacklistedToken.save();
-    res.status(200).send({invalidToken: invalidToken, message: 'Logged out successfully'});
+    var hashToken = hashJWT(token);
+    // invalidate JWT
+    await invalidateToken(hashToken);
+    // invalidate JWT
+    await invalidateToken(hashToken);
+    res.status(200).send('Logged out successfully');
   }
   catch(err){
     res.status(400).send('Error while logging out');
@@ -97,5 +109,6 @@ const getLogout = async function(req, res){
 module.exports = {
   postRegister,
   postLogin,
+  postRefreshToken,
   getLogout
 };

@@ -17,6 +17,9 @@ UserRouter.route('/register')
 UserRouter.route('/login')
     .post(require('./users').postLogin);
 
+UserRouter.route('/refreshToken')
+    .post(require('./users').postRefreshToken);
+
 UserRouter.route('/logout')
     .get(passport.authenticate('jwt', {session: false}), require('./users').getLogout);
 

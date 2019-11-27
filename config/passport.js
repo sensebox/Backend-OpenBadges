@@ -15,7 +15,7 @@ const isTokenInvalid = require('../helper/jwt');
 // and also defines the key to be used when verifying the token
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), //cookieExtractor,
-    secretOrKey: process.env.JWT_Token,
+    secretOrKey: process.env.JWT_Token_Secret,
     passReqToCallback: true
 };
 
@@ -51,13 +51,3 @@ module.exports = function(passport){
     })
   );
 };
-
-
-// var cookieExtractor = function(req) {
-//   var token = null;
-//   if (req && req.cookies){
-//     // jwt-token stored in cookie "access"
-//     token = process.env.JWT_Header_Token +  req.cookies.access;
-//   }
-//   return token;
-// };

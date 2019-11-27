@@ -3,6 +3,8 @@
 "use strict";
 
 const mongoose = require('mongoose');
+const moment = require('moment');
+
 
 //simple schema
 const UserSchema = new mongoose.Schema({
@@ -29,9 +31,22 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minlength: 6
   },
+  role: {
+    type: [String],
+    required: true,
+    enum: ['earner', 'issuer', 'admin'],
+    default: ['earner']
+  },
+  refreshToken: {
+    type: String,
+  },
+  refreshTokenExpiresIn: {
+    type: Date
+  },
   date: {
     type: Date,
-    required: true
+    required: true,
+    default: moment.utc().toDate()
   }
 });
 

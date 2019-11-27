@@ -23,6 +23,9 @@ MainRouter.route('/user/register')
     .get(require('./users').getRegister)
     .post(require('./users').postRegister);
 
+MainRouter.route('/user/logout')
+    .get(require('./users').getSignout);
+
 MainRouter.route('/secret')
     .get(require('./users').getSecret);
 
