@@ -2,23 +2,22 @@
 // jshint node: true
 "use strict";
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const request = require('request');
 
-const {accessSecret, refreshToken, cookieExtractor} = require('../../helper/accessSecret');
+const {refreshToken, cookieExtractor} = require('../helper/refreshToken_Client');
 
 
-const getRegister = function(req, res){
-// router.get('/register', (req, res) => {
+router.get('/register', function (req, res){
   res.render('register', {
     title: 'Registrieren'
   });
-};
+});
 
 
-const postRegister = function(req, res){
-  var url = 'http://localhost:3000/api/v1/user/register';
+router.post('/register', function (req, res){
+  var url = process.env.API_Domain+'/api/v1/user/register';
   request.post(url, {form: req.body})
     .on('response', function(response) {
       // concatenate updates from datastream
@@ -37,19 +36,18 @@ const postRegister = function(req, res){
     .on('error', function(err) {
       return res.status(400).send('Fehler');
   });
-};
+});
 
 
-const getLogin = function(req, res){
-// router.get('/login', async (req, res) => {
+router.get('/login', async function (req, res){
   res.render('login', {
     title: 'Login'
   });
-};
+});
 
 
-const postLogin = function(req, res){
-  var url = 'http://localhost:3000/api/v1/user/login';
+router.post('/login', function (req, res){
+  var url = process.env.API_Domain+'/api/v1/user/login';
   request.post(url, {form: req.body})
     .on('response', function(response) {
       // concatenate updates from datastream
@@ -68,27 +66,21 @@ const postLogin = function(req, res){
           httpOnly: true, // the cookie only accessible by the web server
         };
         res.cookie('access', (JSON.parse(body)).token, cookieOptions);
+        cookieOptions.maxAge = process.env.COOKIE_MaxAge;
         res.cookie('refresh', (JSON.parse(body)).refreshToken, cookieOptions);
-        return res.redirect('/secret'); //homePage
+        return res.redirect('/');
       });
     })
     .on('error', function(err) {
       return res.status(400).send('Fehler');
   });
-};
+});
 
 
-const getSecret = function(req, res){
-  accessSecret(req, res);
-};
-
-
-
-
-const getSignout = function(req, res){
+router.get('/logout', function(req, res){
   var token = cookieExtractor(req, 'access');
   var options = {
-    url: 'http://localhost:3000/api/v1/user/secret',
+    url: process.env.API_Domain+'/api/v1/user/logout',
     headers: {
       'Authorization': 'Bearer '+token
     }
@@ -103,7 +95,7 @@ const getSignout = function(req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          return res.status(400).send(body);
+          return refreshToken(req, res, '/user/logout');
         }
         res.clearCookie('access');
         res.clearCookie('refresh');
@@ -113,15 +105,8 @@ const getSignout = function(req, res){
     .on('error', function(err) {
       return res.status(400).send('Fehler');
   });
-};
+});
 
 
 
-module.exports = {
-  getLogin,
-  postLogin,
-  getRegister,
-  postRegister,
-  getSignout,
-  getSecret,
-};
+module.exports = router;

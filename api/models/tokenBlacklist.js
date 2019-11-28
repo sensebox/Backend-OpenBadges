@@ -14,8 +14,8 @@ const TokenBlacklistSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: moment.utc().add(Number(process.env.Token_Blacklist_expiresIn), 'ms').toDate(),
-    expires: moment.utc().add(Number(process.env.Token_Blacklist_expiresIn), 'ms').toDate()
+    default: moment.utc().add(Number(process.env.Token_Blacklist_ExpiresIn), 'ms').toDate(),
+    expires: Number(process.env.Token_Blacklist_ExpiresIn)/1000
   }
 });
 

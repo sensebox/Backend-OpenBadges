@@ -75,15 +75,17 @@ const postRefreshToken = async function(req, res){
   if (!user) {
     return res.status(401).send('Refresh token invalid or too old. Please sign in with your username and password.');
   }
-  try{
-    // invalidate old token
-    invalidateToken(refreshToken);
-    // create JWT-Token and refresh-Token
-    const {token: token, refreshToken: newRefreshToken } = await createToken(user);
-    return res.status(200).send({token: token, refreshToken: newRefreshToken, user});
-  }
-  catch(err){
-    return res.status(400).send('Error refreshing token');
+  else {
+    try{
+      // invalidate old token
+      invalidateToken(refreshToken);
+      // create JWT-Token and refresh-Token
+      const {token: token, refreshToken: newRefreshToken } = await createToken(user);
+      return res.status(200).send({token: token, refreshToken: newRefreshToken, user});
+    }
+    catch(err){
+      return res.status(400).send('Error refreshing token');
+    }
   }
 };
 
@@ -91,14 +93,15 @@ const postRefreshToken = async function(req, res){
 
 // access only if user is authenticated
 const getLogout = async function(req, res){
+  const refreshToken = req.query.refreshToken;
   const rawAuthorizationHeader = req.header('authorization');
   const [, token] = rawAuthorizationHeader.split(' ');
   try {
-    var hashToken = hashJWT(token);
+    // var hashToken = hashJWT(token);
     // invalidate JWT
-    await invalidateToken(hashToken);
+    await invalidateToken(token);
     // invalidate JWT
-    await invalidateToken(hashToken);
+    await User.updateOne({_id: req.user.id}, {refreshToken: '', refreshTokenExpiresIn: moment.utc().subtract(1, 'h').toDate()});
     res.status(200).send('Logged out successfully');
   }
   catch(err){

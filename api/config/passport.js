@@ -24,7 +24,6 @@ module.exports = function(passport){
     new JwtStrategy(opts, async (req, payload, done) => {
       const rawAuthorizationHeader = req.header('authorization');
       const [, token] = rawAuthorizationHeader.split(' ');
-      console.log(token);
 
       var invalid = await TokenBlacklist.findOne({token: token});
       if(!invalid){

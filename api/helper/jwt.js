@@ -30,7 +30,7 @@ const isTokenValid = async function(token){
 // @see: https://github.com/sensebox/openSenseMap-API/blob/461777e52f8568a6f234945fbae083688a7edb59/packages/api/lib/helpers/jwtHelpers.js#L26
 const createToken = function (user) {
   const payload = {id: user._id};
-  const options = {expiresIn: Math.round(Number(process.env.JWT_expiresIn) / 1000)};
+  const options = {expiresIn: Math.round(Number(process.env.JWT_ExpiresIn) / 1000)};
 
   return new Promise(function (resolve, reject) {
     jwt.sign(payload, process.env.JWT_Token_Secret, options, async (err, token) => {
@@ -44,11 +44,7 @@ const createToken = function (user) {
       // it is a HMAC of the jwt string
       const refreshToken = hashJWT(token);
       try {
-        console.log(Number(process.env.Refresh_Token_ExpiresIn));
-        console.log(moment.utc()
-          .add(Number(process.env.Refresh_Token_ExpiresIn), 'ms')
-          .toDate());
-        await user.update({
+        await user.updateOne({
           $set: {
             refreshToken: refreshToken,
             refreshTokenExpiresIn: moment.utc()
