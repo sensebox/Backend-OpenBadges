@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  birthday: {
+    type: Date,
+    required: true
+  },
   email: {
     type: String,
     required: true,
@@ -30,6 +34,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  postalcode: {
+    type: Number,
+    required: true
   },
   role: {
     type: [String],

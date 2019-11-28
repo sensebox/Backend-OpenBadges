@@ -4,7 +4,7 @@ html
     head
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
-        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
+        link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
         title Open Bades Registrierung!
     // Bootstrap CSS
     // Navbar
@@ -17,37 +17,40 @@ html
                 .col-lg-6
                     h1 Open Badges Registrierung
                     br
-                    form(action='#')
+                    form(action='/user/register', method='POST')
                         .form-row
                             .form-group.col-auto
                                 label(for='inputEmail4') Email
-                                input#inputEmail4.form-control(type='email', placeholder='Email@example.com', data-toggle='tooltip', data-placement='top', title='Gültige Email Adresse')
+                                input#inputEmail4.form-control(type='email', name='email', placeholder='Email@example.com', data-toggle='tooltip', data-placement='top', title='Gültige Email Adresse')
+                            .form-group.col-auto
+                                label(for='inputEmail4') Nutzername
+                                input#inputEmail4.form-control(type='text', name='username', placeholder='M_Mustermann', data-toggle='tooltip', data-placement='top', title='Nutzername mindestens 6 Zeichen')
                             .form-group.col-auto
                                 label(for='inputPassword') Passwort
-                                input#inputPassword.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Passwort mit mindestens 5 Zeichen')
+                                input#inputPassword.form-control(type='password', name='password' placeholder='Password', data-toggle='tooltip', data-placement='top', title='Passwort mit mindestens 5 Zeichen')
                             .form-group.col-auto
                                 label(for='inputPassword2') Passwort Bestätigen
-                                input#inputPassword2.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Identisches Passwort')
+                                input#inputPassword2.form-control(type='password', name='confirmPassword' placeholder='Password', data-toggle='tooltip', data-placement='top', title='Identisches Passwort')
                                 span#pwtext.badge.badge-danger
                         .form-row
                             .form-group.col-auto
                                 label(for='inputVoname') Vorname
-                                input#inputVoname.form-control(type='text', placeholder='Max', data-toggle='tooltip', data-placement='top', title='Vorname')
+                                input#inputVoname.form-control(type='text', name='firstname', placeholder='Max', data-toggle='tooltip', data-placement='top', title='Vorname')
                             .form-group.col-auto
-                                label(for='inputNachnahme') Nachnahme
-                                input#inputNachnahme.form-control(type='text', placeholder='Mustermann', data-toggle='tooltip', data-placement='top', title='Nachnahme')
+                                label(for='inputNachnahme') Nachname
+                                input#inputNachnahme.form-control(type='text', name='lastname', placeholder='Mustermann', data-toggle='tooltip', data-placement='top', title='Nachnahme')
                         .form-row
                             .form-group.col-auto
                                 label(for='inputCity') Stadt
-                                input#inputCity.form-control(type='text', placeholder='Musterstadt', data-toggle='tooltip', data-placement='top', title='Wohnort')
+                                input#inputCity.form-control(type='text', name='city' placeholder='Musterstadt', data-toggle='tooltip', data-placement='top', title='Wohnort')
                             .form-group.col-auto
                                 label(for='inputZip') Postleitzahl
-                                input#inputZip.form-control(type='number', min='10000', max='99999', placeholder='00000', data-toggle='tooltip', data-placement='top', title='Postleitzahl des Wohnortes')
+                                input#inputZip.form-control(type='number', name='postalcode' min='10000', max='99999', placeholder='00000', data-toggle='tooltip', data-placement='top', title='Postleitzahl des Wohnortes')
                         .form-row
                             .form-group.col-auto
                                 label(for='inputDate') Geburtsdatum
-                                input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
-                        button.btn.btn-primary(type='submit', onclick='check();') Sign in
+                                input#inputDate.form-control(type='date', name='birthday', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
+                        button.btn.btn-primary(type='submit', onclick='check()') Sign in
                 .col-lg
             br
         script.
@@ -72,15 +75,16 @@ html
                 if(pwident || pwshort){
                     if (pwshort) {
                         document.getElementById('pwtext').innerText = 'Passwort zu Kurz';
-                        return;
+                        return false;
                     }
                     if (pwident) {
                         document.getElementById('pwtext').innerText = 'Passwörter stimmen nicht überein';
+                        return false;
                     }
                 }else{
                     document.getElementById('pwtext').innerText="f";
                 }
             }
-        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
-        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
+        script(src='/jquery/jquery.min.js')
+        script(src='/popper/umd/popper.min.js')
+        script(src='/bootstrap/js/bootstrap.min.js')

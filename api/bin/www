@@ -23,7 +23,6 @@ const {connectMongoDB} = require('../helper/mongoConnection');
 var port = normalizePort('3001');
 api.set('port', port);
 
-console.log(port);
 
 /**
  * First connect to MongoDB and then start API-server, then request extreme Weather and finally start APP

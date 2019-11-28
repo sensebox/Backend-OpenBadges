@@ -10,7 +10,7 @@ const {refreshToken, cookieExtractor} = require('../helper/refreshToken_Client')
 
 
 router.get('/register', function (req, res){
-  res.render('register', {
+  res.render('registrierung', {
     title: 'Registrieren'
   });
 });

@@ -32,8 +32,13 @@ const postRegister = async function(req, res){
     lastname: req.body.lastname,
     firstname: req.body.firstname,
     email: req.body.email,
+    birthday: new Date(req.body.birthday),
+    city: req.body.city,
+    postalcode: req.body.postalcode,
     username: req.body.username,
-    password: hashedPassword,
+    password: hashedPassword
+
+
   });
   try{
     const savedUser = await user.save();

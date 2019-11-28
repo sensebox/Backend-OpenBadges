@@ -27,7 +27,7 @@ router.get('/', function(req, res){
     });
     response.on('end', function(){
       if(response.statusCode !== 200){
-        return refreshToken(req, res, '/secret');
+        return refreshToken(req, res, '/');
       }
       res.render('index', {
         title: 'my secret'

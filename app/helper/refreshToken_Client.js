@@ -18,7 +18,7 @@ const cookieExtractor = function(req, cookieName) {
 
 const refreshToken = function(req, res, redirectUrl){
   var token = cookieExtractor(req, 'refresh');
-  var url = 'http://localhost:3000/api/v1/user/refreshToken';
+  var url = process.env.API_Domain+'/api/v1/user/refreshToken';
   request.post(url, {form: {refreshToken: token}})
   .on('response', function(response) {
     // concatenate updates from datastream
@@ -39,7 +39,7 @@ const refreshToken = function(req, res, redirectUrl){
           httpOnly: true, // the cookie only accessible by the web server
         };
         res.cookie('access', (JSON.parse(body)).token, cookieOptions);
-        cookieOptions.maxAge = process.env.Refresh_Token_ExpiresIn;
+        cookieOptions.maxAge = process.env.COOKIE_MaxAge;
         res.cookie('refresh', (JSON.parse(body)).refreshToken, cookieOptions);
         console.log('Token refreshed');
         return res.redirect(redirectUrl);
