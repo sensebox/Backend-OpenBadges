@@ -1,0 +1,90 @@
+doctype html
+// Required meta tags
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+        title Open Bades Registrierung!
+    // Bootstrap CSS
+    // Navbar
+    // Keine Navbar im Register
+    // Navbar ende
+    body.bg-white
+        .container.bg-light.mt-5.border
+            .row
+                .col-lg
+                .col-lg-6
+                    h1 Open Badges Registrierung
+                    br
+                    form(action='/user/register', method='POST')
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputEmail4') Email
+                                input#inputEmail4.form-control(type='email', name='email', placeholder='Email@example.com', data-toggle='tooltip', data-placement='top', title='Gültige Email Adresse')
+                            .form-group.col-auto
+                                label(for='inputEmail4') Nutzername
+                                input#inputEmail4.form-control(type='text', name='username', placeholder='M_Mustermann', data-toggle='tooltip', data-placement='top', title='Nutzername mindestens 6 Zeichen')
+                            .form-group.col-auto
+                                label(for='inputPassword') Passwort
+                                input#inputPassword.form-control(type='password', name='password' placeholder='Password', data-toggle='tooltip', data-placement='top', title='Passwort mit mindestens 5 Zeichen')
+                            .form-group.col-auto
+                                label(for='inputPassword2') Passwort Bestätigen
+                                input#inputPassword2.form-control(type='password', name='confirmPassword' placeholder='Password', data-toggle='tooltip', data-placement='top', title='Identisches Passwort')
+                                span#pwtext.badge.badge-danger
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputVoname') Vorname
+                                input#inputVoname.form-control(type='text', name='firstname', placeholder='Max', data-toggle='tooltip', data-placement='top', title='Vorname')
+                            .form-group.col-auto
+                                label(for='inputNachnahme') Nachname
+                                input#inputNachnahme.form-control(type='text', name='lastname', placeholder='Mustermann', data-toggle='tooltip', data-placement='top', title='Nachnahme')
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputCity') Stadt
+                                input#inputCity.form-control(type='text', name='city' placeholder='Musterstadt', data-toggle='tooltip', data-placement='top', title='Wohnort')
+                            .form-group.col-auto
+                                label(for='inputZip') Postleitzahl
+                                input#inputZip.form-control(type='number', name='postalcode' min='10000', max='99999', placeholder='00000', data-toggle='tooltip', data-placement='top', title='Postleitzahl des Wohnortes')
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputDate') Geburtsdatum
+                                input#inputDate.form-control(type='date', name='birthday', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
+                        button.btn.btn-primary(type='submit', onclick='check()') Sign in
+                .col-lg
+            br
+        script.
+            function check() {
+                pw1 = document.getElementById('inputPassword').value;
+                pw2 = document.getElementById('inputPassword2').value;
+                pwident = null;
+                pwshort = null;
+                if (pw1 != pw2) {
+                    pwident = true;
+                } else {
+                    pwident = false;
+                }
+                if (pw1.length < 5) {
+                    pwshort = true;
+                } else {
+                    pwshort = false;
+                }
+                if (!pwident && !pwshort) {
+                    return;
+                } else
+                if(pwident || pwshort){
+                    if (pwshort) {
+                        document.getElementById('pwtext').innerText = 'Passwort zu Kurz';
+                        return false;
+                    }
+                    if (pwident) {
+                        document.getElementById('pwtext').innerText = 'Passwörter stimmen nicht überein';
+                        return false;
+                    }
+                }else{
+                    document.getElementById('pwtext').innerText="f";
+                }
+            }
+        script(src='/jquery/jquery.min.js')
+        script(src='/popper/umd/popper.min.js')
+        script(src='/bootstrap/js/bootstrap.min.js')

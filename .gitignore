@@ -1,2 +1,5 @@
 node_modules
+start_server.bat
+package-lock.json
 data
+.idea
