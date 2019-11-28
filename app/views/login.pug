@@ -1,14 +1,31 @@
-extends layout
-
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body
 block content
-  h1= title
-
-  form#login(method='POST' action='/user/login')
-    label.labelRegister(for='username') Benutzername:
-    br
-    input(name='username' type='text' required='' style='width: 100%')
-    br
-    label.labelRegister(for='password') Passwort:
-    br
-    input(name='password' type='password' required='' style='width: 100%')
-    button(type='submit') Anmelden
+    h1= title
+    p Welcome to #{title}
+    link#bootstrap-css(href='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet')
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    // ---- Include the above in your HEAD tag --------
+    .wrapper.fadeInDown
+        #formContent
+            // Tabs Titles
+            // Icon
+            .fadeIn.first
+            // Beispiel Bild
+              img#icon(src='https://miro.medium.com/max/1280/0*4ty0Adbdg4dsVBo3.png' height='100' width='200' alt='User Icon')
+            // Login Form
+            form
+                input#login.fadeIn.second(type='text' name='login' placeholder='login')
+                input#password.fadeIn.third(type='text' name='login' placeholder='password')
+                input.fadeIn.fourth(type='submit' value='Log In')
+            // Remind Passowrd
+            #formFooter
+                a.underlineHover(href='#') Forgot Password?
+            #container.col
+                p Button
+                a(href='./start') hier

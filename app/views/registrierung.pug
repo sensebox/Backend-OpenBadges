@@ -1,0 +1,86 @@
+doctype html
+// Required meta tags
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T', crossorigin='anonymous')
+        title Open Bades Registrierung!
+    // Bootstrap CSS
+    // Navbar
+    // Keine Navbar im Register
+    // Navbar ende
+    body.bg-white
+        .container.bg-light.mt-5.border
+            .row
+                .col-lg
+                .col-lg-6
+                    h1 Open Badges Registrierung
+                    br
+                    form(action='#')
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputEmail4') Email
+                                input#inputEmail4.form-control(type='email', placeholder='Email@example.com', data-toggle='tooltip', data-placement='top', title='Gültige Email Adresse')
+                            .form-group.col-auto
+                                label(for='inputPassword') Passwort
+                                input#inputPassword.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Passwort mit mindestens 5 Zeichen')
+                            .form-group.col-auto
+                                label(for='inputPassword2') Passwort Bestätigen
+                                input#inputPassword2.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Identisches Passwort')
+                                span#pwtext.badge.badge-danger
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputVoname') Vorname
+                                input#inputVoname.form-control(type='text', placeholder='Max', data-toggle='tooltip', data-placement='top', title='Vorname')
+                            .form-group.col-auto
+                                label(for='inputNachnahme') Nachnahme
+                                input#inputNachnahme.form-control(type='text', placeholder='Mustermann', data-toggle='tooltip', data-placement='top', title='Nachnahme')
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputCity') Stadt
+                                input#inputCity.form-control(type='text', placeholder='Musterstadt', data-toggle='tooltip', data-placement='top', title='Wohnort')
+                            .form-group.col-auto
+                                label(for='inputZip') Postleitzahl
+                                input#inputZip.form-control(type='number', min='10000', max='99999', placeholder='00000', data-toggle='tooltip', data-placement='top', title='Postleitzahl des Wohnortes')
+                        .form-row
+                            .form-group.col-auto
+                                label(for='inputDate') Geburtsdatum
+                                input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
+                        button.btn.btn-primary(type='submit', onclick='check();') Sign in
+                .col-lg
+            br
+        script.
+            function check() {
+                pw1 = document.getElementById('inputPassword').value;
+                pw2 = document.getElementById('inputPassword2').value;
+                pwident = null;
+                pwshort = null;
+                if (pw1 != pw2) {
+                    pwident = true;
+                } else {
+                    pwident = false;
+                }
+                if (pw1.length < 5) {
+                    pwshort = true;
+                } else {
+                    pwshort = false;
+                }
+                if (!pwident && !pwshort) {
+                    return;
+                } else
+                if(pwident || pwshort){
+                    if (pwshort) {
+                        document.getElementById('pwtext').innerText = 'Passwort zu Kurz';
+                        return;
+                    }
+                    if (pwident) {
+                        document.getElementById('pwtext').innerText = 'Passwörter stimmen nicht überein';
+                    }
+                }else{
+                    document.getElementById('pwtext').innerText="f";
+                }
+            }
+        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
