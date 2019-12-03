@@ -11,17 +11,17 @@ const express = require('express');
 const UserRouter = express.Router();
 const passport = require('passport');
 
-UserRouter.route('/register')
+UserRouter.route('/signup')
     .post(require('./users').postRegister);
 
-UserRouter.route('/login')
+UserRouter.route('/signin')
     .post(require('./users').postLogin);
 
 UserRouter.route('/refreshToken')
     .post(require('./users').postRefreshToken);
 
-UserRouter.route('/logout')
-    .get(passport.authenticate('jwt', {session: false}), require('./users').getLogout);
+UserRouter.route('/signout')
+    .post(passport.authenticate('jwt', {session: false}), require('./users').postLogout);
 
 UserRouter.route('/secret')
     .get(passport.authenticate('jwt', {session: false}), require('./secret').getSecret);

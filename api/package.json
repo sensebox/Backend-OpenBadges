@@ -1,10 +1,11 @@
 {
-  "name": "openbadges",
-  "version": "0.0.0",
+  "name": "openBadges_API",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "docs": "apidoc -i . -e \"(node_modules)\" -o doc"
   },
   "dependencies": {
     "@hapi/joi": "^16.1.7",

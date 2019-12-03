@@ -17,7 +17,7 @@ router.get('/register', function (req, res){
 
 
 router.post('/register', function (req, res){
-  var url = process.env.API_Domain+'/api/v1/user/register';
+  var url = process.env.API_Domain+'/api/v1/user/signup';
   request.post(url, {form: req.body})
     .on('response', function(response) {
       // concatenate updates from datastream
@@ -27,7 +27,7 @@ router.post('/register', function (req, res){
           body += chunk;
       });
       response.on('end', function(){
-        if(response.statusCode !== 200){
+        if(response.statusCode !== 201){
           return res.status(400).send(JSON.parse(body));
         }
         res.redirect('/user/login');
@@ -47,7 +47,7 @@ router.get('/login', async function (req, res){
 
 
 router.post('/login', function (req, res){
-  var url = process.env.API_Domain+'/api/v1/user/login';
+  var url = process.env.API_Domain+'/api/v1/user/signin';
   request.post(url, {form: req.body})
     .on('response', function(response) {
       // concatenate updates from datastream
@@ -80,12 +80,12 @@ router.post('/login', function (req, res){
 router.get('/logout', function(req, res){
   var token = cookieExtractor(req, 'access');
   var options = {
-    url: process.env.API_Domain+'/api/v1/user/logout',
+    url: process.env.API_Domain+'/api/v1/user/signout',
     headers: {
       'Authorization': 'Bearer '+token
     }
   };
-  request.get(options)
+  request.post(options)
     .on('response', function(response) {
       // concatenate updates from datastream
       var body = '';

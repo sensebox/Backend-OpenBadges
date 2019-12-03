@@ -16,7 +16,7 @@ const registerValidation = data => {
     confirmPassword: Joi.any().valid(Joi.ref('password')).required(),
     birthday: Joi.date().required(),
     city: Joi.string().min(2).required(),
-    postalcode: Joi.number().integer().min(10000).max(99999)
+    postalcode: Joi.number().integer().min(1067).max(99998)
   });
 
   return schema.validate(data);
