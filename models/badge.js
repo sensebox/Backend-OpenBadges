@@ -9,7 +9,9 @@ const BadgeSchema = new mongoose.Schema({
   name: String,
   description: String,
   image: String,
-  criteria: Array
+  criteria: Array,
+  issuer: mongoose.Schema.Types.ObjectId,
+  ref: 'User'
 });
 
 

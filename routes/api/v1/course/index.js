@@ -71,34 +71,10 @@ const getCourses = async function(req, res){
   res.send(result);
 };
 
+// url/:id
 const getCourseID = async function(req, res){
-  var qname = req.query.name;
-  var qcoordinates = req.query.coordinates;
-  var qradius = req.query.radius;
-  var qtopic = req.query.topic;
-  var qstartdate = req.query.startdate;
-  var qenddate = req.query.enddate;
-
-  var query = {};
-  if(qname){
-    query.name = qname;
-  }
-  if(qtopic){
-    query.topic = qtopic;
-  }
-  if(qstartdate){
-    query.name = {$gte: {qstartdate}};
-  }
-  if(qcoordinates.notEmpty() && qradius.notEmpty()){
-    query.coordinates = {$geowithin: {$centerSphere: [qcoordinates, qradius]}};
-  }
-  if(qenddate){
-    query.name = {$lte: {qenddate}};
-  }
-
   const course = new Course();
-  var result = await course.find(query);
-
+  var result = await course.findOne({_id: req.params.id});
   res.send(result);
 };
 
