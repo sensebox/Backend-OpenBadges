@@ -35,49 +35,75 @@ const postCourse = async function(req, res){
   }
 };
 
-/**
-  * Überpüft ob ein Kurs innerhalb eines Radius eines bestimmten Gebiets liegt
-  * @params searchedPoint Punkt eines Kurs [lat,lng]
-  * @params sourcePoint Punkt den User festgelegt hat [lat,lng]
-  * @params radius Der Radius um den sourcePoint in dem sich der searched Point befinden sollte
-  * @return true or false
+
+
+/** url?name=<placeholder>&coordinates=[<lat>,<lng>]&startdate=<placeholder> etc.
+  *
   */
-function pointInRadius(searchedPoint, sourcePoint, radius){
-    var coordSqd = (searchedPoint[0] - sourcePoint[0])**2 + (searchedPoint[1] - sourcePoint[1])**2;
-    var radiusSqd = radius **2;
-    if(coordSqd < radiusSqd){
-      return true;
-    }else{
-      return false;
-    }
-}
+const getCourses = async function(req, res){
+  var qname = req.query.name;
+  var qcoordinates = req.query.coordinates;
+  var qradius = req.query.radius;
+  var qtopic = req.query.topic;
+  var qstartdate = req.query.startdate;
+  var qenddate = req.query.enddate;
 
-
-
-
-const getCourse = async function(req, res){
-  var qname = req.query.name || {};
-  var qcoordinates = req.query.coordinates || {};
-  var qradius = req.query.radius || {};
-  var qtopic = req.query.topic || {};
-  var qstartdate = req.query.startdate ||{};
-  var qenddate = req.query.enddate || {};
-  const course = new Course();
-  var query = course.find();
-  if(qcoordinates.notEmpty() && qradius.notEmpty()){
-    var area = {center: qcoordinates,radius: qradius };
-    query.where("coordinates.coordinates").within().centerSphere(area);
+  var query = {};
+  if(qname){
+    query.name = qname;
   }
-  query.where("name", qname).
-  where("topic", qtopic).
-  where("startdate", qstartdate).
-  where("enddate", qenddate);
+  if(qtopic){
+    query.topic = qtopic;
+  }
+  if(qstartdate){
+    query.name = {$gte: {qstartdate}};
+  }
+  if(qcoordinates.notEmpty() && qradius.notEmpty()){
+    query.coordinates = {$geowithin: {$centerSphere: [qcoordinates, qradius]}};
+  }
+  if(qenddate){
+    query.name = {$lte: {qenddate}};
+  }
 
-  res.send(query);
+  const course = new Course();
+  var result = await course.find(query);
+
+  res.send(result);
 };
 
+const getCourseID = async function(req, res){
+  var qname = req.query.name;
+  var qcoordinates = req.query.coordinates;
+  var qradius = req.query.radius;
+  var qtopic = req.query.topic;
+  var qstartdate = req.query.startdate;
+  var qenddate = req.query.enddate;
 
+  var query = {};
+  if(qname){
+    query.name = qname;
+  }
+  if(qtopic){
+    query.topic = qtopic;
+  }
+  if(qstartdate){
+    query.name = {$gte: {qstartdate}};
+  }
+  if(qcoordinates.notEmpty() && qradius.notEmpty()){
+    query.coordinates = {$geowithin: {$centerSphere: [qcoordinates, qradius]}};
+  }
+  if(qenddate){
+    query.name = {$lte: {qenddate}};
+  }
+
+  const course = new Course();
+  var result = await course.find(query);
+
+  res.send(result);
+};
 
 module.exports = {
-  postCourse
+  postCourse,
+  getCourses,
+  getCourseID
 };
