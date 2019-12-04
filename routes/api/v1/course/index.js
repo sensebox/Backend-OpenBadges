@@ -14,14 +14,15 @@ const postCourse = async function(req, res){
   const course = new Course({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
+    badge: req.body.badge,
+    localbadge: req.body.localbadge,
     username: req.body.username,
     courseprovider: req.body.courseprovider,
     postcode: req.body.postcode,
     address: req.body.address,
-
     coordinates: {type: 'point', coordinates: req.body.coordinates},
     topic: req.body.topic,
-    decriptipn: req.body.description,
+    descriptipn: req.body.description,
     requirements: req.body.requirements,
     startdate: req.body.startdate,
     enddate: req.body.enddate
@@ -76,6 +77,26 @@ const getCourseID = async function(req, res){
   const course = new Course();
   var result = await course.findOne({_id: req.params.id});
   res.send(result);
+};
+
+
+// url/?
+const putCourse = async function(req, res){
+  const course = new Course();
+  var result = await course.findOne({_id: req.params.id}, (err, result)=>{
+    result.name= req.body.name;
+    result.courseprovider= req.body.courseprovider;
+    result.postcode= req.body.postcode;
+    result.address= req.body.address;
+
+    result.coordinates= {type: 'point', coordinates: req.body.coordinates};
+    result.topic= req.body.topic;
+    result.description = req.body.description;
+    result.requirements= req.body.requirements;
+    result.startdate= req.body.startdate;
+    result.enddate= req.body.enddate;
+  });
+
 };
 
 module.exports = {

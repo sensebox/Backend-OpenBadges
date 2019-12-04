@@ -9,11 +9,10 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  badge: {type: mongoose.Schema.Types.ObjectId, ref: 'Badge'},
+  localbadge: [{type: mongoose.Schema.Types.ObjectId, ref: 'Badge'}],
   // Nutzername der den Kurs erstellt
-  username: {
-    type: String,
-    required: true,
-  },
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   // Falls der Nutzer es für eine organisation etc anbietet (zb. Kreativwerkstatt Münster)
   courseprovider: {
     type: String
@@ -57,7 +56,8 @@ const CourseSchema = new mongoose.Schema({
   enddate: {
     type: Date,
     required: true
-  }
+  },
+  participants: Array
 });
 
 
