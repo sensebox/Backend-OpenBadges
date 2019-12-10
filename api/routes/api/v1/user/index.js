@@ -12,6 +12,7 @@ const UserRouter = express.Router();
 
 const login = require('./login');
 const authorization = require('./authorization');
+const user = require('./user');
 const {userAuthorization} = require('../../../../helper/authorization/middleware');
 
 
@@ -32,6 +33,15 @@ UserRouter.route('/signout')
 
 UserRouter.route('/token/refresh')
     .post(authorization.postRefreshToken);
+
+UserRouter.route('/me')
+    .get(userAuthorization, user.getMe);
+
+UserRouter.route('/me')
+    .put(userAuthorization, user.putMe);
+
+UserRouter.route('/me')
+    .delete(userAuthorization, user.deleteMe);
 
 UserRouter.route('/secret')
     .get(userAuthorization, require('./secret').getSecret);

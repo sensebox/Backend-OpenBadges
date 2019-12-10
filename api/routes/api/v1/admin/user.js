@@ -2,7 +2,6 @@
 // jshint node: true
 "use strict";
 
-const mongoose = require('mongoose');
 const User = require('../../../../models/user');
 
 
