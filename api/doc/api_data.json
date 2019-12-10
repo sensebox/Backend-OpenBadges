@@ -76,21 +76,145 @@
     },
     "error": {
       "fields": {
-        "Error 4xx": [
+        "On error": [
           {
-            "group": "Error 4xx",
+            "group": "On error",
             "type": "String",
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;Refresh token is invalid or too old. Please sign in with your user credentials.&quot;}</code></p>"
-          }
-        ],
-        "Error 5xx": [
+          },
           {
-            "group": "Error 5xx",
+            "group": "On error",
             "optional": false,
             "field": "500",
             "description": "<p>Complications during querying the database or creating a JWT.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/user/users.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/requestResetPassword",
+    "title": "Request reset password",
+    "name": "requestResetPassword",
+    "description": "<p>Requests a password reset (in case of forgotten password). A link to reset the password will then be sent in an email, which is valid for 12 hours.</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>the username of the user; it is used for sending the email with all instructions</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Reset instructions successfully sent to user.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during sending the email with all instructions to reset the password.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/user/users.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/resetPassword",
+    "title": "Reset password",
+    "name": "resetPassword",
+    "description": "<p>Reset the password with the resetPasswordToken.</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "resetPasswordToken",
+            "description": "<p>token to reset password sent through email</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>the new desired password for the user; must consist of at least 6 characters</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "confirmPassword",
+            "description": "<p>confirm the new desired password for the user; must consist the same string as password</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Password successfully reset.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;Request password reset expired.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during updating the password.</p>"
           }
         ]
       }
@@ -155,18 +279,16 @@
     },
     "error": {
       "fields": {
-        "Error 4xx": [
+        "On error": [
           {
-            "group": "Error 4xx",
+            "group": "On error",
             "type": "String",
             "optional": false,
             "field": "403",
-            "description": "<p><code>{&quot;error&quot;: &quot;Email or password is wrong&quot;}</code></p>"
-          }
-        ],
-        "Error 5xx": [
+            "description": "<p><code>{&quot;message&quot;: &quot;Email or password is wrong&quot;}</code></p>"
+          },
           {
-            "group": "Error 5xx",
+            "group": "On error",
             "optional": false,
             "field": "500",
             "description": "<p>Complications during querying the database or creating a JWT</p>"
@@ -200,7 +322,7 @@
       "examples": [
         {
           "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0ODMwMDYxNTIsImV4cCI6MTQ4MzAwOTc1MiwiaXNzIjoibG9jYWxob3N0OjgwMDAiLCJzdWIiOiJ0ZXN0QHRlc3QuZGUiLCJqdGkiOiJmMjNiOThkNi1mMjRlLTRjOTQtYWE5Ni1kMWI4M2MzNmY1MjAifQ.QegeWHWetw19vfgOvkTCsBfaSOPnjakhzzRjVtNi-2Q",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZWY2ZjczZWViMGFiNmUwY2IzNzdiMiIsImlhdCI6MTU3NTk3ODAxNCwiZXhwIjoxNTc1OTc4MDc0fQ.ls6uhrJ6pvJquxhcocwjlvJBkM5opwbnbyx5N1PRpoQ",
           "type": "String"
         }
       ]
@@ -220,18 +342,16 @@
     },
     "error": {
       "fields": {
-        "Error 4xx": [
+        "On error": [
           {
-            "group": "Error 4xx",
+            "group": "On error",
             "type": "String",
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;JSON Web Token is invalid. Please sign in with your user credentials.&quot;}</code></p>"
-          }
-        ],
-        "Error 5xx": [
+          },
           {
-            "group": "Error 5xx",
+            "group": "On error",
             "optional": false,
             "field": "500",
             "description": "<p>Complications during querying the database or creating a JWT.</p>"
@@ -341,25 +461,23 @@
     },
     "error": {
       "fields": {
-        "Error 4xx": [
+        "On error": [
           {
-            "group": "Error 4xx",
+            "group": "On error",
             "type": "String",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;error&quot;: &lt;Passed parameters are not valid&gt;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &lt;Passed parameters are not valid&gt;}</code></p>"
           },
           {
-            "group": "Error 4xx",
+            "group": "On error",
             "type": "String",
             "optional": false,
             "field": "409",
-            "description": "<p><code>{&quot;error&quot;: &quot;Email already exists&quot;}</code> or <code>{&quot;error&quot;: &quot;Username already exists&quot;}</code></p>"
-          }
-        ],
-        "Error 5xx": [
+            "description": "<p><code>{&quot;message&quot;: &quot;Email already exists&quot;}</code> or <code>{&quot;error&quot;: &quot;Username already exists&quot;}</code></p>"
+          },
           {
-            "group": "Error 5xx",
+            "group": "On error",
             "optional": false,
             "field": "500",
             "description": "<p>Complications during storage</p>"

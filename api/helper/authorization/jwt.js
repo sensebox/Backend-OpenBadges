@@ -3,10 +3,10 @@
 "use strict";
 
 
-const TokenBlacklist = require('../models/tokenBlacklist');
+const TokenBlacklist = require('../../models/tokenBlacklist');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
-const {hashJWT} = require('../helper/refreshToken');
+const {hashJWT} = require('./refreshToken');
 
 
 const invalidateToken = async function(token){

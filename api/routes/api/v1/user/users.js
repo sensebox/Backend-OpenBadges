@@ -9,9 +9,9 @@ const uuid = require('uuid');
 const nodemailer = require('nodemailer');
 
 const User = require('../../../../models/user');
-const {registerValidation, resetPasswordValidation} = require('../../../../config/validation');
-const {createToken, isTokenValid, invalidateToken} = require('../../../../helper/jwt');
-const {hashJWT} = require('../../../../helper/refreshToken');
+const {registerValidation, resetPasswordValidation} = require('../../../../helper/validation');
+const {createToken, isTokenValid, invalidateToken} = require('../../../../helper/authorization/jwt');
+const {hashJWT} = require('../../../../helper/authorization/refreshToken');
 
 
 /**
@@ -33,19 +33,19 @@ const {hashJWT} = require('../../../../helper/refreshToken');
  * @apiSuccess (Created 201) {String} message `User is successfully registered`
  * @apiSuccess (Created 201) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":["earner"]}`
  *
- * @apiError (Error 4xx) {String} 400 `{"error": <Passed parameters are not valid>}`
- * @apiError (Error 4xx) {String} 409 `{"error": "Email already exists"}` or `{"error": "Username already exists"}`
- * @apiError (Error 5xx) 500 Complications during storage
+ * @apiError (On error) {String} 400 `{"message": <Passed parameters are not valid>}`
+ * @apiError (On error) {String} 409 `{"message": "Email already exists"}` or `{"error": "Username already exists"}`
+ * @apiError (On error) 500 Complications during storage
  */
 const postRegister = async function(req, res){
   // validate incoming data
   const {error} = registerValidation(req.body);
-  if(error) return res.status(400).send({error: error.details[0].message});
+  if(error) return res.status(400).send({message: error.details[0].message});
   // checking if user is already in db
   const emailExists = await User.findOne({email: req.body.email});
-  if(emailExists) return res.status(409).send({error: 'Email already exists'});
+  if(emailExists) return res.status(409).send({message: 'Email already exists'});
   const usernameExists = await User.findOne({username: req.body.username});
-  if(usernameExists) return res.status(409).send({error: 'Username already exists'});
+  if(usernameExists) return res.status(409).send({message: 'Username already exists'});
   // hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -125,17 +125,17 @@ const postRegister = async function(req, res){
  * @apiSuccess (Success 200) {String} token valid JSON Web Token
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
- * @apiError (Error 4xx) {String} 403 `{"error": "Email or password is wrong"}`
- * @apiError (Error 5xx) 500 Complications during querying the database or creating a JWT
+ * @apiError (On error) {String} 403 `{"message": "Email or password is wrong"}`
+ * @apiError (On error) 500 Complications during querying the database or creating a JWT
  */
 const postLogin = async function(req, res){
   try{
     // checking if the email exists
     const user = await User.findOne({username: req.body.username});
-    if(!user) return res.status(403).send({error:'Email or password is wrong'});
+    if(!user) return res.status(403).send({message:'Email or password is wrong'});
     // checking if password is correct
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if(!validPassword) return res.status(403).send({error:'Email or password is wrong'});
+    if(!validPassword) return res.status(403).send({message:'Email or password is wrong'});
     // create JWT-Token and refresh-Token
     const {token: token, refreshToken: refreshToken } = await createToken(user);
     return res.status(200).send({
@@ -161,8 +161,8 @@ const postLogin = async function(req, res){
  * @apiSuccess (Success 200) {String} token valid JSON Web Token
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
- * @apiError (Error 4xx) {String} 403 `{"message": "Refresh token is invalid or too old. Please sign in with your user credentials."}`
- * @apiError (Error 5xx) 500 Complications during querying the database or creating a JWT.
+ * @apiError (On error) {String} 403 `{"message": "Refresh token is invalid or too old. Please sign in with your user credentials."}`
+ * @apiError (On error) 500 Complications during querying the database or creating a JWT.
  */
 const postRefreshToken = async function(req, res){
   var refreshToken = req.body.refreshToken;
@@ -202,8 +202,8 @@ const postRefreshToken = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `Reset instructions successfully sent to user.`
  *
- * @apiError (Error 4xx) {String} 404 `{"message": "User not found."}`
- * @apiError (Error 5xx) 500 Complications during sending the email with all instructions to reset the password.
+ * @apiError (On error) {String} 404 `{"message": "User not found."}`
+ * @apiError (On error) 500 Complications during sending the email with all instructions to reset the password.
  */
 const requestResetPassword = async function (req, res){
   console.log(req.body.username);
@@ -255,7 +255,7 @@ const requestResetPassword = async function (req, res){
 
 
 /**
- * @api {post} /user/resetPassword reset password
+ * @api {post} /user/resetPassword Reset password
  * @apiName resetPassword
  * @apiDescription Reset the password with the resetPasswordToken.
  * @apiGroup User
@@ -266,13 +266,13 @@ const requestResetPassword = async function (req, res){
  *
  * @apiSuccess (Success 200) {String} message `Password successfully reset.`
  *
- * @apiError (Error 4xx) {String} 403 `{"message": "Request password reset expired."}`
- * @apiError (Error 5xx) 500 Complications during updating the password.
+ * @apiError (On error) {String} 403 `{"message": "Request password reset expired."}`
+ * @apiError (On error) 500 Complications during updating the password.
  */
 const setResetPassword = async function (req, res){
   // validate incoming data
   const {error} = resetPasswordValidation(req.body);
-  if(error) return res.status(400).send({error: error.details[0].message});
+  if(error) return res.status(400).send({message: error.details[0].message});
 
   var user = await User.findOne({resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpiresIn: {$gte: moment.utc().toDate()}});
   if(user){
@@ -304,12 +304,12 @@ const setResetPassword = async function (req, res){
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
- *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0ODMwMDYxNTIsImV4cCI6MTQ4MzAwOTc1MiwiaXNzIjoibG9jYWxob3N0OjgwMDAiLCJzdWIiOiJ0ZXN0QHRlc3QuZGUiLCJqdGkiOiJmMjNiOThkNi1mMjRlLTRjOTQtYWE5Ni1kMWI4M2MzNmY1MjAifQ.QegeWHWetw19vfgOvkTCsBfaSOPnjakhzzRjVtNi-2Q
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZWY2ZjczZWViMGFiNmUwY2IzNzdiMiIsImlhdCI6MTU3NTk3ODAxNCwiZXhwIjoxNTc1OTc4MDc0fQ.ls6uhrJ6pvJquxhcocwjlvJBkM5opwbnbyx5N1PRpoQ
  *
  * @apiSuccess (Success 200) {String} message `Signed out successfully`
  *
- * @apiError (Error 4xx) {String} 403 `{"message": "JSON Web Token is invalid. Please sign in with your user credentials."}`
- * @apiError (Error 5xx) 500 Complications during querying the database or creating a JWT.
+ * @apiError (On error) {String} 403 `{"message": "JSON Web Token is invalid. Please sign in with your user credentials."}`
+ * @apiError (On error) 500 Complications during querying the database or creating a JWT.
  */
 // access only if user is authenticated
 const postLogout = async function(req, res){

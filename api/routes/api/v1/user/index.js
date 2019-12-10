@@ -9,8 +9,10 @@
 
 const express = require('express');
 const UserRouter = express.Router();
-const passport = require('passport');
+
 const user = require('./users');
+const {userAuthorization} = require('../../../../helper/authorization/middleware');
+
 
 UserRouter.route('/signup')
     .post(user.postRegister);
@@ -28,10 +30,10 @@ UserRouter.route('/resetPassword')
     .post(user.setResetPassword);
 
 UserRouter.route('/signout')
-    .post(passport.authenticate('jwt', {session: false}), user.postLogout);
+    .post(userAuthorization, user.postLogout);
 
 UserRouter.route('/secret')
-    .get(passport.authenticate('jwt', {session: false}), require('./secret').getSecret);
+    .get(userAuthorization, require('./secret').getSecret);
 
 
 module.exports = UserRouter;

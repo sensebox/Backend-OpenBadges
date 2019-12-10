@@ -58,7 +58,7 @@ router.post('/login', function (req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          return res.status(400).send(JSON.parse(body));
+          return res.status(400).redirect('/');
         }
         // token is generated
         // set cookies (name: "access" and "refresh") with token as content
