@@ -121,21 +121,21 @@ const postRegister = async function(req, res){
  * @apiParam {String} username the username of the user
  * @apiParam {String} password the password of the user
  *
- * @apiSuccess (Success 200) {String} message `User is successfully registered`
+ * @apiSuccess (Success 200) {String} message `User successfully signed in`
  * @apiSuccess (Success 200) {String} token valid JSON Web Token
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
- * @apiError (On error) {String} 403 `{"message": "Email or password is wrong"}`
+ * @apiError (On error) {String} 403 `{"message": "Username or password is wrong"}`
  * @apiError (On error) 500 Complications during querying the database or creating a JWT
  */
 const postLogin = async function(req, res){
   try{
-    // checking if the email exists
+    // checking if the username exists
     const user = await User.findOne({username: req.body.username});
-    if(!user) return res.status(403).send({message:'Email or password is wrong'});
+    if(!user) return res.status(403).send({message:'Username or password is wrong'});
     // checking if password is correct
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if(!validPassword) return res.status(403).send({message:'Email or password is wrong'});
+    if(!validPassword) return res.status(403).send({message:'Username or password is wrong'});
     // create JWT-Token and refresh-Token
     const {token: token, refreshToken: refreshToken } = await createToken(user);
     return res.status(200).send({

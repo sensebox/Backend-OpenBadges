@@ -3,7 +3,7 @@
 "use strict";
 
 /**
-* routes/api/v1/dwd/index.js
+* routes/api/v1/user/index.js
 * @see https://medium.com/@sesitamakloe/how-we-structure-our-express-js-routes-58933d02e491
 */
 

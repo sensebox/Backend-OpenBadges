@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema({
     type: [String],
     required: true,
     enum: ['earner', 'issuer', 'admin'],
-    default: ['earner']
+    default: 'earner'
   },
   emailConfirmationToken: {
     type: String,
