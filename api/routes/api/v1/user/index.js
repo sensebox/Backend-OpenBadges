@@ -10,27 +10,28 @@
 const express = require('express');
 const UserRouter = express.Router();
 
-const user = require('./users');
+const login = require('./login');
+const authorization = require('./authorization');
 const {userAuthorization} = require('../../../../helper/authorization/middleware');
 
 
 UserRouter.route('/signup')
-    .post(user.postRegister);
+    .post(login.postRegister);
 
 UserRouter.route('/signin')
-    .post(user.postLogin);
+    .post(login.postLogin);
 
-UserRouter.route('/refreshToken')
-    .post(user.postRefreshToken);
+UserRouter.route('/password/request')
+    .post(login.requestResetPassword);
 
-UserRouter.route('/requestResetPassword')
-    .post(user.requestResetPassword);
-
-UserRouter.route('/resetPassword')
-    .post(user.setResetPassword);
+UserRouter.route('/password/reset')
+    .post(login.setResetPassword);
 
 UserRouter.route('/signout')
-    .post(userAuthorization, user.postLogout);
+    .post(userAuthorization, login.postLogout);
+
+UserRouter.route('/token/refresh')
+    .post(authorization.postRefreshToken);
 
 UserRouter.route('/secret')
     .get(userAuthorization, require('./secret').getSecret);

@@ -18,7 +18,7 @@ const cookieExtractor = function(req, cookieName) {
 
 const refreshToken = function(req, res, redirectUrl){
   var token = cookieExtractor(req, 'refresh');
-  var url = process.env.API_Domain+'/api/v1/user/refreshToken';
+  var url = process.env.API_Domain+'/api/v1/user/token/refresh';
   request.post(url, {form: {refreshToken: token}})
   .on('response', function(response) {
     // concatenate updates from datastream

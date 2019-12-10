@@ -58,8 +58,9 @@ router.post('/login', function (req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
+          // login not successfully
           req.flash('loginError', JSON.parse(body).message);
-          return res.status(400).redirect('/');
+          return res.status(400).redirect('/user/login');
         }
         // token is generated
         // set cookies (name: "access" and "refresh") with token as content

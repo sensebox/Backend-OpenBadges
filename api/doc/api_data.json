@@ -29,6 +29,76 @@
   },
   {
     "type": "post",
+    "url": "/user/token/refresh",
+    "title": "Refresh token",
+    "name": "refreshToken",
+    "description": "<p>Refresh the authorization, if the refresh token is valid.</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "refreshToken",
+            "description": "<p>the refresh token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Authorization successfully refreshed</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>valid JSON Web Token</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "refreshToken",
+            "description": "<p>valid refresh token</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;Refresh token is invalid or too old. Please sign in with your user credentials.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database or creating a JWT.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/user/authorization.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
     "url": "/user/refreshToken",
     "title": "Refresh token",
     "name": "refreshToken",
@@ -94,12 +164,12 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/user/users.js",
+    "filename": "./routes/api/v1/user/login.js",
     "groupTitle": "User"
   },
   {
     "type": "post",
-    "url": "/user/requestResetPassword",
+    "url": "/user/password/request",
     "title": "Request reset password",
     "name": "requestResetPassword",
     "description": "<p>Requests a password reset (in case of forgotten password). A link to reset the password will then be sent in an email, which is valid for 12 hours.</p>",
@@ -150,12 +220,12 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/user/users.js",
+    "filename": "./routes/api/v1/user/login.js",
     "groupTitle": "User"
   },
   {
     "type": "post",
-    "url": "/user/resetPassword",
+    "url": "/user/password/reset",
     "title": "Reset password",
     "name": "resetPassword",
     "description": "<p>Reset the password with the resetPasswordToken.</p>",
@@ -220,7 +290,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/user/users.js",
+    "filename": "./routes/api/v1/user/login.js",
     "groupTitle": "User"
   },
   {
@@ -297,7 +367,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/user/users.js",
+    "filename": "./routes/api/v1/user/login.js",
     "groupTitle": "User"
   },
   {
@@ -360,7 +430,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/user/users.js",
+    "filename": "./routes/api/v1/user/login.js",
     "groupTitle": "User"
   },
   {
@@ -486,7 +556,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/user/users.js",
+    "filename": "./routes/api/v1/user/login.js",
     "groupTitle": "User"
   }
 ]

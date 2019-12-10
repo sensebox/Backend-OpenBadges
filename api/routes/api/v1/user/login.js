@@ -193,7 +193,7 @@ const postRefreshToken = async function(req, res){
 
 
 /**
- * @api {post} /user/requestResetPassword Request reset password
+ * @api {post} /user/password/request Request reset password
  * @apiName requestResetPassword
  * @apiDescription Requests a password reset (in case of forgotten password). A link to reset the password will then be sent in an email, which is valid for 12 hours.
  * @apiGroup User
@@ -255,7 +255,7 @@ const requestResetPassword = async function (req, res){
 
 
 /**
- * @api {post} /user/resetPassword Reset password
+ * @api {post} /user/password/reset Reset password
  * @apiName resetPassword
  * @apiDescription Reset the password with the resetPasswordToken.
  * @apiGroup User
