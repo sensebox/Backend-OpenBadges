@@ -29,7 +29,7 @@ const refreshToken = function(req, res, redirectUrl){
     });
     response.on('end', function(){
       if(response.statusCode !== 200){
-        console.log('directed to Login');
+        req.flash('loginError', JSON.parse(body).message);
         return res.redirect('user/login');
       }
       else {

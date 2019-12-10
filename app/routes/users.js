@@ -58,6 +58,7 @@ router.post('/login', function (req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
+          req.flash('loginError', JSON.parse(body).message);
           return res.status(400).redirect('/');
         }
         // token is generated
@@ -99,6 +100,7 @@ router.get('/logout', function(req, res){
         }
         res.clearCookie('access');
         res.clearCookie('refresh');
+        req.flash('logoutSuccess', JSON.parse(body).message);
         res.redirect('/user/login');
       });
     })

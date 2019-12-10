@@ -31,25 +31,35 @@ const userAuthorization = async function(req, res, next){
            }
            else {
              // user does not exist
-             return res.status(401).send('You\'re unauthorized');
+             return res.status(401).send({
+               message: 'You\'re unauthorized'
+             });
            }
         })
         .catch(err => {
-          return res.status(401).send('You\'re unauthorized');
+          return res.status(401).send({
+            message: 'You\'re unauthorized'
+          });
         });
       }
       else {
         // Token is blacklisted -> invalid
-        return res.status(401).send('You\'re unauthorized');
+        return res.status(401).send({
+          message: 'You\'re unauthorized'
+        });
       }
     }
     // authorization-header does not exist
     else {
-      return res.status(401).send('You\'re unauthorized');
+      return res.status(401).send({
+        message: 'You\'re unauthorized'
+      });
     }
   }
   catch(err) {
-    return res.status(401).send('You\'re unauthorized');
+    return res.status(401).send({
+      message: 'You\'re unauthorized'
+    });
   }
 };
 
