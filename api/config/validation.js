@@ -22,16 +22,16 @@ const registerValidation = data => {
   return schema.validate(data);
 };
 
-// Register Validation
-const loginValidation = data => {
+// Reset Password Validation
+const resetPasswordValidation = data => {
   const schema = Joi.object({
-    username: Joi.string().min(6).required(),
+    resetPasswordToken: Joi.string().required(),
     password: Joi.string().min(6).required(),
-    stayLogged: Joi.boolean()
+    confirmPassword: Joi.any().valid(Joi.ref('password')).required()
   });
 
   return schema.validate(data);
 };
 
 module.exports.registerValidation = registerValidation;
-module.exports.loginValidation = loginValidation;
+module.exports.resetPasswordValidation = resetPasswordValidation;

@@ -5,9 +5,11 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const moment = require('moment');
+const uuid = require('uuid');
+const nodemailer = require('nodemailer');
 
 const User = require('../../../../models/user');
-const {registerValidation, loginValidation} = require('../../../../config/validation');
+const {registerValidation, resetPasswordValidation} = require('../../../../config/validation');
 const {createToken, isTokenValid, invalidateToken} = require('../../../../helper/jwt');
 const {hashJWT} = require('../../../../helper/refreshToken');
 
@@ -47,6 +49,7 @@ const postRegister = async function(req, res){
   // hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  const emailToken = uuid();
   // create a new user
   const user = new User({
     _id: new mongoose.Types.ObjectId(),
@@ -57,10 +60,38 @@ const postRegister = async function(req, res){
     city: req.body.city,
     postalcode: req.body.postalcode,
     username: req.body.username,
-    password: hashedPassword
+    password: hashedPassword,
+    emailConfirmationToken: emailToken
   });
   try{
     const savedUser = await user.save();
+
+    // send an email to confirm the email
+    const email = process.env.EMAIL;
+    const password = process.env.PASSWORD_Email;
+
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmx.de',
+      port: 465,
+      auth: {
+        user: email,
+        pass: password
+      },
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+      }
+    });
+    var mailOptions = {
+        from: '"OpenBadges"'+email, // sender address
+        to: savedUser.email, // list of receiver
+        subject: 'Email verifizieren', // Subject line
+        html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/user/confirmEmail?=token'+savedUser.emailConfirmationToken+'">Link</a> ermöglicht das Verifizieren Ihrer Email-Adresse.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions);
+
     return res.status(201).send({
       message: 'User is successfully registered',
       user: {
@@ -74,6 +105,7 @@ const postRegister = async function(req, res){
         role: savedUser.role
       }
     });
+
   }
   catch(err) {
     return res.status(500).send(err);
@@ -97,9 +129,6 @@ const postRegister = async function(req, res){
  * @apiError (Error 5xx) 500 Complications during querying the database or creating a JWT
  */
 const postLogin = async function(req, res){
-  // // validate incoming login-data
-  // const {error} = loginValidation(req.body);
-  // if(error) return res.status(400).send({error: error.details[0].message});
   try{
     // checking if the email exists
     const user = await User.findOne({username: req.body.username});
@@ -162,6 +191,111 @@ const postRefreshToken = async function(req, res){
 };
 
 
+
+/**
+ * @api {post} /user/requestResetPassword Request reset password
+ * @apiName requestResetPassword
+ * @apiDescription Requests a password reset (in case of forgotten password). A link to reset the password will then be sent in an email, which is valid for 12 hours.
+ * @apiGroup User
+ *
+ * @apiParam {String} username the username of the user; it is used for sending the email with all instructions
+ *
+ * @apiSuccess (Success 200) {String} message `Reset instructions successfully sent to user.`
+ *
+ * @apiError (Error 4xx) {String} 404 `{"message": "User not found."}`
+ * @apiError (Error 5xx) 500 Complications during sending the email with all instructions to reset the password.
+ */
+const requestResetPassword = async function (req, res){
+  console.log(req.body.username);
+  var user = await User.findOne({username: req.body.username});
+  console.log('user', user);
+  if(user){
+    try{
+      var token = uuid();
+      await User.updateOne({username: req.body.username}, {resetPasswordToken: token, resetPasswordExpiresIn: moment.utc().add(12, 'h').toDate(), refreshToken: '', refreshTokenExpiresIn: moment.utc().subtract(1, 'h').toDate()});
+
+      const email = process.env.EMAIL;
+      const password = process.env.PASSWORD_Email;
+
+      let transporter = nodemailer.createTransport({
+        host: 'smtp.gmx.de',
+        port: 465,
+        auth: {
+          user: email,
+          pass: password
+        },
+        tls: {
+          // do not fail on invalid certs
+          rejectUnauthorized: false
+        }
+      });
+      var mailOptions = {
+          from: '"OpenBadges"'+email, // sender address
+          to: user.email, // list of receiver
+          subject: 'Passwort zurücksetzen', // Subject line
+          html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/user/resetPassword?=token'+token+'">Link</a> ermöglicht das Zurücksetzen des Passwortes.<br>Bitte beachten Sie, dass die Gültigkeit des Links auf 12 Stunden begrenzt ist.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+      };
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions);
+
+      return res.status(200).send({
+        message: 'Reset instructions successfully sent to user.'
+      });
+    }
+    catch(err){
+      return res.status(500).send(err);
+    }
+  }
+  return res.status(404).send({
+    message: 'User not found.'
+  });
+};
+
+
+
+/**
+ * @api {post} /user/resetPassword reset password
+ * @apiName resetPassword
+ * @apiDescription Reset the password with the resetPasswordToken.
+ * @apiGroup User
+ *
+ * @apiParam {String} resetPasswordToken token to reset password sent through email
+ * @apiParam {String} password the new desired password for the user; must consist of at least 6 characters
+ * @apiParam {String} confirmPassword confirm the new desired password for the user; must consist the same string as password
+ *
+ * @apiSuccess (Success 200) {String} message `Password successfully reset.`
+ *
+ * @apiError (Error 4xx) {String} 403 `{"message": "Request password reset expired."}`
+ * @apiError (Error 5xx) 500 Complications during updating the password.
+ */
+const setResetPassword = async function (req, res){
+  // validate incoming data
+  const {error} = resetPasswordValidation(req.body);
+  if(error) return res.status(400).send({error: error.details[0].message});
+
+  var user = await User.findOne({resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpiresIn: {$gte: moment.utc().toDate()}});
+  if(user){
+    try{
+      // hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      // update password
+      await User.updateOne({_id: user._id}, {password: hashedPassword, resetPasswordToken: '', resetPasswordExpiresIn: moment.utc().subtract(1, 'h').toDate()});
+      return res.status(200).send({
+        message: 'Password successfully reset.'
+      });
+    }
+    catch(err){
+      return res.status(500).send(error);
+    }
+  }
+  return res.status(403).send({
+    message: 'Request password reset expired.'
+  });
+};
+
+
 /**
  * @api {post} /user/signout Sign out
  * @apiName signOut
@@ -187,7 +321,7 @@ const postLogout = async function(req, res){
     await invalidateToken(token);
     await User.updateOne({_id: req.user.id}, {refreshToken: '', refreshTokenExpiresIn: moment.utc().subtract(1, 'h').toDate()});
     res.status(200).send({
-      message: 'Signed out successfully'});
+      message: 'Signed out successfully.'});
   }
   catch(err){
     res.status(500).send(err);
@@ -198,5 +332,7 @@ module.exports = {
   postRegister,
   postLogin,
   postRefreshToken,
+  requestResetPassword,
+  setResetPassword,
   postLogout
 };

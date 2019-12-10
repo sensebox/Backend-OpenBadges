@@ -10,18 +10,25 @@
 const express = require('express');
 const UserRouter = express.Router();
 const passport = require('passport');
+const user = require('./users');
 
 UserRouter.route('/signup')
-    .post(require('./users').postRegister);
+    .post(user.postRegister);
 
 UserRouter.route('/signin')
-    .post(require('./users').postLogin);
+    .post(user.postLogin);
 
 UserRouter.route('/refreshToken')
-    .post(require('./users').postRefreshToken);
+    .post(user.postRefreshToken);
+
+UserRouter.route('/requestResetPassword')
+    .post(user.requestResetPassword);
+
+UserRouter.route('/resetPassword')
+    .post(user.setResetPassword);
 
 UserRouter.route('/signout')
-    .post(passport.authenticate('jwt', {session: false}), require('./users').postLogout);
+    .post(passport.authenticate('jwt', {session: false}), user.postLogout);
 
 UserRouter.route('/secret')
     .get(passport.authenticate('jwt', {session: false}), require('./secret').getSecret);

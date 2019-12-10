@@ -49,6 +49,21 @@ const UserSchema = new mongoose.Schema({
     enum: ['earner', 'issuer', 'admin'],
     default: ['earner']
   },
+  emailConfirmationToken: {
+    type: String,
+    required: true
+  },
+  emailIsConfirmed: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  resetPasswordToken: {
+    type: String
+  },
+  resetPasswordExpiresIn: {
+    type: Date
+  },
   refreshToken: {
     type: String,
   },
