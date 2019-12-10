@@ -2,7 +2,7 @@
   "name": "OpenBadges API",
   "title": "OpenBadges API documentation",
   "url": "http://localhost:3001",
-  "order": ["Sign up", "Sign in", "Sign out", "Refresh token"],
+  "order": ["Sign up", "Sign in", "Sign out", "Refresh token", "Request reset password", "Reset password", "Get details"],
   "template": {
     "withCompare": false,
     "forceLanguage": "en"

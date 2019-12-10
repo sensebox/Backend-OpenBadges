@@ -8,7 +8,10 @@ define({
     "Sign up",
     "Sign in",
     "Sign out",
-    "Refresh token"
+    "Refresh token",
+    "Request reset password",
+    "Reset password",
+    "Get details"
   ],
   "template": {
     "withCompare": false,
@@ -19,7 +22,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2019-12-10T15:16:04.117Z",
+    "time": "2019-12-10T19:05:55.847Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }
