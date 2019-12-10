@@ -51,19 +51,19 @@ const getCourses = async function(req, res){
 
   var query = {};
   if(qname){
-    query.name = qname;
+    query[name] = qname;
   }
   if(qtopic){
-    query.topic = qtopic;
+    query[topic] = qtopic;
   }
   if(qstartdate){
-    query.name = {$gte: {qstartdate}};
-  }
-  if(qcoordinates.notEmpty() && qradius.notEmpty()){
-    query.coordinates = {$geowithin: {$centerSphere: [qcoordinates, qradius]}};
+    query[startdate] = {$gte: {qstartdate}};
   }
   if(qenddate){
-    query.name = {$lte: {qenddate}};
+    query[enddate] = {$lte: {qenddate}};
+  }
+  if(qcoordinates.notEmpty() && qradius.notEmpty()){
+    query[coordinates] = {$geowithin: {$centerSphere: [qcoordinates, qradius]}};
   }
 
   const course = new Course();
