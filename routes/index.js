@@ -7,7 +7,6 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET Start page. */
-module.exports = router;
 router.get('/begin', function(req, res, next) {
   res.render('Start');
 });
@@ -23,3 +22,4 @@ router.get('/Kursliste', function(req, res, next) {
 router.get('/login', function(req, res, next) {
   res.render('login');
 });
+module.exports = router;
