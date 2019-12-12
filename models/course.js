@@ -15,12 +15,12 @@ const CourseSchema = new mongoose.Schema({
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   // Falls der Nutzer es für eine organisation etc anbietet (zb. Kreativwerkstatt Münster)
   courseprovider: {
-    type: String
+    type: String,
+    required: true
   },
   // PLZ wird benötigt
   postcode: {
-    type: String,
-    required: true
+    type: String
   },
   // Adresse wird benötigt
   address: {
@@ -30,8 +30,7 @@ const CourseSchema = new mongoose.Schema({
   // wird vom user mitgeliefert --> osm nominatim
   coordinates: {
     type: String,
-    coordinates: Array,
-    required: true
+    coordinates: Array
   },
   // das übergeordnete Thema des Kurses
   topic:{
@@ -45,17 +44,14 @@ const CourseSchema = new mongoose.Schema({
   },
   // mögliche Kenntnisse die man bringen sollen
   requirements:{
-    type: String,
-    required: false
+    type: String
   },
   // zeitraum des Kurses
   startdate: {
-    type: Date,
-    required: true
+    type: Date
   },
   enddate: {
-    type: Date,
-    required: true
+    type: Date
   },
   participants: Array
 });

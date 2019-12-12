@@ -8,17 +8,15 @@
 */
 
 const express = require('express');
-const CourseRouter = express.Router();
+const BadgeRouter = express.Router();
 
-CourseRouter.route('/createCourse')
-    .post(require('./course').postCourse);
-
-
-CourseRouter.route('/findCourse')
-    .get(require('./course').getCourse);
+BadgeRouter.route('/createBadge')
+    .post(require('./badge').postBadge);
 
 
+BadgeRouter.route('/findCourse')
+    .get(require('./badge').getBadge);
 
 
 
-module.exports = CourseRouter;
+module.exports = BadgeRouter;

@@ -6,10 +6,15 @@ const mongoose = require('mongoose');
 
 //simple schema
 const BadgeSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  image: String,
-  criteria: Array,
+  name: {
+    type: String,
+    required: true},
+  description: {
+    type: String},
+  image: {
+    type: String},
+  criteria: {
+    type: String},
   issuer: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 
