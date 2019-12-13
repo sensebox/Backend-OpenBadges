@@ -74,7 +74,15 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     required: true,
     default: moment.utc().toDate()
-  }
+  },
+  badge: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Badge'
+  },
+  localbadge: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Badge'
+  },
 });
 
 

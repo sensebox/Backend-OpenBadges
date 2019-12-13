@@ -22,7 +22,7 @@ AdminRouter.route('/signin')
     .post(login.postLogin);
 
 AdminRouter.route('/user')
-    .get(user.getAllUser);
+    .get(adminAuthorization, user.getAllUser);
 
 AdminRouter.route('/user/:userId')
     .get(adminAuthorization, user.getOneUser);
