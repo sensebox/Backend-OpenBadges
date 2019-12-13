@@ -18,7 +18,7 @@ const cookieExtractor = function(req, cookieName) {
 
 const refreshToken = function(req, res, redirectUrl){
   var token = cookieExtractor(req, 'refresh');
-  var url = process.env.API_Domain+'/api/v1/user/refreshToken';
+  var url = process.env.API_Domain+'/api/v1/user/token/refresh';
   request.post(url, {form: {refreshToken: token}})
   .on('response', function(response) {
     // concatenate updates from datastream
@@ -29,7 +29,7 @@ const refreshToken = function(req, res, redirectUrl){
     });
     response.on('end', function(){
       if(response.statusCode !== 200){
-        console.log('directed to Login');
+        req.flash('loginError', JSON.parse(body).message);
         return res.redirect('user/login');
       }
       else {

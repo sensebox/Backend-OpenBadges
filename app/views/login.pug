@@ -12,6 +12,15 @@ block content
     script(src='/jquery/jquery.min.js')
     // ---- Include the above in your HEAD tag --------
     .wrapper.fadeInDown
+        // login-messages from server
+        if (messages.loginError)
+          for message in messages.loginError
+            .alert.alert-danger
+              span= message
+        if (messages.logoutSuccess)
+          for message in messages.logoutSuccess
+            .alert.alert-success
+              span= message
         #formContent
             // Tabs Titles
             // Icon

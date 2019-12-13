@@ -13,6 +13,7 @@ const V1Router = express.Router();
 
 // Put route handels here;
 V1Router.use('/user', require('./user'));
+V1Router.use('/admin', require('./admin'));
 V1Router.use('/course', require('./course'));
 V1Router.use('/badge', require('./badge'));
 

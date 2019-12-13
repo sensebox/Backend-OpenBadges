@@ -11,27 +11,27 @@ const registerValidation = data => {
     firstname: Joi.string().min(2).required(),
     lastname: Joi.string().min(2).required(),
     email: Joi.string().min(6).required().email(),
-    username: Joi.string().min(6).required(),
+    username: Joi.string().min(5).required(),
     password: Joi.string().min(6).required(),
     confirmPassword: Joi.any().valid(Joi.ref('password')).required(),
     birthday: Joi.date().required(),
     city: Joi.string().min(2).required(),
-    postalcode: Joi.number().integer().min(10000).max(99999)
+    postalcode: Joi.number().integer().min(1067).max(99998)
   });
 
   return schema.validate(data);
 };
 
-// Register Validation
-const loginValidation = data => {
+// Reset Password Validation
+const resetPasswordValidation = data => {
   const schema = Joi.object({
-    username: Joi.string().min(6).required(),
+    resetPasswordToken: Joi.string().required(),
     password: Joi.string().min(6).required(),
-    stayLogged: Joi.boolean()
+    confirmPassword: Joi.any().valid(Joi.ref('password')).required()
   });
 
   return schema.validate(data);
 };
 
 module.exports.registerValidation = registerValidation;
-module.exports.loginValidation = loginValidation;
+module.exports.resetPasswordValidation = resetPasswordValidation;

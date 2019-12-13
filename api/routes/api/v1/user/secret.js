@@ -7,7 +7,8 @@ var router = express.Router();
 
 /* GET home page. */
 const getSecret = function(req, res){
-// router.get('/', function(req, res, next) {
+  console.log(req.user);
+  // router.get('/', function(req, res, next) {
   res.status(200).send('secret accessed successfully!');
 };
 

@@ -3,28 +3,48 @@
 "use strict";
 
 /**
-* routes/api/v1/dwd/index.js
+* routes/api/v1/user/index.js
 * @see https://medium.com/@sesitamakloe/how-we-structure-our-express-js-routes-58933d02e491
 */
 
 const express = require('express');
 const UserRouter = express.Router();
-const passport = require('passport');
 
-UserRouter.route('/register')
-    .post(require('./users').postRegister);
+const login = require('./login');
+const authorization = require('./authorization');
+const user = require('./user');
+const {userAuthorization} = require('../../../../helper/authorization/middleware');
 
-UserRouter.route('/login')
-    .post(require('./users').postLogin);
 
-UserRouter.route('/refreshToken')
-    .post(require('./users').postRefreshToken);
+UserRouter.route('/signup')
+    .post(login.postRegister);
 
-UserRouter.route('/logout')
-    .get(passport.authenticate('jwt', {session: false}), require('./users').getLogout);
+UserRouter.route('/signin')
+    .post(login.postLogin);
+
+UserRouter.route('/password/request')
+    .post(login.requestResetPassword);
+
+UserRouter.route('/password/reset')
+    .post(login.setResetPassword);
+
+UserRouter.route('/signout')
+    .post(userAuthorization, login.postLogout);
+
+UserRouter.route('/token/refresh')
+    .post(authorization.postRefreshToken);
+
+UserRouter.route('/me')
+    .get(userAuthorization, user.getMe);
+
+UserRouter.route('/me')
+    .put(userAuthorization, user.putMe);
+
+UserRouter.route('/me')
+    .delete(userAuthorization, user.deleteMe);
 
 UserRouter.route('/secret')
-    .get(passport.authenticate('jwt', {session: false}), require('./secret').getSecret);
+    .get(userAuthorization, require('./secret').getSecret);
 
 
 module.exports = UserRouter;

@@ -7,6 +7,9 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require('express-session');
+const flash = require('express-flash');
+
 
 const app = express();
 
@@ -21,6 +24,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// set flash messages
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(flash());
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 // make packages available for client using statics

@@ -16,7 +16,7 @@ services:
     depends_on:
       - mongo
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://192.168.99.100:3001"]
+      test: ["CMD", "curl", "-f", "http://192.168.99.100:3001/docs"]
       interval: 5s
       timeout: 2s
       retries: 5

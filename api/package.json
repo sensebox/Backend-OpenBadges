@@ -1,10 +1,11 @@
 {
-  "name": "openbadges",
-  "version": "0.0.0",
+  "name": "openBadges_API",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "docs": "apidoc -i . -e \"(node_modules)\" -o doc"
   },
   "dependencies": {
     "@hapi/joi": "^16.1.7",
@@ -15,13 +16,12 @@
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongoose": "^5.7.10",
     "morgan": "~1.9.1",
     "multer": "^1.4.2",
-    "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0",
-    "pug": "^2.0.4",
-    "request": "^2.88.0"
+    "nodemailer": "^6.4.1",
+    "uuid": "^3.3.3"
   }
 }
