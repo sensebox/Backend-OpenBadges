@@ -14,10 +14,9 @@
 ## Starting with Docker:
 
 1. install Docker on your local machine
-<!-- 2. ensure that the data folder is shared -->
-3. open shell and navigate to folder ``OpenBadges``
-4. run ``docker-compose up``
-5. open  [192.168.99.100:3000](http://192.168.99.100:3000/)
+2. open shell and navigate to folder ``OpenBadges``
+3. run ``docker-compose up``
+4. open  [192.168.99.100:3000](http://192.168.99.100:3000/)
 
 
 ## Starting without Docker:
@@ -25,27 +24,31 @@
 2. open shell and create MongoDB
    * on Windows: ``"C:\Program Files\MongoDB\Server\4.2\bin\mongod.exe" --dbpath="C:\path_to_OpenBadges\data"``
 3. open another shell and navigate to folder ``api``
-```
-OpenBadges
- └── api
-```
+   ```
+   OpenBadges
+    └── api
+   ```
 
  * run ``npm install``
  * run ``npm start``
 4. open another shell and navigate to folder ``app``
-```
-OpenBadges
-└── app
-```
+   ```
+   OpenBadges
+   └── app
+   ```
 
  * run ``npm install``
  * run ``npm start``
 5. open  [localhost:3000](http://localhost:3000)
 
 
+
+## Credentials
+   | username  | password |
+   | --------- | -------- |
+   | admin     | admin123 |
+   
+
 ## Authors
 * Dorian
-* Hilal
 * Luc
-* Marius
-* Sven
