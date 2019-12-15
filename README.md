@@ -7,8 +7,7 @@
 
 ## Getting Started
 
-1. [Download](https://github.com/dhenn12/OpenBadges/archive/master.zip) or clone the GitHub Repository
-``git clone https://github.com/dhenn12/OpenBadges``
+1. [Download](https://github.com/dhenn12/OpenBadges/archive/dev.zip) or clone the GitHub Repository ``git clone https://github.com/dhenn12/OpenBadges`` and checkout to branch ``dev``.
 
 
 ## Starting with Docker:
@@ -47,7 +46,11 @@
    | username  | password |
    | --------- | -------- |
    | admin     | admin123 |
-   
+
+
+## API
+The generated HTML page of the current API documentation are located in [``doc``](../dev/api/doc) and can be accessed in the browser at [localhost:3001/docs](http://localhost:3001/docs/) respectively [192.168.99.100:3001/docs](http://192.168.99.100:3001/docs/).
+
 
 ## Authors
 * Dorian
