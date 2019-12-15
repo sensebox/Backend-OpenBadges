@@ -16,9 +16,7 @@
 2. open shell and navigate to folder ``OpenBadges``
  * run ``npm install``
  * run ``npm start``
-
-5. open
-   | content   | route |
+3. | content   | route |
    | --------- | -------- |
    | Start     | [localhost:3000/begin](http://localhost:3000/begin) |
    | Registrierung     | [localhost:3000/registrierung](http://localhost:3000/registrierung) |
