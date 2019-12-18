@@ -1,37 +1,46 @@
 extends layout
-block content
-        // Filter
-        #group
-            .container
-                .row
-                    .col-sm
-                    .col-auto.mt-2
-                        button.btn.btn-primary(data-parent='#group', type='button', data-toggle='collapse', data-target='#collapsedeactivate', aria-expanded='false', aria-controls='collapseExample')
-                            | Filtern
-                    .col-sm
-        #collapsedeactivate.collapse
-            .container.bg-light.mt-5.border
-                p
-                    | Hier kannst du deine Kurse filtern.
-                form(action='#')
-                    button.btn.btn-danger.btn-lg.btn-block.mt-5(type='button') Kurse filtern
-                p
 
-        // Kartendarstellung
-        .text-right
-          button.btn.btn-info(type='button' data-toggle='modal' data-target='#modalRegular') Karte
-        #modalRegular.modal.fade(tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true')
-          .modal-dialog.modal-lg(role='document')
-            // Content
-            .modal-content
-              // Body
-              .modal-body.mb-0.p-0
-                // Google map
-                #map-container-google-16.z-depth-1-half.map-container-9(style='height: 400px')
-                  iframe(src='https://maps.google.com/maps?width=700&height=440&hl=en&q=M%C3%BCnster+(m%C3%BCnster)&ie=UTF8&t=&z=9&iwloc=B&output=embed' frameborder='0' style='border:0' allowfullscreen='')
-              // Footer
-              .modal-footer.justify-content-center
-                button.btn.btn-outline-info.btn-md(type='button' data-dismiss='modal')
-                  | Close
-                  i.fas.fa-times.ml-1
-          
+
+block content
+  link(href='/leaflet/leaflet.css' rel='stylesheet')
+
+  // Filter
+  #group
+      .container
+          .row
+              .col-sm
+              .col-auto.mt-2
+                  button.btn.btn-primary(data-parent='#group', type='button', data-toggle='collapse', data-target='#collapsedeactivate', aria-expanded='false', aria-controls='collapseExample')
+                      | Filtern
+              .col-sm
+  #collapsedeactivate.collapse
+      .container.bg-light.mt-5.border
+          p
+              | Hier kannst du deine Kurse filtern.
+          form(action='#')
+              button.btn.btn-danger.btn-lg.btn-block.mt-5(type='button') Kurse filtern
+          p
+
+  // Kartendarstellung
+  .text-right
+    button.btn.btn-info(type='button' data-toggle='modal' data-target='#modalRegular') Karte
+  #modalRegular.modal.fade(tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+      // Content
+      .modal-content
+        // Body
+        .modal-body.mb-0.p-0
+          // Google map
+          #map(style='height:550px;')
+
+          // #map-container-google-16.z-depth-1-half.map-container-9(style='height: 400px')
+          #map(style='height:550px;')
+          //  iframe(src='https://maps.google.com/maps?width=700&height=440&hl=en&q=M%C3%BCnster+(m%C3%BCnster)&ie=UTF8&t=&z=9&iwloc=B&output=embed' frameborder='0' style='border:0' allowfullscreen='')
+        // Footer
+        .modal-footer.justify-content-center
+          button.btn.btn-outline-info.btn-md(type='button' data-dismiss='modal')
+            | Close
+            i.fas.fa-times.ml-1
+
+  script(src='/leaflet/leaflet.js')
+  script(src='/javascripts/leaflet.js')
