@@ -1,0 +1,144 @@
+extends layout
+block content
+        #group
+            .container
+                .row
+                    .col-sm
+                    .col-auto.mt-2
+                        a.btn.btn-primary(data-parent='#group', data-toggle='collapse', href='#collapseSettings', role='button', aria-expanded='false', aria-controls='collapseExample')
+                            | Kontodaten
+                        button.btn.btn-primary(data-parent='#group', type='button', data-toggle='collapse', data-target='#collapsedeactivate', aria-expanded='false', aria-controls='collapseExample')
+                            | Konto Löschen
+                    .col-sm
+        #collapsedeactivate.collapse
+            .container.bg-light.mt-5.border
+                p
+                    | Möchtest du dein Konto wirklich Löschen? Alle deine erstellten Kurse
+                    | und nicht Exportiere Badges werden gelöscht!
+                form(action='#')
+                    button.btn.btn-danger.btn-lg.btn-block.mt-5(type='button') Konto Löschen
+                p
+        if(user)
+          #collapseSettings.collapse
+              .card.card-body
+                  .container.bg-light.mt-5.border.fadein
+                      .row
+                          .col-lg
+                          .col-lg-6
+                              h1 Konto Anpassung
+                              br
+                              form(action='#')
+                                  .form-row
+                                      .form-group.col-auto
+                                          label(for='inputEmail4') Email
+                                          input#inputEmail4.form-control(value=user.email type='email', placeholder='Email@example.com', data-toggle='tooltip', data-placement='top', title='Gültige Email Adresse')
+                                          span#email.badge.badge-danger
+                                      .form-group.col-auto
+                                          label(for='inputPassword') Passwort
+                                          input#inputPassword.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Passwort mit mindestens 5 Zeichen')
+                                      .form-group.col-auto
+                                          label(for='inputPassword2') Passwort Bestätigen
+                                          input#inputPassword2.form-control(type='password', placeholder='Password', data-toggle='tooltip', data-placement='top', title='Identisches Passwort')
+                                          span#pwtext.badge.badge-danger
+                                  .form-row
+                                      .form-group.col-auto
+                                          label(for='inputVoname') Vorname
+                                          input#inputVoname.form-control(value=user.firstname type='text', placeholder='Max', data-toggle='tooltip', data-placement='top', title='Vorname')
+                                          span#vorname.badge.badge-danger
+                                      .form-group.col-auto
+                                          label(for='inputNachnahme') Nachnahme
+                                          input#inputNachnahme.form-control(value=user.lastname type='text', placeholder='Mustermann', data-toggle='tooltip', data-placement='top', title='Nachnahme')
+                                          span#nachnahme.badge.badge-danger
+                                  .form-row
+                                      .form-group.col-auto
+                                          label(for='inputCity') Stadt
+                                          input#inputCity.form-control(value=user.city type='text', placeholder='Musterstadt', data-toggle='tooltip', data-placement='top', title='Wohnort')
+                                          span#city.badge.badge-danger
+                                      .form-group.col-auto
+                                          label(for='inputZip') Postleitzahl
+                                          input#inputZip.form-control(value=user.postalcode type='number', min='10000', max='99999', placeholder='00000', data-toggle='tooltip', data-placement='top', title='Postleitzahl des Wohnortes')
+                                          span#plz.badge.badge-danger
+                                  .form-row
+                                      .form-group.col-auto
+                                          label(for='inputDate') Geburtsdatum
+                                          input#inputDate.form-control(value=user.birthday type='date', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
+                                          span#date.badge.badge-danger
+                                  button#Send.btn.btn-primary(type='submit') Speichern
+                                  button.btn.btn-danger(type='button') Reset
+                          .col-lg
+                      br
+        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')
+        script.
+            document.getElementById("Send").addEventListener("click", function (event) {
+                pw1 = document.getElementById('inputPassword').value;
+                pw2 = document.getElementById('inputPassword2').value;
+                pwident = null;
+                pwshort = null;
+                if (pw1 != pw2) {
+                    pwident = true;
+                } else {
+                    pwident = false;
+                }
+                if (pw1.length < 5) {
+                    pwshort = true;
+                } else {
+                    pwshort = false;
+                }
+                if (!pwident && !pwshort) {
+                } else if (pwident || pwshort) {
+                    if (pwshort) {
+                        document.getElementById('pwtext').innerText = 'Passwort zu Kurz';
+                        event.preventDefault()
+                    }
+                    if (pwident) {
+                        document.getElementById('pwtext').innerText = 'Passwörter stimmen nicht überein';
+                        event.preventDefault()
+                    }
+                } else {
+                    document.getElementById('pwtext').innerText = "";
+                }
+
+                if(document.getElementById("inputVoname").value == ""){
+                    document.getElementById('vorname').innerText = 'Vorname Eingeben';
+                    event.preventDefault();
+                }else{
+                    document.getElementById('vorname').innerText = "";
+                }
+
+                if (document.getElementById("inputNachnahme").value == "") {
+                    document.getElementById('nachnahme').innerText = 'Nachnahme Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('nachnahme').innerText = "";
+                }
+
+                if (document.getElementById("inputCity").value == "") {
+                    document.getElementById('city').innerText = 'City Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('city').innerText = "";
+                }
+
+                if (document.getElementById("inputEmail4").value == "") {
+                    document.getElementById('email').innerText = 'Email Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('email').innerText = "";
+                }
+
+                if (document.getElementById("inputZip").value == "") {
+                    document.getElementById('plz').innerText = 'Postleitzahl Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('plz').innerText = "";
+                }
+
+                if (document.getElementById("inputDate").value == "") {
+                    document.getElementById('date').innerText = 'Gebursdatum Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('date').innerText = "";
+                }
+            });
