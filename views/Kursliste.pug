@@ -3,7 +3,6 @@ extends layout
 
 block content
   link(href='/leaflet/leaflet.css' rel='stylesheet')
-
   // Filter
   #group
       .container
@@ -17,30 +16,70 @@ block content
       .container.bg-light.mt-5.border
           p
               | Hier kannst du deine Kurse filtern.
+          p
+              input#myInput(type='text' onkeyup='myFunction()' placeholder='Suche nach Kursname' title='Type in a name')
+          p
+              input#myInput1(type='text' onkeyup='myFunction1()' placeholder='Ort' title='Type in a name')
+          p
+              input#myInput2(type='text' onkeyup='myFunction2()' placeholder='Kursleiter' title='Type in a name')
+
+              .form-row
+                  .form-group.col-auto
+                      label(for='inputDate') Der Kurs beginnt am:
+                      input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
+                      span#date.badge.badge-danger
+
+              .form-row
+                  .form-group.col-auto
+                      label(for='inputDate') Der Kurs endet am:
+                      input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
+                      span#date.badge.badge-danger
           form(action='#')
               button.btn.btn-danger.btn-lg.btn-block.mt-5(type='button') Kurse filtern
           p
 
-  // Kartendarstellung
-  .text-right
-    button.btn.btn-info(type='button' data-toggle='modal' data-target='#modalRegular') Karte
-  #modalRegular.modal.fade(tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true')
-    .modal-dialog.modal-lg(role='document')
-      // Content
-      .modal-content
-        // Body
-        .modal-body.mb-0.p-0
-          // Google map
-          #map(style='height:550px;')
-
-          // #map-container-google-16.z-depth-1-half.map-container-9(style='height: 400px')
-          #map(style='height:550px;')
-          //  iframe(src='https://maps.google.com/maps?width=700&height=440&hl=en&q=M%C3%BCnster+(m%C3%BCnster)&ie=UTF8&t=&z=9&iwloc=B&output=embed' frameborder='0' style='border:0' allowfullscreen='')
-        // Footer
-        .modal-footer.justify-content-center
-          button.btn.btn-outline-info.btn-md(type='button' data-dismiss='modal')
-            | Close
-            i.fas.fa-times.ml-1
-
+  // Karte Leaflet
+  #map(style='height:220px;')
   script(src='/leaflet/leaflet.js')
   script(src='/javascripts/leaflet.js')
+
+  // Beispiel Tabelle zum Testen
+  table#myTable
+    tr.header
+      th(style='width:60%;') Name
+      th(style='width:40%;') Country
+      th(style='width:40%;') Kursleiter
+    tr
+      td Alfreds Futterkiste
+      td Germany
+      td Hans
+    tr
+      td Berglunds snabbkop
+      td Sweden
+      td Mannfred
+    tr
+      td Island Trading
+      td UK
+      td Hilal
+    tr
+      td Koniglich Essen
+      td Germany
+      td Hilal
+    tr
+      td Laughing Bacchus Winecellars
+      td Canada
+      td Hilal
+    tr
+      td Magazzini Alimentari Riuniti
+      td Italy
+      td Hilal
+    tr
+      td North/South
+      td UK
+      td Hilal
+    tr
+      td Paris specialites
+      td France
+      td Hilal
+
+  script(src='/javascripts/filter.js')
