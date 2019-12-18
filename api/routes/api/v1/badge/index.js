@@ -14,7 +14,7 @@ BadgeRouter.route('/createBadge')
     .post(require('./badge').postBadge);
 
 
-BadgeRouter.route('/findCourse')
+BadgeRouter.route('/findBadge')
     .get(require('./badge').getBadge);
 
 

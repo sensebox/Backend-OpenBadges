@@ -15,7 +15,8 @@ const BadgeSchema = new mongoose.Schema({
     type: String},
   criteria: {
     type: String},
-  issuer: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+  issuer: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  exists: {type:Boolean}
 });
 
 
