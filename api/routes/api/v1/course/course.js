@@ -9,7 +9,27 @@ const mongoose = require('mongoose');
 const Course = require('../../../../models/course');
 
 
-
+/**
+ * @api {post} /course/createCourse Create Course
+ * @apiName createCourse
+ * @apiDescription Create a new Course
+ * @apiGroup Course
+ *
+ * @apiParam (Parameters for creating a Course) {String} name Name des Kurses kann vom Ersteller eingegeben werden; Character String for a Course Name
+ * @apiParam (Parameters for creating a Course) {Badge} badge Badges die dem Kurs zugeordnet sind; Badges for the Course
+ * @apiParam (Parameters for creating a Course) {Badge} localbadge Lokale Badges die der Ersteller des Kurses selbst zuordnen kann; Localadge for the Course
+ * @apiParam (Parameters for creating a Course) {User} creator of the Course  ; Id to the User who, created the Course
+ * @apiParam (Parameters for creating a Course) {String} courseprovider Anbieter des Kurses; The provider of the course might be specified by the creator
+ * @apiParam (Parameters for creating a Course) {String} postcode Postcode of the Building where the course take place; Postcode for the location of the Course
+ * @apiParam (Parameters for creating a Course) {String} address Adresse des Kurses bei einem festgelegten Ort ; adress of the location from the Course
+ * @apiParam (Parameters for creating a Course) {String} coordinates Koordinaten von der Lokalisierung des Kurses; coordinates of the location from the Course
+ * @apiParam (Parameters for creating a Course) {String} topic Thema des Kurses kann fuer verschiedene tags festgelegt werden ; topic of the Course
+ * @apiParam (Parameters for creating a Course) {String} description Beschreibung des Kurses ; a biref summary about the course contents
+ *
+ * @apiSuccess (Created 201) {String} message `success`
+ * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer"= user, "criteria":"criteria", "image":"image"}'
+ *
+ */
 const postCourse = async function(req, res){
   console.log(req.user.id);
   const course = new Course({
