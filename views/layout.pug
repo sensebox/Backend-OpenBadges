@@ -6,7 +6,7 @@ block head
  meta(charset='utf-8')
  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
-body
+body(onload="fadeIn()")
   // WWU Logo Austauschen !
   nav.navbar.navbar-expand-lg.navbar-dark.bg-dark(class='navbar-toggleable-*')
     a.navbar-brand(href='#')
@@ -20,11 +20,13 @@ body
         li.nav-item
           a.nav-link(href='/begin') Starseite
         li.nav-item
-          a.nav-link(href='#') Kursliste
+          a.nav-link(href='/Kursliste') Kursliste
         li.nav-item
           a.nav-link(href='#') Belegte Kurse
         li.nav-item
           a.nav-link(href='Kontaktformular') Admin Kontakt
+        li.nav-item
+          a.nav-link(href='Kontoseite') Mein Konto
         li.nav-item
           a.nav-link(href='#', style='color: red;') Logout
 script(crossorigin='anonymous', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', src='https://code.jquery.com/jquery-3.3.1.slim.min.js')
