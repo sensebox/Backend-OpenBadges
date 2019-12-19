@@ -22,4 +22,8 @@ router.get('/Kursliste', function(req, res, next) {
 router.get('/login', function(req, res, next) {
   res.render('login');
 });
+/* GET kursRegistrierung. */
+router.get('/kursRegistrierung', function(req, res, next) {
+    res.render('kursRegistrierung');
+});
 module.exports = router;
