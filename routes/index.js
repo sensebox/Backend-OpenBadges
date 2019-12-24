@@ -22,8 +22,9 @@ router.get('/Kursliste', function(req, res, next) {
 router.get('/login', function(req, res, next) {
   res.render('login');
 });
-router.get('/Kontoseite', function(req, res, next) {
-  res.render('Kontoseite');
+/* GET kursRegistrierung. */
+router.get('/kursRegistrierung', function(req, res, next) {
+    res.render('kursRegistrierung');
 });
 router.get('/Kursseite', function(req, res, next) {
   res.render('Kursseite');
