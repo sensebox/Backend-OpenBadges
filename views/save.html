@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+            crossorigin=""></script>
+    <script src="/public/javascripts/leaflet.js"></script>
+
+</head>
+<!-- Navbar -->
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-toggleable-*"><a class="navbar-brand" href="#">Open Badges</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="google.de">Starseite</a></li>
+            <li class="nav-item"><a class="nav-link" href="amazon.de">Kursliste</a></li>
+            <li class="nav-item"><a class="nav-link" href="amazon.de">Belegte Kurse</a></li>
+            <li class="nav-item"><a class="nav-link" href="amazon.de">Admin Kontakt</a></li>
+            <li class="nav-item"><a class="nav-link" href="amazon.de" style="color: red;">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+<!--Navbar ende-->
+
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6">
+            <div class="container bg-light mt-5 border">
+                <h1>Kurs XY</h1>
+                <div class="form-row">
+                    <div class="form-group col-auto">
+                        <label for="titel">Kurstitel</label>
+                        <input class="form-control" id="titel" value="" readonly>
+                    </div>
+                    <div class="form-group col-auto">
+                        <label for="ersteller">Ersteller</label>
+                        <input class="form-control" id="ersteller" value="" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-auto">
+                        <label for="Thema">Thema</label>
+                        <input class="form-control" id="Thema" value="" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="voraussetzungen">Voraussetzungen</label>
+                        <input class="form-control" id="voraussetzungen" value="" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-auto">
+                        <label for="start">Startdatum</label>
+                        <input class="form-control" id="start" readonly>
+                    </div>
+                    <div class="form-group col-auto">
+                        <label for="ende">Enddatum</label>
+                        <input class="form-control" id="ende" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="beschreibung">Beschreibung</label>
+                        <textarea class="form-control" id="beschreibung" rows="3" style="resize: none"readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div id="map"></div>
+            <div>
+                <div class="container bg-light mt-5 border">
+                    <h1>Globale Badges</h1>
+                </div>
+                <!-- Hier for schleife und if einfügen-->
+                <div>
+                    <div class="container bg-light mt-5 border">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
