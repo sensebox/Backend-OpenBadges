@@ -25,4 +25,7 @@ router.get('/login', function(req, res, next) {
 router.get('/Kontoseite', function(req, res, next) {
   res.render('Kontoseite');
 });
+router.get('/Kursseite', function(req, res, next) {
+  res.render('Kursseite');
+});
 module.exports = router;
