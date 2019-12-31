@@ -29,4 +29,7 @@ router.get('/kursRegistrierung', function(req, res, next) {
 router.get('/Kursseite', function(req, res, next) {
   res.render('Kursseite');
 });
+router.get('/Kontoseite', function(req, res, next) {
+  res.render('Kontoseite');
+});
 module.exports = router;
