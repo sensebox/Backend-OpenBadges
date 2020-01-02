@@ -20,7 +20,7 @@ router.get('/Kursliste', function(req, res, next) {
   res.render('kursliste');
 });
 router.get('/login', function(req, res, next) {
-  res.render('login');
+  res.render('loginnew');
 });
 /* GET kursRegistrierung. */
 router.get('/kursRegistrierung', function(req, res, next) {
@@ -31,5 +31,11 @@ router.get('/Kursseite', function(req, res, next) {
 });
 router.get('/Kontoseite', function(req, res, next) {
   res.render('Kontoseite');
+});
+router.get('/pwlost', function(req, res, next) {
+  res.render('pwlost');
+});
+router.get('/badgelist', function(req, res, next) {
+  res.render('badgelist');
 });
 module.exports = router;
