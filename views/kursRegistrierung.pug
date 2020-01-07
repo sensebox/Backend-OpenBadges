@@ -2,7 +2,7 @@
 extends layout
 block content
 
-    .container.bg-light.mt-5.border.fadein(id='#div1')
+    .container.bg-light.mt-5.border.fadein(id='#fadein')
         .row
             .col-lg
             .col-lg-6
@@ -40,115 +40,32 @@ block content
                     .form-row
                         .form-group.col-auto
                             label(for='inputVorraussetzungen') Vorraussetzungen:
-                            input#Vorraussetzungen.form-control(type='text' placeholder=' z.B Java Grundlagen belegt ' data-toggle='tooltip' data-placement='top' title='Gültige Vorraussetzungen')
+                            input#inputVorraussetzungen.form-control(type='text' placeholder=' z.B Java Grundlagen belegt ' data-toggle='tooltip' data-placement='top' title='Gültige Vorraussetzungen')
                         |
 
                         .form-group.col-auto
                             label(for='inputlocalBadge') Lokale Badges:
                             input#inputlocalBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Welche Badges können erreicht werden')
-                    .custom-file.form-row.col-auto
-                        input#customFile.custom-file-input(type='file' multiple='')
-                        label.custom-file-label(for='customFile') Choose file
-                    .form-group.col-auto
-                        label(for='inputglobalBadge') Globale Badges:
-                        input#inputglobalBadgeBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen')
-                    .list-group(<ul='')
-                    li.list-group-item
                     .form-row
-                    button.btn.btn-primary(type='submit') Senden
+                        .form-group.col-auto
+                            label(for='exampleFormControlFile1') Example file input
+                            input#exampleFormControlFile1.form-control-file(type='file', multiple='')
+                        .form-group.col-auto
+                            label(for='inputglobalBadge') Globale Badges:
+                            input#inputglobalBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen')
+                    ul.list-unstyled
+                        li.list-group-item
+                            img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                        li.list-group-item
+                            img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                    .form-row
+                        button.btn.btn-primary(type='submit') Senden
             .col-lg
         br
     script.
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous')
-    script.
-        (function() {
-            var FX = {
-                easing: {
-                    linear: function(progress) {
-                        return progress;
-                    },
-                    quadratic: function(progress) {
-                        return Math.pow(progress, 2);
-                    },
-                    swing: function(progress) {
-                        return 0.5 - Math.cos(progress * Math.PI) / 2;
-                    },
-                    circ: function(progress) {
-                        return 1 - Math.sin(Math.acos(progress));
-                    },
-                    back: function(progress, x) {
-                        return Math.pow(progress, 2) * ((x + 1) * progress - x);
-                    },
-                    bounce: function(progress) {
-                        for (var a = 0, b = 1, result; 1; a += b, b /= 2) {
-                            if (progress >= (7 - 4 * a) / 11) {
-                                return -Math.pow((11 - 6 * a - 11 * progress) / 4, 2) + Math.pow(b, 2);
-                            }
-                        }
-                    },
-                    elastic: function(progress, x) {
-                        return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * x / 3 * progress);
-                    }
-                },
-                animate: function(options) {
-                    var start = new Date;
-                    var id = setInterval(function() {
-                        var timePassed = new Date - start;
-                        var progress = timePassed / options.duration;
-                        if (progress > 1) {
-                            progress = 1;
-                        }
-                        options.progress = progress;
-                        var delta = options.delta(progress);
-                        options.step(delta);
-                        if (progress == 1) {
-                            clearInterval(id);
-                            options.complete();
-                        }
-                    }, options.delay || 10);
-                },
-                fadeOut: function(element, options) {
-                    var to = 1;
-                    this.animate({
-                        duration: options.duration,
-                        delta: function(progress) {
-                            progress = this.progress;
-                            return FX.easing.swing(progress);
-                        },
-                        complete: options.complete,
-                        step: function(delta) {
-                            element.style.opacity = to - delta;
-                        }
-                    });
-                },
-                fadeIn: function(element, options) {
-                    var to = 0;
-                    this.animate({
-                        duration: options.duration,
-                        delta: function(progress) {
-                            progress = this.progress;
-                            return FX.easing.swing(progress);
-                        },
-                        complete: options.complete,
-                        step: function(delta) {
-                            element.style.opacity = to + delta;
-                        }
-                    });
-                }
-            };
-            window.FX = FX;
-        })();
-        function fadeIn() {
-            FX.fadeIn(document.getElementById('#div1'), {
-                duration: 2000,
-            });
-        }
-    script.
-        // Add the following code if you want the name of the file appear on select
-        $(".custom-file-input").on("change", function() {
-            var fileName = $(this).val().split("\\\").pop();
-            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-        });
+
+
 
