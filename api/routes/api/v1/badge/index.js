@@ -10,20 +10,28 @@
 const express = require('express');
 const BadgeRouter = express.Router();
 
-BadgeRouter.route('/createBadge')
+BadgeRouter.route('/local')
     .post(require('./badge').postBadge);
 
-BadgeRouter.route('/findBadge')
+BadgeRouter.route('/')
     .get(require('./badge').getBadge);
 
-BadgeRouter.route('/findBadge')
-    .get(require('./badge').putBadgeGlobal);
+<<<<<<< HEAD
+BadgeRouter.route('/global')
+    .put(require('./badge').putBadgeGlobal);
 
-BadgeRouter.route('/findBadge')
-    .get(require('./badge').putBadgeLocal);
+BadgeRouter.route('/local')
+    .put(require('./badge').putBadgeLocal);
 
-BadgeRouter.route('/findBadge')
-    .get(require('./badge').postBadgeGlobal);
+BadgeRouter.route('/global')
+    .post(require('./badge').postBadgeGlobal);
+=======
+BadgeRouter.route('/assigne/:badgeId/:userId/')
+    .put(require('./user').assigneBadge);
+
+
+
+>>>>>>> User
 
 
 module.exports = BadgeRouter;
