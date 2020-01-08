@@ -1,5 +1,38 @@
 extends layout
 block content
+    .container(id='#fadein')
+        .row
+            .col
+            .col-6
+                h1 Startseite
+                .container.bg-light.mt-5.border
+                    h3 Nächste Kurstermine
+                    ul.list-unstyled
+                        // Schleife hier starten !
+                        a(href='google.de')
+                            li.media
+                                // Das Darf so nicht online gehen. Wir halten nicht die rechte an dem Bild! !
+                                img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                                .media-body
+                                    h5.mt-0.mb-1 Kursname
+                                    kursbeschreibung
+                                        datum
+                        // Schleife bis hier !
+                .container.bg-light.mt-5.border
+                    h3 Vorgeschlagene Kurstermine
+                    ul.list-unstyled
+                        // Schleife hier starten !
+                        a(href='google.de')
+                            li.media
+                                // Das Darf so nicht online gehen. Wir halten nicht die rechte an dem Bild! !
+                                img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                                .media-body
+                                    h5.mt-0.mb-1 Kursname
+                                    kursbeschreibung
+                                        datum
+                        // Schleife bis hier !
+            .col
+
 
 
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
