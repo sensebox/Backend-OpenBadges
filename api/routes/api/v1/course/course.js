@@ -47,7 +47,8 @@ const postCourse = async function(req, res){
     requirements: req.body.requirements,
     startdate: req.body.startdate,
     enddate: req.body.enddate,
-    size: req.body.size
+    size: req.body.size,
+    exists: true
   });
   try{
     const savedCourse = await course.save();
@@ -147,6 +148,22 @@ const getParticipants = async function(req, res){
   }
   return res.status(404).send({
     message: 'Invalid CourseID.',
+  });
+};
+
+const putCourseHidden = async function(req, res){
+  const course = new Course();
+  var result = await course.findOne({_id: req.params.id}, (err, result)=>{
+  });
+  if(re)
+  if(result){
+    result.exists = false;
+    return res.status(200).send({
+      message: 'Course is now deactivated'
+    });
+  }
+  return res.status(404).send({
+    message: 'Error deactivating course',
   });
 };
 
