@@ -24,8 +24,7 @@ const CourseSchema = new mongoose.Schema({
   },
   // Adresse wird benötigt
   address: {
-    type: String,
-    required: true
+    type: String
   },
   // wird vom user mitgeliefert --> osm nominatim
   coordinates: {
@@ -66,7 +65,9 @@ const CourseSchema = new mongoose.Schema({
   size: {
     type: Number,
     required: true,
-  }
+  },
+  // ist der Kurs aktuell, bei Nein soll er nicht mehr gesehen werden
+  exists: {type:Boolean}
 });
 
 

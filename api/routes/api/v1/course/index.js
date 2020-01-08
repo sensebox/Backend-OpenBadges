@@ -19,12 +19,17 @@ CourseRouter.route('/')
 CourseRouter.route('/')
     .get(require('./course').getCourse);
 
+CourseRouter.route('/')
+    .get(require('./course').getParticipants);
+
 CourseRouter.route('/:courseId/user/signin')
     .put(userAuthorization, user.putCourseSignIn);
 
 CourseRouter.route('/:courseId/user/signout')
     .put(userAuthorization, user.putCourseSignOut);
 
+    CourseRouter.route('/:courseId')
+    .get(userAuthorization, user.putCourseSignOut);
 
 
 
