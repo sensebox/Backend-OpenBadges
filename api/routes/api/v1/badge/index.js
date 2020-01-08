@@ -13,9 +13,13 @@ const BadgeRouter = express.Router();
 BadgeRouter.route('/createBadge')
     .post(require('./badge').postBadge);
 
-
 BadgeRouter.route('/findBadge')
     .get(require('./badge').getBadge);
+
+BadgeRouter.route('/assigne/:badgeId/:userId/')
+    .put(require('./user').assigneBadge);
+
+
 
 
 
