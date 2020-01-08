@@ -14,15 +14,14 @@ const Badge = require('../../../../models/badge');
  * @apiDescription Find a Badge
  * @apiGroup Badge
  *
- * @apiQuery (Query for filtering Badges) {String} name Name des Badge; find Badge by its name
- * @apiQuery (Query for filtering Badges) {String} description Beschreibung des Badge; find Badge by its description
- * @apiQuery (Query for filtering Badges) {String} issuer Ersteller des  Badges ; find Badge by its issuer
- * @apiQuery (Query for filtering Badges) {String} id id des Badge; find Badge by its id
+ * @apiParam (Query for filtering Badges) {String} name Name des Badge; find Badge by its name
+ * @apiParam (Query for filtering Badges) {String} description Beschreibung des Badge; find Badge by its description
+ * @apiParam (Query for filtering Badges) {String} issuer Ersteller des  Badges ; find Badge by its issuer
+ * @apiParam (Query for filtering Badges) {String} id id des Badge; find Badge by its id
  *
  * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer"= user, "criteria":"criteria", "image":"image"}'
  *
  */
-
 const getBadge = async function(req, res){
   var qname  = req.query.name;
   var qdescription = req.query.description;
