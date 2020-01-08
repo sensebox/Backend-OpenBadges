@@ -38,4 +38,7 @@ router.get('/pwlost', function(req, res, next) {
 router.get('/badgelist', function(req, res, next) {
   res.render('badgelist');
 });
+router.get('/belegteKurse', function(req, res, next) {
+  res.render('belegteKurse');
+});
 module.exports = router;
