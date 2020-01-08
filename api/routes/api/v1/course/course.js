@@ -185,6 +185,17 @@ const getParticipants = async function(req, res){
   });
 };
 
+/**
+ * @api {put} /course/putCourseHidden (sign in a user)
+ * @apiName putCourseHidden
+ * @apiDescription change a course to deactivated. The course might be no longer in offer.
+ * @apiGroup Course
+ *
+ * @apiSuccess (Success 200) {String} message `Course is now deactivated.`
+ * @apiSuccess (Success 200) {Object} course `{...}`
+ *
+ * @apiError (On error) {String} 404 `{"message": "Error deactivating course."}`
+ */
 const putCourseHidden = async function(req, res){
   const course = new Course();
   var result = await course.findOne({_id: req.params.id}, (err, result)=>{
