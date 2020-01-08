@@ -155,7 +155,6 @@ const putCourseHidden = async function(req, res){
   const course = new Course();
   var result = await course.findOne({_id: req.params.id}, (err, result)=>{
   });
-  if(re)
   if(result){
     result.exists = false;
     return res.status(200).send({

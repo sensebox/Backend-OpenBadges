@@ -17,6 +17,9 @@ BadgeRouter.route('/createBadge')
 BadgeRouter.route('/findBadge')
     .get(require('./badge').getBadge);
 
+BadgeRouter.route('/findBadge')
+    .get(require('./badge').putBadgeGlobal);
+
 
 
 module.exports = BadgeRouter;
