@@ -11,21 +11,23 @@ const Course = require('../../../../models/course');
 
 
 const postCourse = async function(req, res){
+  console.log(req.user.id);
   const course = new Course({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     badge: req.body.badge,
     localbadge: req.body.localbadge,
-    username: req.body.username,
+    creator: req.user.id,
     courseprovider: req.body.courseprovider,
     postcode: req.body.postcode,
     address: req.body.address,
-    coordinates: {type: 'point', coordinates: req.body.coordinates},
+    'coordinates.coordinates': JSON.parse(req.body.coordinates),
     topic: req.body.topic,
-    descriptipn: req.body.description,
+    description: req.body.description,
     requirements: req.body.requirements,
     startdate: req.body.startdate,
-    enddate: req.body.enddate
+    enddate: req.body.enddate,
+    size: req.body.size
   });
   try{
     const savedCourse = await course.save();

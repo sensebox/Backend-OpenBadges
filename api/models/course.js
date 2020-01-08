@@ -10,7 +10,7 @@ const CourseSchema = new mongoose.Schema({
     required: true,
   },
   badge: {type: mongoose.Schema.Types.ObjectId, ref: 'Badge'},
-  localbadge: [{type: mongoose.Schema.Types.ObjectId, ref: 'Badge'}],
+  localbadge: {type: [mongoose.Schema.Types.ObjectId], ref: 'Badge'},
   // Nutzername der den Kurs erstellt
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   // Falls der Nutzer es für eine organisation etc anbietet (zb. Kreativwerkstatt Münster)
@@ -29,8 +29,14 @@ const CourseSchema = new mongoose.Schema({
   },
   // wird vom user mitgeliefert --> osm nominatim
   coordinates: {
-    type: String,
-    coordinates: Array
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number]
+    }
   },
   // das übergeordnete Thema des Kurses
   topic:{
@@ -53,7 +59,14 @@ const CourseSchema = new mongoose.Schema({
   enddate: {
     type: Date
   },
-  participants: Array
+  participants: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'User'
+  },
+  size: {
+    type: Number,
+    required: true,
+  }
 });
 
 
