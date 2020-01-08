@@ -13,13 +13,17 @@ const BadgeRouter = express.Router();
 BadgeRouter.route('/createBadge')
     .post(require('./badge').postBadge);
 
-
 BadgeRouter.route('/findBadge')
     .get(require('./badge').getBadge);
 
 BadgeRouter.route('/findBadge')
     .get(require('./badge').putBadgeGlobal);
 
+BadgeRouter.route('/findBadge')
+    .get(require('./badge').putBadgeLocal);
+
+BadgeRouter.route('/findBadge')
+    .get(require('./badge').postBadgeGlobal);
 
 
 module.exports = BadgeRouter;

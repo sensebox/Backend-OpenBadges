@@ -22,6 +22,9 @@ CourseRouter.route('/')
 CourseRouter.route('/')
     .get(require('./course').getParticipants);
 
+CourseRouter.route('/')
+    .get(require('./course').putCourseHidden);
+
 CourseRouter.route('/:courseId/user/signin')
     .put(userAuthorization, user.putCourseSignIn);
 

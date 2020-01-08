@@ -75,6 +75,33 @@ const postBadge = async function(req, res){
 };
 
 
+/**
+ * @api {post} /badge/createGlobalBadge Create Global Badge
+ * @apiName createBadge
+ * @apiDescription Create a new Badge
+ * @apiGroup Badge
+ *
+ * @apiParam (Parameters for creating a Badge) {String} name Name des Kurses kann vom Ersteller eingegeben werden; Character String for a Course Name
+ * @apiParam (Parameters for creating a Badge) {String} critera Kriterien des Badges die vorrausgesetzt sind; Character String criterias getting this Badge
+ * @apiParam (Parameters for creating a Badge) {String} image Image wird als String gespeichert ; Character String image values getting saved as String in mongo but might be rendered on site
+ *
+ * @apiSuccess (Created 201) {String} message `success`
+ * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer"= user, "criteria":"criteria", "image":"image"}'
+ *
+ */
+const postGlobalBadge = async function(req, res){
+  const badge = new Badge({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    issuer: req.body.issuer,
+    criteria: req.body.criteria,
+    image: req.body.image,
+    global: true
+  });
+  badge.save();
+  res.send("success");
+};
+
 const putBadgeGlobal = async function(req, res){
   const badge = new Badge();
   var result = await badge.findOne({_id: req.params.id}, (err, result)=>{
@@ -90,9 +117,25 @@ const putBadgeGlobal = async function(req, res){
   });
 };
 
+const putBadgeLocal = async function(req, res){
+  const badge = new Badge();
+  var result = await badge.findOne({_id: req.params.id}, (err, result)=>{
+  });
+  if(result){
+    badge.global = false;
+    return res.status(200).send({
+      message: 'Badge is now an local one'
+    });
+  }
+  return res.status(404).send({
+    message: 'Error at setting badge local',
+  });
+};
 
 module.exports = {
+  putBadgeLocal,
   putBadgeGlobal,
   postBadge,
-  getBadge
+  getBadge,
+  postGlobalBadge
 };

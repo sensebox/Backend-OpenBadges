@@ -61,9 +61,22 @@ const postCourse = async function(req, res){
 
 
 
-/** url?name=<placeholder>&coordinates=<lat>,<lng>&startdate=<placeholder> etc.
-  *
-  */
+/**
+ * @api {get} /course/createCourse Create Course
+ * @apiName getCourse
+ * @apiDescription Find a course by different Parameters
+ * @apiGroup Course
+ *
+ * @apiParam (Parameters for searching a Course) {String} name Name des Kurses; Character String for a Course Name
+ * @apiParam (Parameters for searching a Course) {Number} coordinates Koordinaten auf einer Karte; Coordinates in which radius might be an course
+ * @apiParam (Parameters for searching a Course) {Number} radius Radius um die Koordinaten; Radius about a pair of coordinates
+ * @apiParam (Parameters for searching a Course) {Date} stardate Startdatum des Kurses; The startdate of the course
+ * @apiParam (Parameters for searching a Course) {Date} enddate Enddatum des Kurses; The enddate of the course
+ * @apiParam (Parameters for searching a Course) {String} topic Thema des Kurses; Character String for a Course Topic
+ *
+ * @apiSuccess (Get 201) {Object} Course
+ *
+ */
 const getCourse = async function(req, res){
   var qname = req.query.name;
   var qcoordinates = req.query.coordinates;
@@ -104,22 +117,43 @@ const getCourseID = async function(req, res){
 };
 
 
-// url/?
+/**
+ * @api {put} /course/putCourse Create Course
+ * @apiName createCourse
+ * @apiDescription Create a new Course
+ * @apiGroup Course
+ *
+ * @apiParam (Parameters for creating a Course) {String} name Name des Kurses kann vom Ersteller eingegeben werden; Character String for a Course Name
+ * @apiParam (Parameters for creating a Course) {Badge} badge Badges die dem Kurs zugeordnet sind; Badges for the Course
+ * @apiParam (Parameters for creating a Course) {Badge} localbadge Lokale Badges die der Ersteller des Kurses selbst zuordnen kann; Localadge for the Course
+ * @apiParam (Parameters for creating a Course) {String} courseprovider Anbieter des Kurses; The provider of the course might be specified by the creator
+ * @apiParam (Parameters for creating a Course) {String} postcode Postcode of the Building where the course take place; Postcode for the location of the Course
+ * @apiParam (Parameters for creating a Course) {String} address Adresse des Kurses bei einem festgelegten Ort ; adress of the location from the Course
+ * @apiParam (Parameters for creating a Course) {String} coordinates Koordinaten von der Lokalisierung des Kurses; coordinates of the location from the Course
+ * @apiParam (Parameters for creating a Course) {String} topic Thema des Kurses kann fuer verschiedene tags festgelegt werden ; topic of the Course
+ * @apiParam (Parameters for creating a Course) {String} description Beschreibung des Kurses ; a biref summary about the course contents
+ *
+ * @apiSuccess (Updated 201) {Object} badge
+ *
+ */
 const putCourse = async function(req, res){
   const course = new Course();
-  var result = await course.findOne({_id: req.params.id}, (err, resul)=>{
-    resul.name= req.body.name;
-    resul.courseprovider= req.body.courseprovider;
-    resul.postcode= req.body.postcode;
-    resul.address= req.body.address;
-
-    resul.coordinates= {type: 'point', coordinates: req.body.coordinates};
-    resul.topic= req.body.topic;
-    resul.description = req.body.description;
-    resul.requirements= req.body.requirements;
-    resul.startdate= req.body.startdate;
-    resul.enddate= req.body.enddate;
+  var result = await course.findOne({_id: req.params.id}, (err, result)=>{
+    if(result.creator == req.user.id){
+      result.name= req.body.name;
+      result.courseprovider= req.body.courseprovider;
+      result.postcode= req.body.postcode;
+      result.address= req.body.address;
+      result.badge = req.body.badge;
+      result.coordinates= {type: 'point', coordinates: req.body.coordinates};
+      result.topic= req.body.topic;
+      result.description = req.body.description;
+      result.requirements= req.body.requirements;
+      result.startdate= req.body.startdate;
+      result.enddate= req.body.enddate;
+    }
   });
+  result.save();
 
 };
 
@@ -133,7 +167,7 @@ const putCourse = async function(req, res){
  * @apiSuccess (Created 201) {String} message `success`
  * @apiSuccess (Created 201) {Object} course `{"participants": participants}'
  *
-  * @apiError (On error) {String} 404 `{"message": "Invalid CourseID."}`
+ * @apiError (On error) {String} 404 `{"message": "Invalid CourseID."}`
  */
 const getParticipants = async function(req, res){
   const course = new Course();
@@ -155,7 +189,7 @@ const putCourseHidden = async function(req, res){
   const course = new Course();
   var result = await course.findOne({_id: req.params.id}, (err, result)=>{
   });
-  if(result){
+  if(result && result.creator == req.user.id){
     result.exists = false;
     return res.status(200).send({
       message: 'Course is now deactivated'
@@ -170,5 +204,6 @@ module.exports = {
   postCourse,
   getCourse,
   getCourseID,
-  getParticipants
+  getParticipants,
+  putCourseHidden
 };
