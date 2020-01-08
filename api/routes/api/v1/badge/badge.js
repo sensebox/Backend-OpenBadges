@@ -75,8 +75,24 @@ const postBadge = async function(req, res){
 };
 
 
+const putBadgeGlobal = async function(req, res){
+  const badge = new Badge();
+  var result = await badge.findOne({_id: req.params.id}, (err, result)=>{
+  });
+  if(result){
+    badge.global = true;
+    return res.status(200).send({
+      message: 'Badge is now an global one'
+    });
+  }
+  return res.status(404).send({
+    message: 'Error at setting badge global',
+  });
+};
+
 
 module.exports = {
+  putBadgeGlobal,
   postBadge,
   getBadge
 };
