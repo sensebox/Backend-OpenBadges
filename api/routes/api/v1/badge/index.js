@@ -3,35 +3,38 @@
 "use strict";
 
 /**
-* routes/api/v1/dwd/index.js
+* routes/api/v1/badge/index.js
 * @see https://medium.com/@sesitamakloe/how-we-structure-our-express-js-routes-58933d02e491
 */
 
 const express = require('express');
 const BadgeRouter = express.Router();
 
-BadgeRouter.route('/local')
-    .post(require('./badge').postBadge);
+const {userAuthorization} = require('../../../../helper/authorization/middleware');
+
 
 BadgeRouter.route('/')
+    .post(userAuthorization, require('./badge').postLocalBadge);
+
+BadgeRouter.route('/')
+    .get(require('./badge').getBadges);
+
+BadgeRouter.route('/me')
+    .get(userAuthorization, require('./badge').getBadgesMe);
+
+BadgeRouter.route('/:badgeId')
     .get(require('./badge').getBadge);
 
-<<<<<<< HEAD
-BadgeRouter.route('/global')
-    .put(require('./badge').putBadgeGlobal);
+BadgeRouter.route('/:badgeId')
+    .put(userAuthorization, require('./badge').putBadgeLocal);
 
-BadgeRouter.route('/local')
-    .put(require('./badge').putBadgeLocal);
+BadgeRouter.route('/:badgeId/deactivation')
+    .put(userAuthorization, require('./badge').putBadgeLocalHidden);
 
-BadgeRouter.route('/global')
-    .post(require('./badge').postBadgeGlobal);
-=======
-BadgeRouter.route('/assigne/:badgeId/:userId/')
-    .put(require('./user').assigneBadge);
+BadgeRouter.route('/:badgeId/course/:courseId/assigne/user/:userId')
+    .put(userAuthorization, require('./user').assigneBadge);
 
-
-
->>>>>>> User
-
+BadgeRouter.route('/:badgeId/course/:courseId/unassigne/user/:userId')
+    .put(userAuthorization, require('./user').unassigneBadge);
 
 module.exports = BadgeRouter;
