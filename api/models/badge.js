@@ -8,16 +8,29 @@ const mongoose = require('mongoose');
 const BadgeSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true},
+    required: true
+  },
   description: {
-    type: String},
+    type: String
+  },
   image: {
-    type: String},
+    type: String
+  },
   criteria: {
-    type: String},
-  issuer: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  global: {type:Boolean, default: false},
-  exists: {type:Boolean}
+    type: String
+  },
+  issuer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  global: {
+    type: Boolean,
+    default: false
+  },
+  exists: {
+    type: Boolean,
+    default: true
+  }
 });
 
 

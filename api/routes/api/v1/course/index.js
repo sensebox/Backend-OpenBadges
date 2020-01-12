@@ -17,24 +17,25 @@ CourseRouter.route('/')
     .post(userAuthorization, require('./course').postCourse);
 
 CourseRouter.route('/')
-    .get(require('./course').getCourse);
+    .get(require('./course').getCourses);
 
-CourseRouter.route('/')
-    .get(require('./course').getParticipants);
+CourseRouter.route('/:courseId')
+    .get(require('./course').getCourseID);
 
-CourseRouter.route('/')
-    .get(require('./course').putCourseHidden);
+CourseRouter.route('/:courseId/participants')
+    .get(userAuthorization, require('./course').getParticipants);
 
-CourseRouter.route('/:courseId/user/signin')
+CourseRouter.route('/:courseId/deactivation')
+    .put(userAuthorization, require('./course').putCourseHidden);
+
+CourseRouter.route('/:courseId/user/registration')
     .put(userAuthorization, user.putCourseSignIn);
 
-CourseRouter.route('/:courseId/user/signout')
+CourseRouter.route('/:courseId/user/deregistration')
     .put(userAuthorization, user.putCourseSignOut);
 
-    CourseRouter.route('/:courseId')
-    .get(userAuthorization, user.putCourseSignOut);
-
-
+CourseRouter.route('/:courseId')
+    .put(userAuthorization, require('./course').putCourse);
 
 
 module.exports = CourseRouter;

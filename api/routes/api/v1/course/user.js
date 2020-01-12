@@ -6,17 +6,16 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {put} /course/:courseId/user/signin Put the course (sign in a user)
+ * @api {put} /course/:courseId/user/registration Put the course (sign in a user)
  * @apiName courseSignIn
- * @apiDescription Sign in a user in a course, if the size is not reached.
+ * @apiDescription Register a user in a course, if the size is not reached.
  * @apiGroup Course
  *
- * @apiSuccess (Success 200) {String} message `User signed in successfully in course.`
- * @apiSuccess (Success 200) {Object} course `{...}`
+ * @apiSuccess (Success 200) {String} message `User registered successfully in course.`
  *
  * @apiError (On error) {String} 404 `{"message": "Course not found."}`
  * @apiError (On error) {String} 400 `{"message": "Course size is already reached."}`
- * @apiError (On error) {String} 400 `{"message": "User is already signed in in course."}`
+ * @apiError (On error) {String} 400 `{"message": "User is already registered in course."}`
  * @apiError (On error) 500 Complications during querying the database
  */
  const putCourseSignIn = async function(req, res){
@@ -30,8 +29,7 @@ const Course = require('../../../../models/course');
            course.participants.push(req.user.id);
            course.save();
            return res.status(200).send({
-             message: 'User signed in successfully in course.',
-             course: course
+             message: 'User registered in successfully in course.',
            });
          }
          else{
@@ -42,7 +40,7 @@ const Course = require('../../../../models/course');
        }
        else{
          return res.status(400).send({
-           message: 'User is already signed in in course.',
+           message: 'User is already registered in course.',
          });
        }
      }
@@ -59,16 +57,15 @@ const Course = require('../../../../models/course');
 
 
  /**
-  * @api {put} /course/:courseId/user/signout Put the course (sign out a user)
+  * @api {put} /course/:courseId/user/deregistration Put the course (sign out a user)
   * @apiName courseSignOut
-  * @apiDescription Sign out a user in a course, if the user was signed in.
+  * @apiDescription Deregister a user in a course, if the user was registered.
   * @apiGroup Course
   *
-  * @apiSuccess (Success 200) {String} message `User signed out successfully from course.`
-  * @apiSuccess (Success 200) {Object} course `{...}`
+  * @apiSuccess (Success 200) {String} message `User deregistered successfully from course.`
   *
   * @apiError (On error) {String} 404 `{"message": "Course not found."}`
-  * @apiError (On error) {String} 400 `{"message": "User is not signed in in course."}`
+  * @apiError (On error) {String} 400 `{"message": "User is not registered in course."}`
   * @apiError (On error) 500 Complications during querying the database
   */
   const putCourseSignOut = async function(req, res){
@@ -81,13 +78,12 @@ const Course = require('../../../../models/course');
           course.participants.pop(req.user.id);
           course.save();
           return res.status(200).send({
-            message: 'User signed out successfully from course.',
-            course: course
+            message: 'User deregistered successfully from course.',
           });
         }
         else{
           return res.status(400).send({
-            message: 'User is not signed in in course.',
+            message: 'User is not registered in course.',
           });
         }
       }

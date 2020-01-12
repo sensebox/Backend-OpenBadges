@@ -1,3 +1,5 @@
+// jshint esversion: 6
+// jshint node: true
 "use strict";
 
 const mongoose = require('mongoose');
@@ -9,17 +11,26 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  badge: {type: mongoose.Schema.Types.ObjectId, ref: 'Badge'},
-  localbadge: {type: [mongoose.Schema.Types.ObjectId], ref: 'Badge'},
+  badge: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Badge'
+  }],
+  localbadge: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Badge'
+  }],
   // Nutzername der den Kurs erstellt
-  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   // Falls der Nutzer es für eine organisation etc anbietet (zb. Kreativwerkstatt Münster)
   courseprovider: {
     type: String,
     required: true
   },
   // PLZ wird benötigt
-  postcode: {
+  postalcode: {
     type: String
   },
   // Adresse wird benötigt
@@ -67,7 +78,10 @@ const CourseSchema = new mongoose.Schema({
     required: true,
   },
   // ist der Kurs aktuell, bei Nein soll er nicht mehr gesehen werden
-  exists: {type:Boolean}
+  exists: {
+    type: Boolean,
+    default: true
+  }
 });
 
 
