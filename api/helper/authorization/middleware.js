@@ -27,6 +27,7 @@ const userAuthorization = async function(req, res, next){
              req.user = {};
              req.user.id = user.id;
              req.user.username = user.username;
+             req.user.role = user.role;
              return next();
            }
            else {
@@ -81,6 +82,7 @@ const adminAuthorization = async function(req, res, next){
              req.user = {};
              req.user.id = user.id;
              req.user.username = user.username;
+             req.user.role = user.role;
              return next();
            }
            else {
