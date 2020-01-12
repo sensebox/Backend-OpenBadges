@@ -50,8 +50,7 @@ const UserSchema = new mongoose.Schema({
     default: 'earner'
   },
   emailConfirmationToken: {
-    type: String,
-    required: true
+    type: String
   },
   emailIsConfirmed: {
     type: Boolean,
@@ -75,14 +74,14 @@ const UserSchema = new mongoose.Schema({
     required: true,
     default: moment.utc().toDate()
   },
-  badge: {
-    type: [mongoose.Schema.Types.ObjectId],
+  badge: [{
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Badge'
-  },
-  localbadge: {
-    type: [mongoose.Schema.Types.ObjectId],
+  }],
+  localbadge: [{
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Badge'
-  },
+  }],
 });
 
 
