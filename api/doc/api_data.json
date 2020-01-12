@@ -1006,9 +1006,9 @@
   {
     "type": "put",
     "url": "/api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId",
-    "title": "assigne a Badge",
+    "title": "Assigne a Badge",
     "name": "assigneLocalBadge",
-    "description": "<p>assigne a Badge to current sign in user</p>",
+    "description": "<p>Assigne a Badge to a specified user.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1030,6 +1030,33 @@
         }
       ]
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "courseId",
+            "description": "<p>the ID of the Course you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1039,13 +1066,6 @@
             "optional": false,
             "field": "message",
             "description": "<p><code>Local Badge is assigned successfully to user.</code> or <code>GLobal Badge is assigned successfully to user.</code></p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "user",
-            "description": "<p><code>{...}</code></p>"
           }
         ]
       }
@@ -1079,7 +1099,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -1117,23 +1137,23 @@
     },
     "parameter": {
       "fields": {
-        "Parameters for creating a local Badge": [
+        "Parameter": [
           {
-            "group": "Parameters for creating a local Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "name",
             "description": "<p>title of Badge</p>"
           },
           {
-            "group": "Parameters for creating a local Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "description",
             "description": "<p>a brief summary of the Badge</p>"
           },
           {
-            "group": "Parameters for creating a local Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "critera",
@@ -1157,7 +1177,7 @@
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true}'</p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true}</code></p>"
           }
         ]
       }
@@ -1170,7 +1190,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+            "description": "<p>Complications during storage.</p>"
           }
         ]
       }
@@ -1188,13 +1208,13 @@
     "group": "Badge",
     "parameter": {
       "fields": {
-        "Query for filtering Badges": [
+        "Parameter": [
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "ObejctId",
             "optional": false,
             "field": "badgeId",
-            "description": "<p>get Badge by its ObejctId</p>"
+            "description": "<p>the ID of the Badge you are referring to</p>"
           }
         ]
       }
@@ -1214,7 +1234,7 @@
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}'</p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}</code></p>"
           }
         ]
       }
@@ -1234,7 +1254,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -1252,30 +1272,30 @@
     "group": "Badge",
     "parameter": {
       "fields": {
-        "Query for filtering Badges": [
+        "Parameter": [
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "name",
             "description": "<p>find Badges by its name</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "description",
             "description": "<p>find Badges by its description</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "ObejctId",
             "optional": true,
             "field": "issuer",
-            "description": "<p>find Badges by its issuer</p>"
+            "description": "<p>the ID of the issuer you are referring to</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "Boolean",
             "optional": true,
             "field": "global",
@@ -1299,7 +1319,7 @@
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p>`[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}]'</p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}]</code></p>"
           }
         ]
       }
@@ -1319,7 +1339,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -1357,30 +1377,30 @@
     },
     "parameter": {
       "fields": {
-        "Query for filtering Badges": [
+        "Parameter": [
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "name",
             "description": "<p>find Badges by its name</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "description",
             "description": "<p>find Badges by its description</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "ObejctId",
             "optional": true,
             "field": "issuer",
             "description": "<p>find Badges by its issuer</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "Boolean",
             "optional": true,
             "field": "global",
@@ -1404,7 +1424,7 @@
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p>`[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}]'</p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}]</code></p>"
           }
         ]
       }
@@ -1424,7 +1444,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -1436,9 +1456,9 @@
   {
     "type": "put",
     "url": "/api/v1/badge/:badgeId",
-    "title": "Put local Badge",
+    "title": "Change local Badge",
     "name": "putLocalBadge",
-    "description": "<p>Put a local Badge.</p>",
+    "description": "<p>Change information of a local Badge.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1462,23 +1482,30 @@
     },
     "parameter": {
       "fields": {
-        "Parameters for putting a local Badge": [
+        "Parameter": [
           {
-            "group": "Parameters for putting a local Badge",
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "name",
             "description": "<p>title of Badge</p>"
           },
           {
-            "group": "Parameters for putting a local Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "description",
             "description": "<p>a brief summary of the Badge</p>"
           },
           {
-            "group": "Parameters for putting a local Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "critera",
@@ -1502,7 +1529,7 @@
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true}'</p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true}</code></p>"
           }
         ]
       }
@@ -1536,7 +1563,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+            "description": "<p>Complications during storage.</p>"
           }
         ]
       }
@@ -1550,7 +1577,7 @@
     "url": "/api/v1/badge/:badgeId/deactivation",
     "title": "Deactivate local Badge",
     "name": "putLocalBadgeHidden",
-    "description": "<p>change a local Badge to deactivated.</p>",
+    "description": "<p>Deactivate a local Badge.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1571,6 +1598,19 @@
           "type": "String"
         }
       ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          }
+        ]
+      }
     },
     "success": {
       "fields": {
@@ -1614,7 +1654,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+            "description": "<p>Complications during storage.</p>"
           }
         ]
       }
@@ -1625,10 +1665,10 @@
   },
   {
     "type": "put",
-    "url": "/api/v1/badge/:badgeId/unassigne/user/:userId",
-    "title": "unassigne a Badge",
+    "url": "/api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId",
+    "title": "Unassigne a Badge",
     "name": "unassigneLocalBadge",
-    "description": "<p>unassigne a Badge to current sign in user</p>",
+    "description": "<p>Unassigne a Badge to a specified user.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1650,6 +1690,33 @@
         }
       ]
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "courseId",
+            "description": "<p>the ID of the Course you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1659,13 +1726,6 @@
             "optional": false,
             "field": "message",
             "description": "<p><code>Local Badge is unassigned successfully to user.</code> or <code>Global Badge is unassigned successfully to user.</code></p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "user",
-            "description": "<p><code>{...}</code></p>"
           }
         ]
       }
@@ -1699,7 +1759,7 @@
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }

@@ -8,23 +8,26 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {put} /api/v1/badge/:badgeId/unassigne/user/:userId unassigne a Badge
+ * @api {put} /api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId Unassigne a Badge
  * @apiName unassigneLocalBadge
- * @apiDescription unassigne a Badge to current sign in user
+ * @apiDescription Unassigne a Badge to a specified user.
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} courseId the ID of the Course you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
  * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or `Global Badge is unassigned successfully to user.`
- * @apiSuccess (Success 200) {Object} user `{...}`
  *
  * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or `{"message": "Global Badge is already unassigned to user."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission unassigning the Badge to an user."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
-  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Object} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const unassigneBadge = async function(req, res){
   var badgeId = req.params.badgeId;
@@ -48,13 +51,11 @@ const unassigneBadge = async function(req, res){
                 const updatedUser = await user.save();
                 return res.status(200).send({
                   message: 'Local Badge is unassigned successfully to user.',
-                  user: updatedUser
                 });
               }
               else{
                 return res.status(400).send({
                   message: 'Local Badge is already unassigned to user.',
-                  user: user
                 });
               }
             }
@@ -66,13 +67,11 @@ const unassigneBadge = async function(req, res){
                 const updatedUser = await user.save();
                 return res.status(200).send({
                   message: 'Global Badge is unassigned successfully to user.',
-                  user: updatedUser
                 });
               }
               else{
                 return res.status(400).send({
                   message: 'Global Badge is already unassigned to user.',
-                  user: user
                 });
               }
             }
@@ -109,24 +108,27 @@ const unassigneBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId assigne a Badge
+ * @api {put} /api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId Assigne a Badge
  * @apiName assigneLocalBadge
- * @apiDescription assigne a Badge to current sign in user
+ * @apiDescription Assigne a Badge to a specified user.
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} courseId the ID of the Course you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
  * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or `GLobal Badge is assigned successfully to user.`
- * @apiSuccess (Success 200) {Object} user `{...}`
  *
  * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or `{"message": "Global Badge is already assigned to user."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission assigning the Badge to an user."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Object} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const assigneBadge = async function(req, res){
   var badgeId = req.params.badgeId;
@@ -150,13 +152,11 @@ const assigneBadge = async function(req, res){
                 const updatedUser = await user.save();
                 return res.status(200).send({
                   message: 'Local Badge is assigned successfully to user.',
-                  user: updatedUser
                 });
               }
               else {
                 return res.status(400).send({
                   message: 'Local Badge is already assigned to user.',
-                  user: user
                 });
               }
             }
@@ -168,13 +168,11 @@ const assigneBadge = async function(req, res){
                 const updatedUser = await user.save();
                 return res.status(200).send({
                   message: 'Global Badge is assigned successfully to user.',
-                  user: updatedUser
                 });
               }
               else {
                 return res.status(400).send({
                   message: 'Global Badge is already assigned to user.',
-                  user: user
                 });
               }
             }
