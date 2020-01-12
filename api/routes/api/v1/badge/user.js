@@ -13,6 +13,10 @@ const Course = require('../../../../models/course');
  * @apiDescription unassigne a Badge to current sign in user
  * @apiGroup Badge
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or `Global Badge is unassigned successfully to user.`
  * @apiSuccess (Success 200) {Object} user `{...}`
  *
@@ -109,6 +113,10 @@ const unassigneBadge = async function(req, res){
  * @apiName assigneLocalBadge
  * @apiDescription assigne a Badge to current sign in user
  * @apiGroup Badge
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or `GLobal Badge is assigned successfully to user.`
  * @apiSuccess (Success 200) {Object} user `{...}`

@@ -15,6 +15,10 @@ const Course = require('../../../../models/course');
  * @apiDescription Get (all) Badges by different query.
  * @apiGroup Admin
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiParam (Query for filtering Badges) {String} [name] find Badges by its name
  * @apiParam (Query for filtering Badges) {String} [description] find Badges by its description
  * @apiParam (Query for filtering Badges) {ObejctId} [issuer] find Badges by its issuer
@@ -85,6 +89,10 @@ const getBadges = async function(req, res){
  * @apiDescription Create a new global Badge.
  * @apiGroup Admin
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiParam (Parameters for creating a global Badge) {String} name title of Badge
  * @apiParam (Parameters for creating a global Badge) {String} description a brief summary of the Badge
  * @apiParam (Parameters for creating a global Badge) {String} critera criterias getting this Badge
@@ -121,6 +129,10 @@ const postGlobalBadge = async function(req, res){
  * @apiName AdminPutBadge
  * @apiDescription Put a Badge (global | local).
  * @apiGroup Admin
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam (Parameters for putting a global Badge) {String} [name] title of Badge
  * @apiParam (Parameters for putting a global Badge) {String} [description] a brief summary of the Badge
@@ -179,6 +191,10 @@ const putBadge = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or `Global Badge is unassigned successfully to user.`
  * @apiSuccess (Success 200) {Object} user `{...}`
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or `{"message": "Global Badge is already unassigned to user."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
@@ -264,6 +280,10 @@ const unassigneBadge = async function(req, res){
  * @apiName adminAssigneLocalBadge
  * @apiDescription assigne a Badge to an user
  * @apiGroup Admin
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or `GLobal Badge is assigned successfully to user.`
  * @apiSuccess (Success 200) {Object} user `{...}`

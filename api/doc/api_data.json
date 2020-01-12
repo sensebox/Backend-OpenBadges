@@ -6,6 +6,26 @@
     "name": "AdminPutBadge",
     "description": "<p>Put a Badge (global | local).</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for putting a global Badge": [
@@ -98,6 +118,26 @@
     "name": "adminAssigneLocalBadge",
     "description": "<p>assigne a Badge to an user</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -156,6 +196,26 @@
     "name": "adminFindBadge",
     "description": "<p>Get (all) Badges by different query.</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Query for filtering Badges": [
@@ -256,6 +316,26 @@
     "name": "adminGetParticipants",
     "description": "<p>getting all participants of one course by ID</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Created 201": [
@@ -295,7 +375,7 @@
   },
   {
     "type": "put",
-    "url": "/api/v1/admin/badge/:badgeId/unassigne/user/:userId",
+    "url": "/api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId",
     "title": "unassigne a Badge",
     "name": "adminUnassigneLocalBadge",
     "description": "<p>unassigne a Badge to an user</p>",
@@ -319,6 +399,26 @@
           }
         ]
       }
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
     },
     "error": {
       "fields": {
@@ -358,6 +458,26 @@
     "name": "createGlobalBadge",
     "description": "<p>Create a new global Badge.</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for creating a global Badge": [
@@ -429,6 +549,26 @@
     "name": "getAllUser",
     "description": "<p>Get details about all registered users.</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -481,6 +621,26 @@
     "name": "getOneUser",
     "description": "<p>Get details about one user.</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -544,6 +704,26 @@
     "name": "signInAdmin",
     "description": "<p>Sign in the admin.</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -621,6 +801,26 @@
     "name": "signUpAdmin",
     "description": "<p>Sign up a new OpenBadges-user.</p>",
     "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for creating a new OpenBadges-user": [
@@ -747,6 +947,26 @@
     "name": "assigneLocalBadge",
     "description": "<p>assigne a Badge to current sign in user</p>",
     "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -812,6 +1032,26 @@
     "name": "createLocalBadge",
     "description": "<p>Create a new local Badge.</p>",
     "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for creating a local Badge": [
@@ -1032,6 +1272,26 @@
     "name": "getBadgesMe",
     "description": "<p>Get (all) Badges of currently signed in User by different queries.</p>",
     "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Query for filtering Badges": [
@@ -1117,6 +1377,26 @@
     "name": "putLocalBadge",
     "description": "<p>Put a local Badge.</p>",
     "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for putting a local Badge": [
@@ -1209,6 +1489,26 @@
     "name": "putLocalBadgeHidden",
     "description": "<p>change a local Badge to deactivated.</p>",
     "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1267,6 +1567,26 @@
     "name": "unassigneLocalBadge",
     "description": "<p>unassigne a Badge to current sign in user</p>",
     "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1360,6 +1680,26 @@
     "name": "courseSignIn",
     "description": "<p>Register a user in a course, if the size is not reached.</p>",
     "group": "Course",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1410,6 +1750,26 @@
     "name": "courseSignOut",
     "description": "<p>Deregister a user in a course, if the user was registered.</p>",
     "group": "Course",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1460,6 +1820,26 @@
     "name": "createCourse",
     "description": "<p>Create a new Course</p>",
     "group": "Course",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for creating a Course": [
@@ -1758,6 +2138,26 @@
     "name": "getParticipants",
     "description": "<p>getting all participants of one course by ID</p>",
     "group": "Course",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1816,6 +2216,26 @@
     "name": "putCourse",
     "description": "<p>Put a course.</p>",
     "group": "Course",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for putting a Course": [
@@ -1973,6 +2393,26 @@
     "name": "putCourseHidden",
     "description": "<p>change a course to deactivated. The course might be no longer in offer.</p>",
     "group": "Course",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -2088,6 +2528,26 @@
     "name": "deleteMe",
     "description": "<p>Delete the user-account.</p>",
     "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -2132,6 +2592,26 @@
     "name": "getMe",
     "description": "<p>Get details about myself.</p>",
     "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -2183,6 +2663,26 @@
     "name": "putMe",
     "description": "<p>Update the information about myself.</p>",
     "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
     "parameter": {
       "fields": {
         "Parameters for creating a new OpenBadges-user": [
@@ -2630,7 +3130,7 @@
       "examples": [
         {
           "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZWY2ZjczZWViMGFiNmUwY2IzNzdiMiIsImlhdCI6MTU3NTk3ODAxNCwiZXhwIjoxNTc1OTc4MDc0fQ.ls6uhrJ6pvJquxhcocwjlvJBkM5opwbnbyx5N1PRpoQ",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
           "type": "String"
         }
       ]

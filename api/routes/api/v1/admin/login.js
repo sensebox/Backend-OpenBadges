@@ -20,6 +20,10 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
  * @apiDescription Sign up a new OpenBadges-user.
  * @apiGroup Admin
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiParam (Parameters for creating a new OpenBadges-user) {String} firstname Name the full first name of the admin; must consist of at least 6 characters
  * @apiParam (Parameters for creating a new OpenBadges-user) {String} lastname Name the full last name of the admin; must consist of at least 6 characters
  * @apiParam (Parameters for creating a new OpenBadges-user) {String} city the admin's place of residence; must consist of at least 2 characters
@@ -93,6 +97,10 @@ const postRegister = async function(req, res){
  * @apiName signInAdmin
  * @apiDescription Sign in the admin.
  * @apiGroup Admin
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam {String} username the username of the admin
  * @apiParam {String} password the password of the admin

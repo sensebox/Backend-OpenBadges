@@ -14,6 +14,10 @@ const User = require('../../../../models/user');
  * @apiDescription getting all participants of one course by ID
  * @apiGroup Admin
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiSuccess (Created 201) {String} message `success`
  * @apiSuccess (Created 201) {Object} course `{"participants": participants}'
  *

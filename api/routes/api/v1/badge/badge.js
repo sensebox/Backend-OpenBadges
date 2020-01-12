@@ -80,6 +80,10 @@ const getBadges = async function(req, res){
  * @apiDescription Get (all) Badges of currently signed in User by different queries.
  * @apiGroup Badge
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiParam (Query for filtering Badges) {String} [name] find Badges by its name
  * @apiParam (Query for filtering Badges) {String} [description] find Badges by its description
  * @apiParam (Query for filtering Badges) {ObejctId} [issuer] find Badges by its issuer
@@ -187,6 +191,10 @@ const getBadge = async function(req, res){
  * @apiDescription Create a new local Badge.
  * @apiGroup Badge
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiParam (Parameters for creating a local Badge) {String} name title of Badge
  * @apiParam (Parameters for creating a local Badge) {String} description a brief summary of the Badge
  * @apiParam (Parameters for creating a local Badge) {String} critera criterias getting this Badge
@@ -223,6 +231,10 @@ const postLocalBadge = async function(req, res){
  * @apiName putLocalBadge
  * @apiDescription Put a local Badge.
  * @apiGroup Badge
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam (Parameters for putting a local Badge) {String} [name] title of Badge
  * @apiParam (Parameters for putting a local Badge) {String} [description] a brief summary of the Badge
@@ -282,6 +294,10 @@ const putBadgeLocal = async function(req, res){
  * @apiName putLocalBadgeHidden
  * @apiDescription change a local Badge to deactivated.
  * @apiGroup Badge
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiSuccess (Success 200) {String} message `Local Badge is successfully deactivated.`
  *

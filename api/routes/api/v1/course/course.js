@@ -17,6 +17,10 @@ const User = require('../../../../models/user');
  * @apiDescription Create a new Course
  * @apiGroup Course
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiParam (Parameters for creating a Course) {String} name name of the course
  * @apiParam (Parameters for creating a Course) {ObjectId-Array} badge the ObjectId of global badges for the course
  * @apiParam (Parameters for creating a Course) {ObjectId-Array} localbadge the ObjectId of local badges for the Course
@@ -30,10 +34,6 @@ const User = require('../../../../models/user');
  * @apiParam (Parameters for creating a Course) {Date} startdate Date of the start of the course
  * @apiParam (Parameters for creating a Course) {Date} enddate Date of the end of the course
  * @apiParam (Parameters for creating a Course) {Number} size maximal amount of the course participants
-
-
- * @apiParam (Parameters for creating a Course) {String} description a biref summary about the course contents
-
  *
  * @apiSuccess (Created 201) {String} message `Course is successfully created.`
  * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}'
@@ -188,6 +188,10 @@ const getCourseID = async function(req, res){
  * @apiDescription Put a course.
  * @apiGroup Course
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiParam (Parameters for putting a Course) {String} name name of the course
  * @apiParam (Parameters for putting a Course) {ObjectId-Array} badge the ObjectId of global badges for the course
  * @apiParam (Parameters for putting a Course) {ObjectId-Array} localbadge the ObjectId of local badges for the Course
@@ -267,6 +271,10 @@ const putCourse = async function(req, res){
  * @apiDescription getting all participants of one course by ID
  * @apiGroup Course
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
  * @apiSuccess (Success 200) {String} message `Participants found successfully.`
  * @apiSuccess (Success 200) {Object} participants `<User>'
  *
@@ -309,6 +317,10 @@ const getParticipants = async function(req, res){
  * @apiName putCourseHidden
  * @apiDescription change a course to deactivated. The course might be no longer in offer.
  * @apiGroup Course
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiSuccess (Success 200) {String} message `Course is successfully deactivated.`
  *
