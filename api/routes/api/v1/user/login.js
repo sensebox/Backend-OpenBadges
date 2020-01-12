@@ -33,11 +33,13 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
  * @apiSuccess (Created 201) {String} message `User is successfully registered`
  * @apiSuccess (Created 201) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":["earner"]}`
  *
- * @apiError (On error) {String} 400 `{"message": <Passed parameters are not valid>}`
- * @apiError (On error) {String} 409 `{"message": "Email already exists"}` or `{"error": "Username already exists"}`
- * @apiError (On error) 500 Complications during storage
+ * @apiError (On error) {Object} 400 `{"message": <Passed parameters are not valid>}`
+ * @apiError (On error) {Object} 409 `{"message": "Email already exists"}`
+ * @apiError (On error) {Object} 409 `{"message": "Username already exists"}`
+ * @apiError (On error) {Object} 500 `{"message": "Complications during storage"}`
  */
 const postRegister = async function(req, res){
+  console.log(req.body);
   // validate incoming data
   const {error} = registerValidation(req.body);
   if(error) return res.status(400).send({message: error.details[0].message});
@@ -71,15 +73,16 @@ const postRegister = async function(req, res){
     const password = process.env.PASSWORD_Email;
 
     let transporter = nodemailer.createTransport({
-      host: 'smtp.gmx.de',
-      port: 465,
+      host: 'mail.gmx.net',
+      port: 587,
+      secure: false, // if false TLS
       auth: {
-        user: email,
-        pass: password
+          user: email, // email of the sender
+          pass: password // Passwort of the sender
       },
       tls: {
-        // do not fail on invalid certs
-        rejectUnauthorized: false
+          // do not fail on invalid certs
+          rejectUnauthorized: false
       }
     });
     var mailOptions = {
@@ -112,6 +115,42 @@ const postRegister = async function(req, res){
   }
 };
 
+
+/**
+ * @api {post} /user/email/:emailToken Confirm Email
+ * @apiName confirmEmail
+ * @apiDescription Confirm an email of an user.
+ * @apiGroup User
+ *
+ * @apiParam (Parameters) {String} emailToken Email-Token, to confirm the email-address.
+ *
+ * @apiSuccess (Created 200) {String} message `Email is successfully confirmed.`
+ *
+ * @apiError (On error) {Object} 400 `{"message": Email-Token is not valid.}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
+ */
+const confirmEmail = async function (req, res){
+  var emailToken = req.params.emailToken;
+  try{
+    var user = await User.updateOne(
+      {emailConfirmationToken: emailToken, emailIsConfirmed: false},
+      {emailIsConfirmed: true, emailConfirmationToken: ""});
+    if(user.nModified > 0){
+      return res.status(200).send({
+        message: 'Email is successfully confirmed.'
+      });
+    }
+    else{
+      return res.status(400).send({
+        message: 'Email-Token is not valid.'
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
 /**
  * @api {post} /user/signin Sign in
  * @apiName signIn
@@ -125,8 +164,8 @@ const postRegister = async function(req, res){
  * @apiSuccess (Success 200) {String} token valid JSON Web Token
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
- * @apiError (On error) {String} 403 `{"message": "Username or password is wrong"}`
- * @apiError (On error) 500 Complications during querying the database or creating a JWT
+ * @apiError (On error) {Object} 403 `{"message": "Username or password is wrong"}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database or creating a JWT."}`
  */
 const postLogin = async function(req, res){
   try{
@@ -161,8 +200,8 @@ const postLogin = async function(req, res){
  * @apiSuccess (Success 200) {String} token valid JSON Web Token
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
- * @apiError (On error) {String} 403 `{"message": "Refresh token is invalid or too old. Please sign in with your user credentials."}`
- * @apiError (On error) 500 Complications during querying the database or creating a JWT.
+ * @apiError (On error) {Object} 403 `{"message": "Refresh token is invalid or too old. Please sign in with your user credentials."}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database or creating a JWT."}`
  */
 const postRefreshToken = async function(req, res){
   var refreshToken = req.body.refreshToken;
@@ -179,7 +218,7 @@ const postRefreshToken = async function(req, res){
       // create JWT-Token and refresh-Token
       const {token: token, refreshToken: newRefreshToken } = await createToken(user);
       return res.status(200).send({
-        message: 'Authorization successfully refreshed',
+        message: 'Authorization successfully refreshed.',
         token: token,
         refreshToken: newRefreshToken
       });
@@ -202,31 +241,33 @@ const postRefreshToken = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `Reset instructions successfully sent to user.`
  *
- * @apiError (On error) {String} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "User not found."}`
  * @apiError (On error) 500 Complications during sending the email with all instructions to reset the password.
  */
 const requestResetPassword = async function (req, res){
-  console.log(req.body.username);
-  var user = await User.findOne({username: req.body.username});
-  console.log('user', user);
-  if(user){
-    try{
-      var token = uuid();
-      await User.updateOne({username: req.body.username}, {resetPasswordToken: token, resetPasswordExpiresIn: moment.utc().add(12, 'h').toDate(), refreshToken: '', refreshTokenExpiresIn: moment.utc().subtract(1, 'h').toDate()});
+  try{
+    var token = uuid();
+    var user = await User.findOneAndUpdate(
+      {username: req.body.username},
+      {resetPasswordToken: token, resetPasswordExpiresIn: moment.utc().add(12, 'h').toDate(), refreshToken: '', refreshTokenExpiresIn: moment.utc().subtract(1, 'h').toDate()},
+      {new: true}
+    );
 
+    if(user){
       const email = process.env.EMAIL;
       const password = process.env.PASSWORD_Email;
 
       let transporter = nodemailer.createTransport({
-        host: 'smtp.gmx.de',
-        port: 465,
+        host: 'mail.gmx.net',
+        port: 587,
+        secure: false, // if false TLS
         auth: {
-          user: email,
-          pass: password
+            user: email, // email of the sender
+            pass: password // Passwort of the sender
         },
         tls: {
-          // do not fail on invalid certs
-          rejectUnauthorized: false
+            // do not fail on invalid certs
+            rejectUnauthorized: false
         }
       });
       var mailOptions = {
@@ -243,13 +284,15 @@ const requestResetPassword = async function (req, res){
         message: 'Reset instructions successfully sent to user.'
       });
     }
-    catch(err){
-      return res.status(500).send(err);
+    else {
+      return res.status(404).send({
+        message: 'User not found.'
+      });
     }
   }
-  return res.status(404).send({
-    message: 'User not found.'
-  });
+  catch(err){
+    return res.status(500).send(err);
+  }
 };
 
 
@@ -266,8 +309,8 @@ const requestResetPassword = async function (req, res){
  *
  * @apiSuccess (Success 200) {String} message `Password successfully reset.`
  *
- * @apiError (On error) {String} 403 `{"message": "Request password reset expired."}`
- * @apiError (On error) 500 Complications during updating the password.
+ * @apiError (On error) {Object} 403 `{"message": "Request password reset expired."}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
  */
 const setResetPassword = async function (req, res){
   // validate incoming data
@@ -308,10 +351,9 @@ const setResetPassword = async function (req, res){
  *
  * @apiSuccess (Success 200) {String} message `Signed out successfully`
  *
- * @apiError (On error) {String} 403 `{"message": "JSON Web Token is invalid. Please sign in with your user credentials."}`
- * @apiError (On error) 500 Complications during querying the database or creating a JWT.
+ * @apiError (On error) {Object} 403 `{"message": "JSON Web Token is invalid. Please sign in with your user credentials."}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database or creating the JWT."}`
  */
-// access only if user is authenticated
 const postLogout = async function(req, res){
   const refreshToken = req.query.refreshToken;
   const rawAuthorizationHeader = req.header('authorization');
@@ -334,5 +376,6 @@ module.exports = {
   postRefreshToken,
   requestResetPassword,
   setResetPassword,
-  postLogout
+  postLogout,
+  confirmEmail
 };

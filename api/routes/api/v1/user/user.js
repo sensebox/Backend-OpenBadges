@@ -14,8 +14,8 @@ const User = require('../../../../models/user');
  * @apiSuccess (Success 200) {String} message `User found successfully.`
  * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}`
  *
- * @apiError (On error) {String} 404 `{"message": "User not found."}`
- * @apiError (On error) 500 Complications during querying the database
+ * @apiError (On error) {Obejct} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
  */
 const getMe = async function(req, res){
   var id;
@@ -52,19 +52,17 @@ const getMe = async function(req, res){
  * @apiSuccess (Success 200) {String} message `User information updated successfully.`
  * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}`
  *
- * @apiError (On error) {String} 404 `{"message": "User not found."}`
- * @apiError (On error) 500 Complications during querying the database
+ * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
  */
 const putMe = async function(req, res){
-  var id;
-  if(req.user) id = req.user.id;
   var updatedUser = {};
   if(req.body.lastname) updatedUser.lastname = req.body.lastname; // in case of marriage
   if(req.body.email) updatedUser.email = req.body.email;
   if(req.body.city) updatedUser.city = req.body.city;
   if(req.body.postalcode) updatedUser.postalcode = req.body.postalcode;
   try{
-    var user = await User.findOneAndUpdate({_id: id}, updatedUser, {new: true});
+    var user = await User.findOneAndUpdate({_id: req.user.id}, updatedUser, {new: true});
     if(user){
       // {"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}`
       user = {
@@ -102,8 +100,8 @@ const putMe = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `User deleted successfully.`
  *
- * @apiError (On error) {String} 404 `{"message": "User not found."}`
- * @apiError (On error) 500 Complications during querying the database
+ * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
  */
 const deleteMe = async function(req, res){
   var id;
