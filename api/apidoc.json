@@ -6,5 +6,9 @@
   "template": {
     "withCompare": false,
     "forceLanguage": "en"
+  },
+  "header": {
+    "title": "Introduction",
+    "filename": "doc/introduction.md"
   }
 }
