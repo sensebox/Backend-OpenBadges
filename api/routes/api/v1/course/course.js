@@ -12,7 +12,7 @@ const User = require('../../../../models/user');
 
 
 /**
- * @api {post} /course Create Course
+ * @api {post} /api/v1/course Create Course
  * @apiName createCourse
  * @apiDescription Create a new Course
  * @apiGroup Course
@@ -76,7 +76,7 @@ const postCourse = async function(req, res){
 
 
 /**
- * @api {get} /course Get Courses
+ * @api {get} /api/v1/course Get Courses
  * @apiName getCourses
  * @apiDescription Get all courses respectivly get courses by different parameters
  * @apiGroup Course
@@ -150,7 +150,7 @@ const getCourses = async function(req, res){
 
 
 /**
- * @api {get} /course/:courseId Get Course
+ * @api {get} /api/v1/course/:courseId Get Course
  * @apiName getCourse
  * @apiDescription Get one course by course-id.
  * @apiGroup Course
@@ -183,7 +183,7 @@ const getCourseID = async function(req, res){
 
 
 /**
- * @api {put} /course/:courseId Put course
+ * @api {put} /api/v1/course/:courseId Put course
  * @apiName putCourse
  * @apiDescription Put a course.
  * @apiGroup Course
@@ -262,7 +262,7 @@ const putCourse = async function(req, res){
 
 
 /**
- * @api {get} /course/:courseId/participants Get participants of one course
+ * @api {get} /api/v1/course/:courseId/participants Get participants of one course
  * @apiName getParticipants
  * @apiDescription getting all participants of one course by ID
  * @apiGroup Course
@@ -305,7 +305,7 @@ const getParticipants = async function(req, res){
 
 
 /**
- * @api {put} /course/:courseId/deactivation Deactivate course
+ * @api {put} /api/v1/course/:courseId/deactivation Deactivate course
  * @apiName putCourseHidden
  * @apiDescription change a course to deactivated. The course might be no longer in offer.
  * @apiGroup Course

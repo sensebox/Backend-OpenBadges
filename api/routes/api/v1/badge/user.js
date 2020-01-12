@@ -8,7 +8,7 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {put} /badge/:badgeId/unassigne/user/:userId unassigne a Badge
+ * @api {put} /api/v1/badge/:badgeId/unassigne/user/:userId unassigne a Badge
  * @apiName unassigneLocalBadge
  * @apiDescription unassigne a Badge to current sign in user
  * @apiGroup Badge
@@ -105,7 +105,7 @@ const unassigneBadge = async function(req, res){
 
 
 /**
- * @api {put} /badge/:badgeId/course/:courseId/assigne/user/:userId assigne a Badge
+ * @api {put} /api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId assigne a Badge
  * @apiName assigneLocalBadge
  * @apiDescription assigne a Badge to current sign in user
  * @apiGroup Badge

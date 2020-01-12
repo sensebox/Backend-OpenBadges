@@ -6,7 +6,7 @@ const User = require('../../../../models/user');
 
 
 /**
- * @api {post} /admin/user/:userId Get one user
+ * @api {post} /api/v1/admin/user/:userId Get one user
  * @apiName getOneUser
  * @apiDescription Get details about one user.
  * @apiGroup Admin
@@ -40,7 +40,7 @@ const getOneUser = async function(req, res){
 
 
 /**
- * @api {post} /admin/user Get all users
+ * @api {post} /api/v1/admin/user Get all users
  * @apiName getAllUser
  * @apiDescription Get details about all registered users.
  * @apiGroup Admin

@@ -6,7 +6,7 @@ const User = require('../../../../models/user');
 
 
 /**
- * @api {get} /user/me Get details
+ * @api {get} /api/v1/user/me Get details
  * @apiName getMe
  * @apiDescription Get details about myself.
  * @apiGroup User
@@ -39,7 +39,7 @@ const getMe = async function(req, res){
 
 
 /**
- * @api {put} /user/me Change information
+ * @api {put} /api/v1/user/me Change information
  * @apiName putMe
  * @apiDescription Update the information about myself.
  * @apiGroup User
@@ -93,7 +93,7 @@ const putMe = async function(req, res){
 
 
 /**
- * @api {delete} /user/me Delete me
+ * @api {delete} /api/v1/user/me Delete me
  * @apiName deleteMe
  * @apiDescription Delete the user-account.
  * @apiGroup User

@@ -10,7 +10,7 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {get} /admin/badge Get Badges
+ * @api {get} /api/v1/admin/badge Get Badges
  * @apiName adminFindBadge
  * @apiDescription Get (all) Badges by different query.
  * @apiGroup Admin
@@ -80,7 +80,7 @@ const getBadges = async function(req, res){
 
 
 /**
- * @api {post} /admin/badge Create global Badge
+ * @api {post} /api/v1/admin/badge Create global Badge
  * @apiName createGlobalBadge
  * @apiDescription Create a new global Badge.
  * @apiGroup Admin
@@ -117,7 +117,7 @@ const postGlobalBadge = async function(req, res){
 
 
 /**
- * @api {post} /admin/badge/:badgeId Put Badge
+ * @api {post} /api/v1/admin/badge/:badgeId Put Badge
  * @apiName AdminPutBadge
  * @apiDescription Put a Badge (global | local).
  * @apiGroup Admin
@@ -172,7 +172,7 @@ const putBadge = async function(req, res){
 
 
 /**
- * @api {put} /admin/badge/:badgeId/unassigne/user/:userId unassigne a Badge
+ * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId unassigne a Badge
  * @apiName adminUnassigneLocalBadge
  * @apiDescription unassigne a Badge to an user
  * @apiGroup Admin
@@ -260,7 +260,7 @@ const unassigneBadge = async function(req, res){
 
 
 /**
- * @api {put} /admin/badge/:badgeId/course/:courseId/assigne/user/:userId assigne a Badge
+ * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId assigne a Badge
  * @apiName adminAssigneLocalBadge
  * @apiDescription assigne a Badge to an user
  * @apiGroup Admin

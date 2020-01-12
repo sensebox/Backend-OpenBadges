@@ -15,7 +15,7 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
 
 
 /**
- * @api {post} /user/signup Sign up
+ * @api {post} /api/v1/user/signup Sign up
  * @apiName signUp
  * @apiDescription Sign up a new OpenBadges-user.
  * @apiGroup User
@@ -117,7 +117,7 @@ const postRegister = async function(req, res){
 
 
 /**
- * @api {post} /user/email/:emailToken Confirm Email
+ * @api {post} /api/v1/user/email/:emailToken Confirm Email
  * @apiName confirmEmail
  * @apiDescription Confirm an email of an user.
  * @apiGroup User
@@ -152,7 +152,7 @@ const confirmEmail = async function (req, res){
 };
 
 /**
- * @api {post} /user/signin Sign in
+ * @api {post} /api/v1/user/signin Sign in
  * @apiName signIn
  * @apiDescription Sign in the user.
  * @apiGroup User
@@ -189,7 +189,7 @@ const postLogin = async function(req, res){
 };
 
 /**
- * @api {post} /user/refreshToken Refresh token
+ * @api {post} /api/v1/user/refreshToken Refresh token
  * @apiName refreshToken
  * @apiDescription Refresh the authorization, if the refresh token is valid.
  * @apiGroup User
@@ -232,7 +232,7 @@ const postRefreshToken = async function(req, res){
 
 
 /**
- * @api {post} /user/password/request Request reset password
+ * @api {post} /api/v1/user/password/request Request reset password
  * @apiName requestResetPassword
  * @apiDescription Requests a password reset (in case of forgotten password). A link to reset the password will then be sent in an email, which is valid for 12 hours.
  * @apiGroup User
@@ -298,7 +298,7 @@ const requestResetPassword = async function (req, res){
 
 
 /**
- * @api {post} /user/password/reset Reset password
+ * @api {post} /api/v1/user/password/reset Reset password
  * @apiName resetPassword
  * @apiDescription Reset the password with the resetPasswordToken.
  * @apiGroup User
@@ -340,7 +340,7 @@ const setResetPassword = async function (req, res){
 
 
 /**
- * @api {post} /user/signout Sign out
+ * @api {post} /api/v1/user/signout Sign out
  * @apiName signOut
  * @apiGroup User
  * @apiDescription Signs the user out, if JSON Web Token is valid. Invalidates the current JSON Web Token.

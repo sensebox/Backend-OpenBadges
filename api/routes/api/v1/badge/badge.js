@@ -9,7 +9,7 @@ const User = require('../../../../models/user');
 
 
 /**
- * @api {get} /badge Get Badges
+ * @api {get} /api/v1/badge Get Badges
  * @apiName getBadges
  * @apiDescription Get (all) Badges by different query.
  * @apiGroup Badge
@@ -75,7 +75,7 @@ const getBadges = async function(req, res){
 
 
 /**
- * @api {get} /badge/me Get my Badges
+ * @api {get} /api/v1/badge/me Get my Badges
  * @apiName getBadgesMe
  * @apiDescription Get (all) Badges of currently signed in User by different queries.
  * @apiGroup Badge
@@ -145,7 +145,7 @@ const getBadgesMe = async function(req, res){
 
 
 /**
- * @api {get} /badge/:badgeId Get Badges
+ * @api {get} /api/v1/badge/:badgeId Get Badge
  * @apiName getBadge
  * @apiDescription Get one Badge by its ObjectId.
  * @apiGroup Badge
@@ -182,7 +182,7 @@ const getBadge = async function(req, res){
 
 
 /**
- * @api {post} /badge Create local Badge
+ * @api {post} /api/v1/badge Create local Badge
  * @apiName createLocalBadge
  * @apiDescription Create a new local Badge.
  * @apiGroup Badge
@@ -219,7 +219,7 @@ const postLocalBadge = async function(req, res){
 
 
 /**
- * @api {post} /badge/:badgeId Put local Badge
+ * @api {put} /api/v1/badge/:badgeId Put local Badge
  * @apiName putLocalBadge
  * @apiDescription Put a local Badge.
  * @apiGroup Badge
@@ -278,7 +278,7 @@ const putBadgeLocal = async function(req, res){
 
 
 /**
- * @api {post} /badge/:badgeId/deactivation Deactivate local Badge
+ * @api {put} /api/v1/badge/:badgeId/deactivation Deactivate local Badge
  * @apiName putLocalBadgeHidden
  * @apiDescription change a local Badge to deactivated.
  * @apiGroup Badge

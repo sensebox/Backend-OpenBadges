@@ -6,7 +6,7 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {put} /course/:courseId/user/registration Put the course (sign in a user)
+ * @api {put} /api/v1/course/:courseId/user/registration Put the course (sign in a user)
  * @apiName courseSignIn
  * @apiDescription Register a user in a course, if the size is not reached.
  * @apiGroup Course
@@ -57,7 +57,7 @@ const Course = require('../../../../models/course');
 
 
  /**
-  * @api {put} /course/:courseId/user/deregistration Put the course (sign out a user)
+  * @api {put} /api/v1/course/:courseId/user/deregistration Put the course (sign out a user)
   * @apiName courseSignOut
   * @apiDescription Deregister a user in a course, if the user was registered.
   * @apiGroup Course

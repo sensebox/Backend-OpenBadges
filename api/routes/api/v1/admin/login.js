@@ -15,7 +15,7 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
 
 
 /**
- * @api {post} /admin/signup Sign up
+ * @api {post} /api/v1/admin/signup Sign up
  * @apiName signUpAdmin
  * @apiDescription Sign up a new OpenBadges-user.
  * @apiGroup Admin
@@ -89,7 +89,7 @@ const postRegister = async function(req, res){
 
 
 /**
- * @api {post} /admin/signin Sign in
+ * @api {post} /api/v1/admin/signin Sign in
  * @apiName signInAdmin
  * @apiDescription Sign in the admin.
  * @apiGroup Admin

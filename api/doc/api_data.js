@@ -1,7 +1,430 @@
 define({ "api": [
   {
     "type": "post",
-    "url": "/admin/user",
+    "url": "/api/v1/admin/badge/:badgeId",
+    "title": "Put Badge",
+    "name": "AdminPutBadge",
+    "description": "<p>Put a Badge (global | local).</p>",
+    "group": "Admin",
+    "parameter": {
+      "fields": {
+        "Parameters for putting a global Badge": [
+          {
+            "group": "Parameters for putting a global Badge",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>title of Badge</p>"
+          },
+          {
+            "group": "Parameters for putting a global Badge",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>a brief summary of the Badge</p>"
+          },
+          {
+            "group": "Parameters for putting a global Badge",
+            "type": "String",
+            "optional": true,
+            "field": "critera",
+            "description": "<p>criterias getting this Badge</p>"
+          },
+          {
+            "group": "Parameters for putting a global Badge",
+            "type": "Boolean",
+            "optional": true,
+            "field": "exists",
+            "description": "<p>if false, badge is deactivated</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badge updated successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not changed.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/badge.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId",
+    "title": "assigne a Badge",
+    "name": "adminAssigneLocalBadge",
+    "description": "<p>assigne a Badge to an user</p>",
+    "group": "Admin",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is assigned successfully to user.</code> or <code>GLobal Badge is assigned successfully to user.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p><code>{...}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/badge.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/admin/badge",
+    "title": "Get Badges",
+    "name": "adminFindBadge",
+    "description": "<p>Get (all) Badges by different query.</p>",
+    "group": "Admin",
+    "parameter": {
+      "fields": {
+        "Query for filtering Badges": [
+          {
+            "group": "Query for filtering Badges",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>find Badges by its name</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>find Badges by its description</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "issuer",
+            "description": "<p>find Badges by its issuer</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "id",
+            "description": "<p>find Badges by its id</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "userId",
+            "description": "<p>find Badges of an user</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "Boolean",
+            "optional": true,
+            "field": "global",
+            "description": "<p>find global Badges or local Badges</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badge found successfully.</code></p>"
+          }
+        ],
+        "Created 201": [
+          {
+            "group": "Created 201",
+            "type": "Object",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;= user, &quot;criteria&quot;:&quot;criteria&quot;, &quot;image&quot;:&quot;image&quot;}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/badge.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/course/:courseId/participants",
+    "title": "get participants of the course",
+    "name": "adminGetParticipants",
+    "description": "<p>getting all participants of one course by ID</p>",
+    "group": "Admin",
+    "success": {
+      "fields": {
+        "Created 201": [
+          {
+            "group": "Created 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>success</code></p>"
+          },
+          {
+            "group": "Created 201",
+            "type": "Object",
+            "optional": false,
+            "field": "course",
+            "description": "<p>`{&quot;participants&quot;: participants}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Invalid CourseID.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/course.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/admin/badge/:badgeId/unassigne/user/:userId",
+    "title": "unassigne a Badge",
+    "name": "adminUnassigneLocalBadge",
+    "description": "<p>unassigne a Badge to an user</p>",
+    "group": "Admin",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or <code>Global Badge is unassigned successfully to user.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p><code>{...}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/badge.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/admin/badge",
+    "title": "Create global Badge",
+    "name": "createGlobalBadge",
+    "description": "<p>Create a new global Badge.</p>",
+    "group": "Admin",
+    "parameter": {
+      "fields": {
+        "Parameters for creating a global Badge": [
+          {
+            "group": "Parameters for creating a global Badge",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>title of Badge</p>"
+          },
+          {
+            "group": "Parameters for creating a global Badge",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>a brief summary of the Badge</p>"
+          },
+          {
+            "group": "Parameters for creating a global Badge",
+            "type": "String",
+            "optional": false,
+            "field": "critera",
+            "description": "<p>criterias getting this Badge</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Created 201": [
+          {
+            "group": "Created 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Global Badge is succesfully created.</code></p>"
+          },
+          {
+            "group": "Created 201",
+            "type": "Object",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/badge.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/admin/user",
     "title": "Get all users",
     "name": "getAllUser",
     "description": "<p>Get details about all registered users.</p>",
@@ -53,7 +476,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/admin/user/:userId",
+    "url": "/api/v1/admin/user/:userId",
     "title": "Get one user",
     "name": "getOneUser",
     "description": "<p>Get details about one user.</p>",
@@ -116,7 +539,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/admin/signin",
+    "url": "/api/v1/admin/signin",
     "title": "Sign in",
     "name": "signInAdmin",
     "description": "<p>Sign in the admin.</p>",
@@ -193,7 +616,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/admin/signup",
+    "url": "/api/v1/admin/signup",
     "title": "Sign up",
     "name": "signUpAdmin",
     "description": "<p>Sign up a new OpenBadges-user.</p>",
@@ -318,6 +741,591 @@ define({ "api": [
     "groupTitle": "Admin"
   },
   {
+    "type": "put",
+    "url": "/api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId",
+    "title": "assigne a Badge",
+    "name": "assigneLocalBadge",
+    "description": "<p>assigne a Badge to current sign in user</p>",
+    "group": "Badge",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is assigned successfully to user.</code> or <code>GLobal Badge is assigned successfully to user.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p><code>{...}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission assigning the Badge to an user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/badge",
+    "title": "Create local Badge",
+    "name": "createLocalBadge",
+    "description": "<p>Create a new local Badge.</p>",
+    "group": "Badge",
+    "parameter": {
+      "fields": {
+        "Parameters for creating a local Badge": [
+          {
+            "group": "Parameters for creating a local Badge",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>title of Badge</p>"
+          },
+          {
+            "group": "Parameters for creating a local Badge",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>a brief summary of the Badge</p>"
+          },
+          {
+            "group": "Parameters for creating a local Badge",
+            "type": "String",
+            "optional": false,
+            "field": "critera",
+            "description": "<p>criterias getting this Badge</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Created 201": [
+          {
+            "group": "Created 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is succesfully created.</code></p>"
+          },
+          {
+            "group": "Created 201",
+            "type": "Object",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/badge.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/badge/:badgeId",
+    "title": "Get Badge",
+    "name": "getBadge",
+    "description": "<p>Get one Badge by its ObjectId.</p>",
+    "group": "Badge",
+    "parameter": {
+      "fields": {
+        "Query for filtering Badges": [
+          {
+            "group": "Query for filtering Badges",
+            "type": "ObejctId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>get Badge by its ObejctId</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badge found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/badge.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/badge",
+    "title": "Get Badges",
+    "name": "getBadges",
+    "description": "<p>Get (all) Badges by different query.</p>",
+    "group": "Badge",
+    "parameter": {
+      "fields": {
+        "Query for filtering Badges": [
+          {
+            "group": "Query for filtering Badges",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>find Badges by its name</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>find Badges by its description</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "issuer",
+            "description": "<p>find Badges by its issuer</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "Boolean",
+            "optional": true,
+            "field": "global",
+            "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badges found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "badges",
+            "description": "<p>`[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}]'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badges not found using the specified parameters.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/badge.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/badge/me",
+    "title": "Get my Badges",
+    "name": "getBadgesMe",
+    "description": "<p>Get (all) Badges of currently signed in User by different queries.</p>",
+    "group": "Badge",
+    "parameter": {
+      "fields": {
+        "Query for filtering Badges": [
+          {
+            "group": "Query for filtering Badges",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>find Badges by its name</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>find Badges by its description</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "issuer",
+            "description": "<p>find Badges by its issuer</p>"
+          },
+          {
+            "group": "Query for filtering Badges",
+            "type": "Boolean",
+            "optional": true,
+            "field": "global",
+            "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badges found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "badges",
+            "description": "<p>`[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}]'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badges not found using the specified parameters.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/badge.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/badge/:badgeId",
+    "title": "Put local Badge",
+    "name": "putLocalBadge",
+    "description": "<p>Put a local Badge.</p>",
+    "group": "Badge",
+    "parameter": {
+      "fields": {
+        "Parameters for putting a local Badge": [
+          {
+            "group": "Parameters for putting a local Badge",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>title of Badge</p>"
+          },
+          {
+            "group": "Parameters for putting a local Badge",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>a brief summary of the Badge</p>"
+          },
+          {
+            "group": "Parameters for putting a local Badge",
+            "type": "String",
+            "optional": true,
+            "field": "critera",
+            "description": "<p>criterias getting this Badge</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge updated successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge not changed.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission putting the local Badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/badge.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/badge/:badgeId/deactivation",
+    "title": "Deactivate local Badge",
+    "name": "putLocalBadgeHidden",
+    "description": "<p>change a local Badge to deactivated.</p>",
+    "group": "Badge",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is successfully deactivated.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission deactivating the local Badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "409",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already deactivated.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/badge.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/badge/:badgeId/unassigne/user/:userId",
+    "title": "unassigne a Badge",
+    "name": "unassigneLocalBadge",
+    "description": "<p>unassigne a Badge to current sign in user</p>",
+    "group": "Badge",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or <code>Global Badge is unassigned successfully to user.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p><code>{...}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission unassigning the Badge to an user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
     "success": {
       "fields": {
         "Success 200": [
@@ -346,8 +1354,736 @@ define({ "api": [
     "name": ""
   },
   {
+    "type": "put",
+    "url": "/api/v1/course/:courseId/user/registration",
+    "title": "Put the course (sign in a user)",
+    "name": "courseSignIn",
+    "description": "<p>Register a user in a course, if the size is not reached.</p>",
+    "group": "Course",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User registered successfully in course.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course size is already reached.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/user.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/course/:courseId/user/deregistration",
+    "title": "Put the course (sign out a user)",
+    "name": "courseSignOut",
+    "description": "<p>Deregister a user in a course, if the user was registered.</p>",
+    "group": "Course",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User deregistered successfully from course.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "String",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;User is not registered in course.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/user.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/course",
+    "title": "Create Course",
+    "name": "createCourse",
+    "description": "<p>Create a new Course</p>",
+    "group": "Course",
+    "parameter": {
+      "fields": {
+        "Parameters for creating a Course": [
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>name of the course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "ObjectId-Array",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>the ObjectId of global badges for the course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "ObjectId-Array",
+            "optional": false,
+            "field": "localbadge",
+            "description": "<p>the ObjectId of local badges for the Course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "courseprovider",
+            "description": "<p>the provider of the course might be specified by the creator</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "postalcode",
+            "description": "<p>postalcode of the building where the course take place</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>adress of the location from the Course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "Coordinates-Array",
+            "optional": false,
+            "field": "coordinates",
+            "description": "<p>coordinates of the location from the Course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>topic of the Course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>a brief summary about the course contents</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "requirements",
+            "description": "<p>a brief summary about the course requirements</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "Date",
+            "optional": false,
+            "field": "startdate",
+            "description": "<p>Date of the start of the course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "Date",
+            "optional": false,
+            "field": "enddate",
+            "description": "<p>Date of the end of the course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "Number",
+            "optional": false,
+            "field": "size",
+            "description": "<p>maximal amount of the course participants</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Created 201": [
+          {
+            "group": "Created 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Course is successfully created.</code></p>"
+          },
+          {
+            "group": "Created 201",
+            "type": "Object",
+            "optional": false,
+            "field": "course",
+            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [<badgeId>, <badgeId>], &quot;localbadge&quot;= [<badgeId>, <badgeId>], &quot;creator&quot;: <userId>, &quot;courseprovider&quot;: <String>, &quot;postalcode&quot;: <Number>, &quot;address&quot;: <String>, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: <String>, &quot;description&quot;: <String>, &quot;requirements&quot;: <String>, &quot;startdate&quot;: <Date>, &quot;enddate&quot;: <Date>, &quot;participants&quot;: [<UserId>, <UserId>], &quot;size&quot;: <Number>}'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/course.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/course/:courseId",
+    "title": "Get Course",
+    "name": "getCourse",
+    "description": "<p>Get one course by course-id.</p>",
+    "group": "Course",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Course found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "course",
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/course.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/course",
+    "title": "Get Courses",
+    "name": "getCourses",
+    "description": "<p>Get all courses respectivly get courses by different parameters</p>",
+    "group": "Course",
+    "parameter": {
+      "fields": {
+        "Parameters for searching a Course": [
+          {
+            "group": "Parameters for searching a Course",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>course name</p>"
+          },
+          {
+            "group": "Parameters for searching a Course",
+            "type": "Coordinates-Array",
+            "optional": false,
+            "field": "coordinates",
+            "description": "<p>coordinates in which radius might be an course</p>"
+          },
+          {
+            "group": "Parameters for searching a Course",
+            "type": "Number",
+            "optional": false,
+            "field": "radius",
+            "description": "<p>radius [in km] about a pair of coordinates</p>"
+          },
+          {
+            "group": "Parameters for searching a Course",
+            "type": "Date",
+            "optional": false,
+            "field": "startdate",
+            "description": "<p>greater (or equal) than the startdate of the course</p>"
+          },
+          {
+            "group": "Parameters for searching a Course",
+            "type": "Date",
+            "optional": false,
+            "field": "enddate",
+            "description": "<p>lower (or equal) than the enddate of the course</p>"
+          },
+          {
+            "group": "Parameters for searching a Course",
+            "type": "String",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>course topic</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Courses found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "courses",
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;}]</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;No courses found using the specified parameters.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;To filter courses in a certain radius, the parameters &quot;coordinates&quot; and &quot;radius&quot; are required.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/course.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/course/:courseId/participants",
+    "title": "Get participants of one course",
+    "name": "getParticipants",
+    "description": "<p>getting all participants of one course by ID</p>",
+    "group": "Course",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Participants found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "participants",
+            "description": "<p>`<User>'</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission getting the participants of the course.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Obejct",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/course.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/course/:courseId",
+    "title": "Put course",
+    "name": "putCourse",
+    "description": "<p>Put a course.</p>",
+    "group": "Course",
+    "parameter": {
+      "fields": {
+        "Parameters for putting a Course": [
+          {
+            "group": "Parameters for putting a Course",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>name of the course</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "ObjectId-Array",
+            "optional": false,
+            "field": "badge",
+            "description": "<p>the ObjectId of global badges for the course</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "ObjectId-Array",
+            "optional": false,
+            "field": "localbadge",
+            "description": "<p>the ObjectId of local badges for the Course</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "String",
+            "optional": false,
+            "field": "courseprovider",
+            "description": "<p>the provider of the course might be specified by the creator</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "String",
+            "optional": false,
+            "field": "postalcode",
+            "description": "<p>postalcode of the building where the course take place</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>adress of the location from the Course</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "Coordinates-Array",
+            "optional": false,
+            "field": "coordinates",
+            "description": "<p>coordinates of the location from the Course</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "String",
+            "optional": false,
+            "field": "topic",
+            "description": "<p>topic of the Course</p>"
+          },
+          {
+            "group": "Parameters for putting a Course",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>a biref summary about the course contents</p>"
+          }
+        ],
+        "Parameters for creating a Course": [
+          {
+            "group": "Parameters for creating a Course",
+            "type": "String",
+            "optional": false,
+            "field": "requirements",
+            "description": "<p>a brief summary about the course requirements</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "Date",
+            "optional": false,
+            "field": "startdate",
+            "description": "<p>Date of the start of the course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "Date",
+            "optional": false,
+            "field": "enddate",
+            "description": "<p>Date of the end of the course</p>"
+          },
+          {
+            "group": "Parameters for creating a Course",
+            "type": "Number",
+            "optional": false,
+            "field": "size",
+            "description": "<p>maximal amount of the course participants; must be greater (equal) than the current signed participants</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Course putting successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "course",
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission putting the course.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Obejct",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/course.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/course/:courseId/deactivation",
+    "title": "Deactivate course",
+    "name": "putCourseHidden",
+    "description": "<p>change a course to deactivated. The course might be no longer in offer.</p>",
+    "group": "Course",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Course is successfully deactivated.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission deactivating the course.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "409",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course is already deactivated.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/course/course.js",
+    "groupTitle": "Course"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/user/email/:emailToken",
+    "title": "Confirm Email",
+    "name": "confirmEmail",
+    "description": "<p>Confirm an email of an user.</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameters": [
+          {
+            "group": "Parameters",
+            "type": "String",
+            "optional": false,
+            "field": "emailToken",
+            "description": "<p>Email-Token, to confirm the email-address.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Created 200": [
+          {
+            "group": "Created 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Email is successfully confirmed.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: Email-Token is not valid.}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Obejct",
+            "optional": false,
+            "field": "500",
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/user/login.js",
+    "groupTitle": "User"
+  },
+  {
     "type": "delete",
-    "url": "/user/me",
+    "url": "/api/v1/user/me",
     "title": "Delete me",
     "name": "deleteMe",
     "description": "<p>Delete the user-account.</p>",
@@ -370,16 +2106,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "404",
             "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
           }
         ]
       }
@@ -390,7 +2127,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/user/me",
+    "url": "/api/v1/user/me",
     "title": "Get details",
     "name": "getMe",
     "description": "<p>Get details about myself.</p>",
@@ -420,16 +2157,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Obejct",
             "optional": false,
             "field": "404",
             "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
           }
         ]
       }
@@ -440,7 +2178,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/user/me",
+    "url": "/api/v1/user/me",
     "title": "Change information",
     "name": "putMe",
     "description": "<p>Update the information about myself.</p>",
@@ -504,16 +2242,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "404",
             "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
           }
         ]
       }
@@ -524,7 +2263,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/token/refresh",
+    "url": "/api/v1/user/token/refresh",
     "title": "Refresh token",
     "name": "refreshToken",
     "description": "<p>Refresh the authorization, if the refresh token is valid.</p>",
@@ -574,16 +2313,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;Refresh token is invalid or too old. Please sign in with your user credentials.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database or creating a JWT.</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating a JWT.&quot;}</code></p>"
           }
         ]
       }
@@ -594,7 +2334,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/refreshToken",
+    "url": "/api/v1/user/refreshToken",
     "title": "Refresh token",
     "name": "refreshToken",
     "description": "<p>Refresh the authorization, if the refresh token is valid.</p>",
@@ -644,16 +2384,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;Refresh token is invalid or too old. Please sign in with your user credentials.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database or creating a JWT.</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating a JWT.&quot;}</code></p>"
           }
         ]
       }
@@ -664,7 +2405,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/password/request",
+    "url": "/api/v1/user/password/request",
     "title": "Request reset password",
     "name": "requestResetPassword",
     "description": "<p>Requests a password reset (in case of forgotten password). A link to reset the password will then be sent in an email, which is valid for 12 hours.</p>",
@@ -700,7 +2441,7 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "404",
             "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
@@ -720,7 +2461,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/password/reset",
+    "url": "/api/v1/user/password/reset",
     "title": "Reset password",
     "name": "resetPassword",
     "description": "<p>Reset the password with the resetPasswordToken.</p>",
@@ -770,16 +2511,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;Request password reset expired.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during updating the password.</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
           }
         ]
       }
@@ -790,7 +2532,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/signin",
+    "url": "/api/v1/user/signin",
     "title": "Sign in",
     "name": "signIn",
     "description": "<p>Sign in the user.</p>",
@@ -847,16 +2589,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;Username or password is wrong&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database or creating a JWT</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating a JWT.&quot;}</code></p>"
           }
         ]
       }
@@ -867,7 +2610,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/signout",
+    "url": "/api/v1/user/signout",
     "title": "Sign out",
     "name": "signOut",
     "group": "User",
@@ -910,16 +2653,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;JSON Web Token is invalid. Please sign in with your user credentials.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database or creating a JWT.</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating the JWT.&quot;}</code></p>"
           }
         ]
       }
@@ -930,7 +2674,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/signup",
+    "url": "/api/v1/user/signup",
     "title": "Sign up",
     "name": "signUp",
     "description": "<p>Sign up a new OpenBadges-user.</p>",
@@ -1029,23 +2773,24 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "400",
             "description": "<p><code>{&quot;message&quot;: &lt;Passed parameters are not valid&gt;}</code></p>"
           },
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "409",
-            "description": "<p><code>{&quot;message&quot;: &quot;Email already exists&quot;}</code> or <code>{&quot;error&quot;: &quot;Username already exists&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Email already exists&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during storage</p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage&quot;}</code></p>"
           }
         ]
       }

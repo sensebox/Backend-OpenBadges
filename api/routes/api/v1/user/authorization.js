@@ -9,7 +9,7 @@ const {createToken, invalidateToken} = require('../../../../helper/authorization
 
 
 /**
- * @api {post} /user/token/refresh Refresh token
+ * @api {post} /api/v1/user/token/refresh Refresh token
  * @apiName refreshToken
  * @apiDescription Refresh the authorization, if the refresh token is valid.
  * @apiGroup User
