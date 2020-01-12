@@ -6,7 +6,7 @@ const User = require('../../../../models/user');
 
 
 /**
- * @api {post} /api/v1/admin/user/:userId Get one user
+ * @api {get} /api/v1/admin/user/:userId Get one user
  * @apiName getOneUser
  * @apiDescription Get details about one user.
  * @apiGroup Admin
@@ -15,13 +15,13 @@ const User = require('../../../../models/user');
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam {String} userId the ID of the user you are referring to.
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
  *
  * @apiSuccess (Success 200) {String} message `User found successfully.`
  * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}`
  *
- * @apiError (On error) {String} 404 `{"message": "User not found."}`
- * @apiError (On error) 500 Complications during querying the database
+ * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const getOneUser = async function(req, res){
   const userId = req.params.userId;
@@ -54,11 +54,9 @@ const getOneUser = async function(req, res){
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiSuccess (Success 200) {String} message `All users found successfully.`
- * @apiSuccess (Success 200) {Object} user `[ {"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}, {}, ... ]`
+ * @apiSuccess (Success 200) {Object} users `[{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}]`
  *
- * @apiSuccess (Success 200: no user) {String} message `No user registered.`
- *
- * @apiError (On error) 500 Complications during querying the database
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const getAllUser = async function (req, res){
   try{
@@ -66,12 +64,9 @@ const getAllUser = async function (req, res){
     if(user){
       return res.status(200).send({
         message: 'All users found successfully.',
-        user: user
+        users: user
       });
     }
-    return res.status(200).send({
-      message: 'No user registered.',
-    });
   }
   catch(err){
     return res.status(500).send(err);

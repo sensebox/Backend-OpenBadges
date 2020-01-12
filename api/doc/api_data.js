@@ -1,10 +1,10 @@
 define({ "api": [
   {
-    "type": "post",
+    "type": "put",
     "url": "/api/v1/admin/badge/:badgeId",
-    "title": "Put Badge",
+    "title": "Update Badge",
     "name": "AdminPutBadge",
-    "description": "<p>Put a Badge (global | local).</p>",
+    "description": "<p>Change information of a Badge (global | local).</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -28,30 +28,37 @@ define({ "api": [
     },
     "parameter": {
       "fields": {
-        "Parameters for putting a global Badge": [
+        "Parameter": [
           {
-            "group": "Parameters for putting a global Badge",
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "name",
             "description": "<p>title of Badge</p>"
           },
           {
-            "group": "Parameters for putting a global Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "description",
             "description": "<p>a brief summary of the Badge</p>"
           },
           {
-            "group": "Parameters for putting a global Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "critera",
             "description": "<p>criterias getting this Badge</p>"
           },
           {
-            "group": "Parameters for putting a global Badge",
+            "group": "Parameter",
             "type": "Boolean",
             "optional": true,
             "field": "exists",
@@ -75,7 +82,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}'</p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}</code></p>"
           }
         ]
       }
@@ -102,7 +109,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+            "description": "<p>Complications during storage.</p>"
           }
         ]
       }
@@ -114,9 +121,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId",
-    "title": "assigne a Badge",
+    "title": "Assigne a Badge",
     "name": "adminAssigneLocalBadge",
-    "description": "<p>assigne a Badge to an user</p>",
+    "description": "<p>Assigne a Badge to an user.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -138,6 +145,33 @@ define({ "api": [
         }
       ]
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "courseId",
+            "description": "<p>the ID of the course you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -147,13 +181,6 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p><code>Local Badge is assigned successfully to user.</code> or <code>GLobal Badge is assigned successfully to user.</code></p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "user",
-            "description": "<p><code>{...}</code></p>"
           }
         ]
       }
@@ -180,7 +207,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -218,48 +245,48 @@ define({ "api": [
     },
     "parameter": {
       "fields": {
-        "Query for filtering Badges": [
+        "Parameter": [
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "name",
             "description": "<p>find Badges by its name</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "description",
             "description": "<p>find Badges by its description</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "ObejctId",
             "optional": true,
             "field": "issuer",
-            "description": "<p>find Badges by its issuer</p>"
+            "description": "<p>the ID of the issuer you are referring to</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "ObejctId",
             "optional": true,
-            "field": "id",
-            "description": "<p>find Badges by its id</p>"
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "ObejctId",
             "optional": true,
             "field": "userId",
-            "description": "<p>find Badges of an user</p>"
+            "description": "<p>the ID of the user you are referring to</p>"
           },
           {
-            "group": "Query for filtering Badges",
+            "group": "Parameter",
             "type": "Boolean",
             "optional": true,
             "field": "global",
-            "description": "<p>find global Badges or local Badges</p>"
+            "description": "<p>if true, get global Badges; if false, get local Badges</p>"
           }
         ]
       }
@@ -272,7 +299,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Badge found successfully.</code></p>"
+            "description": "<p><code>Badges found successfully.</code></p>"
           }
         ],
         "Created 201": [
@@ -280,8 +307,8 @@ define({ "api": [
             "group": "Created 201",
             "type": "Object",
             "optional": false,
-            "field": "badge",
-            "description": "<p>`{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;= user, &quot;criteria&quot;:&quot;criteria&quot;, &quot;image&quot;:&quot;image&quot;}'</p>"
+            "field": "badges",
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}]</code></p>"
           }
         ]
       }
@@ -291,16 +318,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badges not found using the specified parameters.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database</p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -312,10 +340,23 @@ define({ "api": [
   {
     "type": "get",
     "url": "/api/v1/course/:courseId/participants",
-    "title": "get participants of the course",
+    "title": "Participants of one course",
     "name": "adminGetParticipants",
-    "description": "<p>getting all participants of one course by ID</p>",
+    "description": "<p>Getting all participants of one course by ID</p>",
     "group": "Admin",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "courseId",
+            "description": "<p>the ID of the course you are referring to</p>"
+          }
+        ]
+      }
+    },
     "header": {
       "fields": {
         "Header": [
@@ -338,20 +379,20 @@ define({ "api": [
     },
     "success": {
       "fields": {
-        "Created 201": [
+        "Success 200": [
           {
-            "group": "Created 201",
+            "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>success</code></p>"
+            "description": "<p><code>Participants found successfully.</code></p>"
           },
           {
-            "group": "Created 201",
+            "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "course",
-            "description": "<p>`{&quot;participants&quot;: participants}'</p>"
+            "field": "participants",
+            "description": "<p><code>[{&quot;firstname&quot;:&quot;full firstname&quot;, &quot;lastname&quot;:&quot;full lastname&quot;, &quot;city&quot;:&quot;cityname&quot;, &quot;postalcode&quot;:&quot;123456&quot;, &quot;birthday&quot;:&quot;ISODate(&quot;1970-12-01T00:00:00Z&quot;)&quot;, &quot;email&quot;:&quot;test@test.de&quot;, &quot;username&quot;:&quot;nickname&quot;, &quot;role&quot;:&quot;earner&quot;, &quot;emailIsConfirmed&quot;: false}]</code></p>"
           }
         ]
       }
@@ -361,10 +402,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Invalid CourseID.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -376,30 +424,10 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId",
-    "title": "unassigne a Badge",
+    "title": "Unassigne a Badge",
     "name": "adminUnassigneLocalBadge",
-    "description": "<p>unassigne a Badge to an user</p>",
+    "description": "<p>Unassigne a Badge to an user.</p>",
     "group": "Admin",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or <code>Global Badge is unassigned successfully to user.</code></p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "user",
-            "description": "<p><code>{...}</code></p>"
-          }
-        ]
-      }
-    },
     "header": {
       "fields": {
         "Header": [
@@ -419,6 +447,46 @@ define({ "api": [
           "type": "String"
         }
       ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "courseId",
+            "description": "<p>the ID of the course you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or <code>Global Badge is unassigned successfully to user.</code></p>"
+          }
+        ]
+      }
     },
     "error": {
       "fields": {
@@ -442,7 +510,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -480,23 +548,23 @@ define({ "api": [
     },
     "parameter": {
       "fields": {
-        "Parameters for creating a global Badge": [
+        "Parameter": [
           {
-            "group": "Parameters for creating a global Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "name",
             "description": "<p>title of Badge</p>"
           },
           {
-            "group": "Parameters for creating a global Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "description",
             "description": "<p>a brief summary of the Badge</p>"
           },
           {
-            "group": "Parameters for creating a global Badge",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "critera",
@@ -533,7 +601,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage.&quot;}</code></p>"
+            "description": "<p>Complications during storage.</p>"
           }
         ]
       }
@@ -583,17 +651,8 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "user",
-            "description": "<p><code>[ {&quot;firstname&quot;:&quot;full firstname&quot;, &quot;lastname&quot;:&quot;full lastname&quot;, &quot;city&quot;:&quot;cityname&quot;, &quot;postalcode&quot;:&quot;123456&quot;, &quot;birthday&quot;:&quot;ISODate(&quot;1970-12-01T00:00:00Z&quot;)&quot;, &quot;email&quot;:&quot;test@test.de&quot;, &quot;username&quot;:&quot;nickname&quot;, &quot;role&quot;:&quot;earner&quot;, &quot;emailIsConfirmed&quot;: false}, {}, ... ]</code></p>"
-          }
-        ],
-        "Success 200: no user": [
-          {
-            "group": "Success 200: no user",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>No user registered.</code></p>"
+            "field": "users",
+            "description": "<p><code>[{&quot;firstname&quot;:&quot;full firstname&quot;, &quot;lastname&quot;:&quot;full lastname&quot;, &quot;city&quot;:&quot;cityname&quot;, &quot;postalcode&quot;:&quot;123456&quot;, &quot;birthday&quot;:&quot;ISODate(&quot;1970-12-01T00:00:00Z&quot;)&quot;, &quot;email&quot;:&quot;test@test.de&quot;, &quot;username&quot;:&quot;nickname&quot;, &quot;role&quot;:&quot;earner&quot;, &quot;emailIsConfirmed&quot;: false}]</code></p>"
           }
         ]
       }
@@ -603,9 +662,10 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
+            "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database</p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -615,7 +675,7 @@ define({ "api": [
     "groupTitle": "Admin"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/api/v1/admin/user/:userId",
     "title": "Get one user",
     "name": "getOneUser",
@@ -646,10 +706,10 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "ObjectId",
             "optional": false,
             "field": "userId",
-            "description": "<p>the ID of the user you are referring to.</p>"
+            "description": "<p>the ID of the user you are referring to</p>"
           }
         ]
       }
@@ -679,16 +739,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "404",
             "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database</p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -752,7 +813,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Admin successfully signed in</code></p>"
+            "description": "<p><code>Admin successfully signed in.</code></p>"
           },
           {
             "group": "Success 200",
@@ -776,16 +837,17 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;Username or password is wrong&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Username or password is wrong.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during querying the database or creating a JWT</p>"
+            "description": "<p>Complications during querying the database or creating a JWT.</p>"
           }
         ]
       }
@@ -799,7 +861,7 @@ define({ "api": [
     "url": "/api/v1/admin/signup",
     "title": "Sign up",
     "name": "signUpAdmin",
-    "description": "<p>Sign up a new OpenBadges-user.</p>",
+    "description": "<p>Sign up a new OpenBadges-Admin. (Only a logged in Admin can create a new Admin account.)</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -823,65 +885,65 @@ define({ "api": [
     },
     "parameter": {
       "fields": {
-        "Parameters for creating a new OpenBadges-user": [
+        "Parameter": [
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "firstname",
-            "description": "<p>Name the full first name of the admin; must consist of at least 6 characters</p>"
+            "description": "<p>full first name of the admin; must consist of at least 6 characters</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "lastname",
-            "description": "<p>Name the full last name of the admin; must consist of at least 6 characters</p>"
+            "description": "<p>full last name of the admin; must consist of at least 6 characters</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "city",
             "description": "<p>the admin's place of residence; must consist of at least 2 characters</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "Number",
             "optional": false,
             "field": "postalcode",
             "description": "<p>the postal code of the admin's place of residence; minimum 01067, maximal 99998</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "Date",
             "optional": false,
             "field": "birthday",
             "description": "<p>the birthday of the admin</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "email",
             "description": "<p>the email for the admin</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "username",
             "description": "<p>the username for the admin; it is used for signing in</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "password",
             "description": "<p>the desired password for the admin; must consist of at least 6 characters</p>"
           },
           {
-            "group": "Parameters for creating a new OpenBadges-user",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "confirmPassword",
@@ -898,7 +960,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Admin is successfully registered</code></p>"
+            "description": "<p><code>Admin is successfully registered.</code></p>"
           },
           {
             "group": "Created 201",
@@ -915,23 +977,24 @@ define({ "api": [
         "On error": [
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &lt;Passed parameters are not valid&gt;}</code></p>"
+            "description": "<p>Passed parameters are not valid.</p>"
           },
           {
             "group": "On error",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "409",
-            "description": "<p><code>{&quot;message&quot;: &quot;Email already exists&quot;}</code> or <code>{&quot;error&quot;: &quot;Username already exists&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Email already exists.&quot;}</code> or <code>{&quot;error&quot;: &quot;Username already exists.&quot;}</code></p>"
           },
           {
             "group": "On error",
+            "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p>Complications during storage</p>"
+            "description": "<p>Complications during storage.</p>"
           }
         ]
       }
