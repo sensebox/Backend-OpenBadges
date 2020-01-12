@@ -17,7 +17,7 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
 /**
  * @api {post} /api/v1/user/signup Sign up
  * @apiName signUp
- * @apiDescription Sign up a new OpenBadges-user.
+ * @apiDescription Sign up a new OpenBadges-User.
  * @apiGroup User
  *
  * @apiParam (Parameters for creating a new OpenBadges-user) {String} firstname Name the full first name of the user; must consist of at least 6 characters
@@ -30,13 +30,13 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
  * @apiParam (Parameters for creating a new OpenBadges-user) {String} password the desired password for the user; must consist of at least 6 characters
  * @apiParam (Parameters for creating a new OpenBadges-user) {String} confirmPassword confirm the desired password for the user; must consist the same string as password
  *
- * @apiSuccess (Created 201) {String} message `User is successfully registered`
+ * @apiSuccess (Created 201) {String} message `User is successfully registered.`
  * @apiSuccess (Created 201) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":["earner"]}`
  *
- * @apiError (On error) {Object} 400 `{"message": <Passed parameters are not valid>}`
+ * @apiError (On error) {Object} 400 Passed parameters are not valid
  * @apiError (On error) {Object} 409 `{"message": "Email already exists"}`
  * @apiError (On error) {Object} 409 `{"message": "Username already exists"}`
- * @apiError (On error) {Object} 500 `{"message": "Complications during storage"}`
+ * @apiError (On error) {Object} 500 Complications during storage
  */
 const postRegister = async function(req, res){
   console.log(req.body);
@@ -96,7 +96,7 @@ const postRegister = async function(req, res){
     transporter.sendMail(mailOptions);
 
     return res.status(201).send({
-      message: 'User is successfully registered',
+      message: 'User is successfully registered.',
       user: {
         firstname: savedUser.firstname,
         lastname: savedUser.lastname,
@@ -122,12 +122,12 @@ const postRegister = async function(req, res){
  * @apiDescription Confirm an email of an user.
  * @apiGroup User
  *
- * @apiParam (Parameters) {String} emailToken Email-Token, to confirm the email-address.
+ * @apiParam (Parameters) {String} emailToken Email-Token, to confirm the email-address
  *
  * @apiSuccess (Created 200) {String} message `Email is successfully confirmed.`
  *
  * @apiError (On error) {Object} 400 `{"message": Email-Token is not valid.}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const confirmEmail = async function (req, res){
   var emailToken = req.params.emailToken;
@@ -165,7 +165,7 @@ const confirmEmail = async function (req, res){
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
  * @apiError (On error) {Object} 403 `{"message": "Username or password is wrong"}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database or creating a JWT."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database or creating a JWT.
  */
 const postLogin = async function(req, res){
   try{
@@ -196,12 +196,12 @@ const postLogin = async function(req, res){
  *
  * @apiParam {String} refreshToken the refresh token
  *
- * @apiSuccess (Success 200) {String} message `Authorization successfully refreshed`
+ * @apiSuccess (Success 200) {String} message `Authorization successfully refreshed.`
  * @apiSuccess (Success 200) {String} token valid JSON Web Token
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
  * @apiError (On error) {Object} 403 `{"message": "Refresh token is invalid or too old. Please sign in with your user credentials."}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database or creating a JWT."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database or creating a JWT.
  */
 const postRefreshToken = async function(req, res){
   var refreshToken = req.body.refreshToken;
@@ -242,7 +242,7 @@ const postRefreshToken = async function(req, res){
  * @apiSuccess (Success 200) {String} message `Reset instructions successfully sent to user.`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) 500 Complications during sending the email with all instructions to reset the password.
+ * @apiError (On error) {Object} 500 Complications during sending the email with all instructions to reset the password.
  */
 const requestResetPassword = async function (req, res){
   try{
@@ -310,7 +310,7 @@ const requestResetPassword = async function (req, res){
  * @apiSuccess (Success 200) {String} message `Password successfully reset.`
  *
  * @apiError (On error) {Object} 403 `{"message": "Request password reset expired."}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const setResetPassword = async function (req, res){
   // validate incoming data
@@ -352,7 +352,7 @@ const setResetPassword = async function (req, res){
  * @apiSuccess (Success 200) {String} message `Signed out successfully`
  *
  * @apiError (On error) {Object} 403 `{"message": "JSON Web Token is invalid. Please sign in with your user credentials."}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database or creating the JWT."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database or creating the JWT.
  */
 const postLogout = async function(req, res){
   const refreshToken = req.query.refreshToken;

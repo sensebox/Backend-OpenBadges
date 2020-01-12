@@ -8,7 +8,7 @@ const User = require('../../../../models/user');
 /**
  * @api {get} /api/v1/user/me Get details
  * @apiName getMe
- * @apiDescription Get details about myself.
+ * @apiDescription Get details about currently logged in user.
  * @apiGroup User
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -19,7 +19,7 @@ const User = require('../../../../models/user');
  * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}`
  *
  * @apiError (On error) {Obejct} 404 `{"message": "User not found."}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const getMe = async function(req, res){
   var id;
@@ -45,7 +45,7 @@ const getMe = async function(req, res){
 /**
  * @api {put} /api/v1/user/me Change information
  * @apiName putMe
- * @apiDescription Update the information about myself.
+ * @apiDescription Update the information about currently logged in user.
  * @apiGroup User
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -61,7 +61,7 @@ const getMe = async function(req, res){
  * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const putMe = async function(req, res){
   var updatedUser = {};
@@ -103,7 +103,7 @@ const putMe = async function(req, res){
 /**
  * @api {delete} /api/v1/user/me Delete me
  * @apiName deleteMe
- * @apiDescription Delete the user-account.
+ * @apiDescription Delete the user-account of currently logged in user.
  * @apiGroup User
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -113,7 +113,7 @@ const putMe = async function(req, res){
  * @apiSuccess (Success 200) {String} message `User deleted successfully.`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const deleteMe = async function(req, res){
   var id;

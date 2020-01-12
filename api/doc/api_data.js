@@ -2674,7 +2674,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "emailToken",
-            "description": "<p>Email-Token, to confirm the email-address.</p>"
+            "description": "<p>Email-Token, to confirm the email-address</p>"
           }
         ]
       }
@@ -2707,7 +2707,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -2721,7 +2721,7 @@ define({ "api": [
     "url": "/api/v1/user/me",
     "title": "Delete me",
     "name": "deleteMe",
-    "description": "<p>Delete the user-account.</p>",
+    "description": "<p>Delete the user-account of currently logged in user.</p>",
     "group": "User",
     "header": {
       "fields": {
@@ -2771,7 +2771,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -2785,7 +2785,7 @@ define({ "api": [
     "url": "/api/v1/user/me",
     "title": "Get details",
     "name": "getMe",
-    "description": "<p>Get details about myself.</p>",
+    "description": "<p>Get details about currently logged in user.</p>",
     "group": "User",
     "header": {
       "fields": {
@@ -2842,7 +2842,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -2856,7 +2856,7 @@ define({ "api": [
     "url": "/api/v1/user/me",
     "title": "Change information",
     "name": "putMe",
-    "description": "<p>Update the information about myself.</p>",
+    "description": "<p>Update the information about currently logged in user.</p>",
     "group": "User",
     "header": {
       "fields": {
@@ -2947,7 +2947,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -3018,7 +3018,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating a JWT.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database or creating a JWT.</p>"
           }
         ]
       }
@@ -3055,7 +3055,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Authorization successfully refreshed</code></p>"
+            "description": "<p><code>Authorization successfully refreshed.</code></p>"
           },
           {
             "group": "Success 200",
@@ -3089,7 +3089,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating a JWT.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database or creating a JWT.</p>"
           }
         ]
       }
@@ -3143,6 +3143,7 @@ define({ "api": [
           },
           {
             "group": "On error",
+            "type": "Object",
             "optional": false,
             "field": "500",
             "description": "<p>Complications during sending the email with all instructions to reset the password.</p>"
@@ -3216,7 +3217,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -3294,7 +3295,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating a JWT.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database or creating a JWT.</p>"
           }
         ]
       }
@@ -3358,7 +3359,7 @@ define({ "api": [
             "type": "Obejct",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during querying the database or creating the JWT.&quot;}</code></p>"
+            "description": "<p>Complications during querying the database or creating the JWT.</p>"
           }
         ]
       }
@@ -3372,7 +3373,7 @@ define({ "api": [
     "url": "/api/v1/user/signup",
     "title": "Sign up",
     "name": "signUp",
-    "description": "<p>Sign up a new OpenBadges-user.</p>",
+    "description": "<p>Sign up a new OpenBadges-User.</p>",
     "group": "User",
     "parameter": {
       "fields": {
@@ -3451,7 +3452,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>User is successfully registered</code></p>"
+            "description": "<p><code>User is successfully registered.</code></p>"
           },
           {
             "group": "Created 201",
@@ -3471,7 +3472,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &lt;Passed parameters are not valid&gt;}</code></p>"
+            "description": "<p>Passed parameters are not valid</p>"
           },
           {
             "group": "On error",
@@ -3485,7 +3486,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "500",
-            "description": "<p><code>{&quot;message&quot;: &quot;Complications during storage&quot;}</code></p>"
+            "description": "<p>Complications during storage</p>"
           }
         ]
       }
