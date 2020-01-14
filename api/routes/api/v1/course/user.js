@@ -6,17 +6,23 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {put} /course/:courseId/user/registration Put the course (sign in a user)
+ * @api {put} /api/v1/course/:courseId/user/registration Register me
  * @apiName courseSignIn
- * @apiDescription Register a user in a course, if the size is not reached.
+ * @apiDescription Register currently logged in user in a course, if the size is not reached.
  * @apiGroup Course
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} courseId the ID of the course you are referring to
  *
  * @apiSuccess (Success 200) {String} message `User registered successfully in course.`
  *
- * @apiError (On error) {String} 404 `{"message": "Course not found."}`
- * @apiError (On error) {String} 400 `{"message": "Course size is already reached."}`
- * @apiError (On error) {String} 400 `{"message": "User is already registered in course."}`
- * @apiError (On error) 500 Complications during querying the database
+ * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
+ * @apiError (On error) {Object} 400 `{"message": "Course size is already reached."}`
+ * @apiError (On error) {Object} 400 `{"message": "User is already registered in course."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
  const putCourseSignIn = async function(req, res){
    var courseId = req.params.courseId;
@@ -57,16 +63,22 @@ const Course = require('../../../../models/course');
 
 
  /**
-  * @api {put} /course/:courseId/user/deregistration Put the course (sign out a user)
+  * @api {put} /api/v1/course/:courseId/user/deregistration Deregister me
   * @apiName courseSignOut
   * @apiDescription Deregister a user in a course, if the user was registered.
   * @apiGroup Course
   *
+  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+  * @apiHeaderExample {String} Authorization Header Example
+  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+  *
+  * @apiParam {ObjectId} courseId the ID of the course you are referring to
+  *
   * @apiSuccess (Success 200) {String} message `User deregistered successfully from course.`
   *
-  * @apiError (On error) {String} 404 `{"message": "Course not found."}`
-  * @apiError (On error) {String} 400 `{"message": "User is not registered in course."}`
-  * @apiError (On error) 500 Complications during querying the database
+  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
+  * @apiError (On error) {Object} 400 `{"message": "User is not registered in course."}`
+  * @apiError (On error) {Object} 500 Complications during querying the database
   */
   const putCourseSignOut = async function(req, res){
     var courseId = req.params.courseId;

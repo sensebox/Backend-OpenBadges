@@ -10,29 +10,35 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {get} /admin/badge Get Badges
+ * @api {get} /api/v1/admin/badge Get Badges
  * @apiName adminFindBadge
  * @apiDescription Get (all) Badges by different query.
  * @apiGroup Admin
  *
- * @apiParam (Query for filtering Badges) {String} [name] find Badges by its name
- * @apiParam (Query for filtering Badges) {String} [description] find Badges by its description
- * @apiParam (Query for filtering Badges) {ObejctId} [issuer] find Badges by its issuer
- * @apiParam (Query for filtering Badges) {ObejctId} [id] find Badges by its id
- * @apiParam (Query for filtering Badges) {ObejctId} [userId] find Badges of an user
- * @apiParam (Query for filtering Badges) {Boolean} [global] find global Badges or local Badges
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiSuccess (Success 200) {String} message `Badge found successfully.`
- * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer"= user, "criteria":"criteria", "image":"image"}'
+ * @apiParam {String} [name] find Badges by its name
+ * @apiParam {String} [description] find Badges by its description
+ * @apiParam {ObejctId} [issuer] the ID of the issuer you are referring to
+ * @apiParam {ObejctId} [badgeId] the ID of the Badge you are referring to
+ * @apiParam {ObejctId} [userId] the ID of the user you are referring to
+ * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
  *
- * @apiError (On error) {String} 404 `{"message": "User not found."}`
- * @apiError (On error) 500 Complications during querying the database
+ * @apiSuccess (Success 200) {String} message `Badges found successfully.`
+ * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}]`
+ *
+ * @apiError (On error) {Object} 404 `{"message": "Badges not found using the specified parameters."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badges not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const getBadges = async function(req, res){
   var qname  = req.query.name;
   var qdescription = req.query.description;
   var qissuer = req.query.issuer;
-  var qid = req.query.id;
+  var qid = req.query.badgeId;
   var qglobal = req.query.global;
   var quserId = req.query.userId;
 
@@ -54,9 +60,9 @@ const getBadges = async function(req, res){
       query.global = qglobal;
     }
     if(quserId){
-      var user = User.findById(quserId).select('badge', 'localbadge');
+      var user = await User.findById(quserId, {badge: 1, localbadge: 1, _id:0});
       if(user){
-        query._id = {$or: [{$in: user.badge}, {$in: user.localbadge}]};
+        query.$or = [{_id: {$in: user.badge}}, {_id: {$in: user.localbadge}}];
       }
       else {
         return res.status(404).send({
@@ -67,10 +73,24 @@ const getBadges = async function(req, res){
     const badge= new Badge();
     var result = await badge.find(query);
 
-    return res.status(200).send({
-      message: 'Badges found succesfully.',
-      badges: result
-    });
+    if(result.length > 0){
+      return res.status(200).send({
+        message: 'Badges found succesfully.',
+        badges: result
+      });
+    }
+    else {
+      if(Object.keys(query).length > 1){
+        return res.status(404).send({
+          message: 'Badges not found using the specified parameters.',
+        });
+      }
+      else {
+        return res.status(404).send({
+          message: 'Badges not found.',
+        });
+      }
+    }
   }
   catch(err){
     return res.status(500).send(err);
@@ -80,19 +100,23 @@ const getBadges = async function(req, res){
 
 
 /**
- * @api {post} /admin/badge Create global Badge
+ * @api {post} /api/v1/admin/badge Create global Badge
  * @apiName createGlobalBadge
  * @apiDescription Create a new global Badge.
  * @apiGroup Admin
  *
- * @apiParam (Parameters for creating a global Badge) {String} name title of Badge
- * @apiParam (Parameters for creating a global Badge) {String} description a brief summary of the Badge
- * @apiParam (Parameters for creating a global Badge) {String} critera criterias getting this Badge
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {String} name title of Badge
+ * @apiParam {String} description a brief summary of the Badge
+ * @apiParam {String} critera criterias getting this Badge
  *
  * @apiSuccess (Created 201) {String} message `Global Badge is succesfully created.`
  * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}'
  *
- * @apiError (On error) {Object} 500 `{"message": "Complications during storage."}`
+ * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postGlobalBadge = async function(req, res){
   try{
@@ -117,22 +141,27 @@ const postGlobalBadge = async function(req, res){
 
 
 /**
- * @api {post} /admin/badge/:badgeId Put Badge
+ * @api {put} /api/v1/admin/badge/:badgeId Update Badge
  * @apiName AdminPutBadge
- * @apiDescription Put a Badge (global | local).
+ * @apiDescription Change information of a Badge (global | local).
  * @apiGroup Admin
  *
- * @apiParam (Parameters for putting a global Badge) {String} [name] title of Badge
- * @apiParam (Parameters for putting a global Badge) {String} [description] a brief summary of the Badge
- * @apiParam (Parameters for putting a global Badge) {String} [critera] criterias getting this Badge
- * @apiParam (Parameters for putting a global Badge) {Boolean} [exists] if false, badge is deactivated
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {String} [name] title of Badge
+ * @apiParam {String} [description] a brief summary of the Badge
+ * @apiParam {String} [critera] criterias getting this Badge
+ * @apiParam {Boolean} [exists] if false, badge is deactivated
  *
  * @apiSuccess (Success 200) {String} message `Badge updated successfully.`
- * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}'
+ * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}`
  *
  * @apiError (On error) {Object} 400 `{"message": "Badge not changed."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
- * @apiError (On error) {Object} 500 `{"message": "Complications during storage."}`
+ * @apiError (On error) {Object} 500 Complications during storage.
  */
 const putBadge = async function(req, res){
   var updatedBadge = {};
@@ -172,18 +201,25 @@ const putBadge = async function(req, res){
 
 
 /**
- * @api {put} /admin/badge/:badgeId/unassigne/user/:userId unassigne a Badge
+ * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId Unassigne a Badge
  * @apiName adminUnassigneLocalBadge
- * @apiDescription unassigne a Badge to an user
+ * @apiDescription Unassigne a Badge to an user.
  * @apiGroup Admin
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
  * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or `Global Badge is unassigned successfully to user.`
- * @apiSuccess (Success 200) {Object} user `{...}`
  *
  * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or `{"message": "Global Badge is already unassigned to user."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
   * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Object} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const unassigneBadge = async function(req, res){
   var badgeId = req.params.badgeId;
@@ -205,13 +241,11 @@ const unassigneBadge = async function(req, res){
               const updatedUser = await user.save();
               return res.status(200).send({
                 message: 'Local Badge is unassigned successfully to user.',
-                user: updatedUser
               });
             }
             else{
               return res.status(400).send({
                 message: 'Local Badge is already unassigned to user.',
-                user: user
               });
             }
           }
@@ -223,13 +257,11 @@ const unassigneBadge = async function(req, res){
               const updatedUser = await user.save();
               return res.status(200).send({
                 message: 'Global Badge is unassigned successfully to user.',
-                user: updatedUser
               });
             }
             else{
               return res.status(400).send({
                 message: 'Global Badge is already unassigned to user.',
-                user: user
               });
             }
           }
@@ -260,19 +292,26 @@ const unassigneBadge = async function(req, res){
 
 
 /**
- * @api {put} /admin/badge/:badgeId/course/:courseId/assigne/user/:userId assigne a Badge
+ * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId Assigne a Badge
  * @apiName adminAssigneLocalBadge
- * @apiDescription assigne a Badge to an user
+ * @apiDescription Assigne a Badge to an user.
  * @apiGroup Admin
  *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
  * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or `GLobal Badge is assigned successfully to user.`
- * @apiSuccess (Success 200) {Object} user `{...}`
  *
  * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or `{"message": "Global Badge is already assigned to user."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Object} 500 `{"message": "Complications during querying the database."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const assigneBadge = async function(req, res){
   var badgeId = req.params.badgeId;
@@ -294,13 +333,11 @@ const assigneBadge = async function(req, res){
               const updatedUser = await user.save();
               return res.status(200).send({
                 message: 'Local Badge is assigned successfully to user.',
-                user: updatedUser
               });
             }
             else {
               return res.status(400).send({
                 message: 'Local Badge is already assigned to user.',
-                user: user
               });
             }
           }
@@ -312,13 +349,11 @@ const assigneBadge = async function(req, res){
               const updatedUser = await user.save();
               return res.status(200).send({
                 message: 'Global Badge is assigned successfully to user.',
-                user: updatedUser
               });
             }
             else {
               return res.status(400).send({
                 message: 'Global Badge is already assigned to user.',
-                user: user
               });
             }
           }

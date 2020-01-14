@@ -9,7 +9,7 @@ const {createToken, invalidateToken} = require('../../../../helper/authorization
 
 
 /**
- * @api {post} /user/token/refresh Refresh token
+ * @api {post} /api/v1/user/token/refresh Refresh token
  * @apiName refreshToken
  * @apiDescription Refresh the authorization, if the refresh token is valid.
  * @apiGroup User
@@ -21,7 +21,7 @@ const {createToken, invalidateToken} = require('../../../../helper/authorization
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
  *
  * @apiError (On error) {Object} 403 `{"message": "Refresh token is invalid or too old. Please sign in with your user credentials."}`
- * @apiError (On error) {Obejct} 500 `{"message": "Complications during querying the database or creating a JWT."}`
+ * @apiError (On error) {Obejct} 500 Complications during querying the database or creating a JWT.
  */
 const postRefreshToken = async function(req, res){
   var refreshToken = req.body.refreshToken;
