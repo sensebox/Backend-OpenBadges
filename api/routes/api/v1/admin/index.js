@@ -18,7 +18,7 @@ const {adminAuthorization} = require('../../../../helper/authorization/middlewar
 
 
 AdminRouter.route('/signup')
-    .post(adminAuthorization, login.postRegister);
+    .post(/*adminAuthorization,*/ login.postRegister);
 
 AdminRouter.route('/signin')
     .post(login.postLogin);

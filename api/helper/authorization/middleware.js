@@ -26,7 +26,7 @@ const userAuthorization = async function(req, res, next){
            if(user){
              req.user = {};
              req.user.id = user.id;
-             req.user.username = user.username;
+             req.user.initials = user.firstname.charAt(0).toUpperCase()+user.lastname.charAt(0).toUpperCase();
              req.user.role = user.role;
              return next();
            }

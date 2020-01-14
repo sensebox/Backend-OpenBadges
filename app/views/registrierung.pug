@@ -7,7 +7,7 @@ block content
                 .col-lg-6
                     h1 Open Badges Registrierung
                     br
-                    form(action='/user/register', method='POST')
+                    form(action='/nutzer/registrieren', method='POST')
                         .form-row
                             .form-group.col-auto
                                 label(for='inputEmail4') Email
@@ -43,7 +43,7 @@ block content
                                 label(for='inputDate') Geburtsdatum
                                 input#inputDate.form-control(type='date', name='birthday', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
                                 span#date.badge.badge-danger
-                       span#date.badge.badge-danger
+                        button.btn.btn-primary#Send(type='submit') Sign in
                 .col-lg
             br
         script.

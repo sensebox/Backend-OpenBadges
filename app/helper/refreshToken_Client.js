@@ -30,7 +30,7 @@ const refreshToken = function(req, res, redirectUrl){
     response.on('end', function(){
       if(response.statusCode !== 200){
         req.flash('loginError', JSON.parse(body).message);
-        return res.redirect('user/login');
+        return res.redirect('nutzer/anmelden');
       }
       else {
         // token is generated
@@ -51,7 +51,7 @@ const refreshToken = function(req, res, redirectUrl){
   });
 };
 
-module.exports = {
   refreshToken,
+  module.exports = {
   cookieExtractor
 };

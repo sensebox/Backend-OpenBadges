@@ -9,16 +9,16 @@ block content
             .col-6
                 .container.bg-light.mt-5.border
                     h1  Open Badges Login
-                    form
+                    form(action='/nutzer/anmelden' method='POST')
+                        .form-groupform
+                            label(for='exampleInputUsername') Nutzername
+                            input#exampleInputUsername.form-control(type='text', name='username', aria-describedby='usernameHelp')
                         .form-group
-                            label(for='exampleInputEmail1') Email Adresse
-                            input#exampleInputEmail1.form-control(type='email', aria-describedby='emailHelp')
-                        .form-group
-                            label(for='exampleInputPassword1') Passwort
-                            input#exampleInputPassword1.form-control(type='password')
+                            label(for='exampleInputPassword') Passwort
+                            input#exampleInputPassword.form-control(type='password', name='password')
                         button.btn.btn-primary.btn-lg.btn-block(type='submit') Login
                     br
-                    a(href='pwlost')
-                        button.btn.btn-danger.btn-lg.btn-block(type='Passwort vergessen') Passwort Vergessen
+                    a(href='/nutzer/passwort')
+                        button.btn.btn-danger.btn-lg.btn-block(type='Passwort vergessen') Passwort vergessen
                     br
             .col

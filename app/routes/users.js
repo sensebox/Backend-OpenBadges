@@ -9,14 +9,14 @@ const request = require('request');
 const {refreshToken, cookieExtractor} = require('../helper/refreshToken_Client');
 
 
-router.get('/register', function (req, res){
+router.get('/registrieren', function (req, res){
   res.render('registrierung', {
     title: 'Registrieren'
   });
 });
 
 
-router.post('/register', function (req, res){
+router.post('/registrieren', function (req, res){
   var url = process.env.API_Domain+'/api/v1/user/signup';
   request.post(url, {form: req.body})
     .on('response', function(response) {
@@ -28,9 +28,10 @@ router.post('/register', function (req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 201){
-          return res.status(400).send(JSON.parse(body));
+          return res.redirect('/nutzer/registrieren');
+          // return res.status(400).send(JSON.parse(body));
         }
-        res.redirect('/user/login');
+        res.redirect('/nutzer/anmelden');
       });
     })
     .on('error', function(err) {
@@ -39,15 +40,16 @@ router.post('/register', function (req, res){
 });
 
 
-router.get('/login', async function (req, res){
-  res.render('login', {
+router.get('/anmelden', async function (req, res){
+  res.render('loginnew', {
     title: 'Login'
   });
 });
 
 
-router.post('/login', function (req, res){
+router.post('/anmelden', function (req, res){
   var url = process.env.API_Domain+'/api/v1/user/signin';
+  console.log(req.body);
   request.post(url, {form: req.body})
     .on('response', function(response) {
       // concatenate updates from datastream
@@ -57,10 +59,11 @@ router.post('/login', function (req, res){
           body += chunk;
       });
       response.on('end', function(){
+        console.log(body);
         if(response.statusCode !== 200){
           // login not successfully
           req.flash('loginError', JSON.parse(body).message);
-          return res.status(400).redirect('/user/login');
+          return res.status(400).redirect('/nutzer/anmelden');
         }
         // token is generated
         // set cookies (name: "access" and "refresh") with token as content
@@ -79,7 +82,7 @@ router.post('/login', function (req, res){
 });
 
 
-router.get('/logout', function(req, res){
+router.get('/abmelden', function(req, res){
   var token = cookieExtractor(req, 'access');
   var options = {
     url: process.env.API_Domain+'/api/v1/user/signout',
@@ -97,12 +100,12 @@ router.get('/logout', function(req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          return refreshToken(req, res, '/user/logout');
+          return refreshToken(req, res, '/nutzer/abmelden');
         }
         res.clearCookie('access');
         res.clearCookie('refresh');
         req.flash('logoutSuccess', JSON.parse(body).message);
-        res.redirect('/user/login');
+        res.redirect('/nutzer/anmelden');
       });
     })
     .on('error', function(err) {

@@ -29,8 +29,10 @@ router.get('/', function(req, res){
       if(response.statusCode !== 200){
         return refreshToken(req, res, '/');
       }
+      console.log(body);
       res.render('index', {
-        title: 'my secret'
+        title: 'my secret',
+        user: JSON.parse(body).me
       });
     });
   })

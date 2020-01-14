@@ -39,15 +39,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use('/popper', express.static(__dirname + '/node_modules/popper.js/dist'));
+app.use("/leaflet", express.static(__dirname + "/node_modules/leaflet/dist"));
 
 
 // setup routes
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const exampleRouter = require('./routes/example');
 
-app.use('/', indexRouter);
-app.use('/user', usersRouter);
-
+// app.use('/', indexRouter);
+app.use('/nutzer', usersRouter);
+app.use('/', exampleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

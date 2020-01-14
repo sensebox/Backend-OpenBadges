@@ -7,38 +7,40 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET Start page. */
-router.get('/begin', function(req, res, next) {
+router.get('/', function(req, res, next) {
   res.render('Start');
 });
-router.get('/Kontaktformular', function(req, res, next) {
+
+
+router.get('/kontakt', function(req, res, next) {
   res.render('Kontaktformular');
 });
-router.get('/registrierung', function(req, res, next) {
+router.get('/nutzer/registrierung', function(req, res, next) {
   res.render('registrierung');
 });
-router.get('/Kursliste', function(req, res, next) {
+router.get('/kurse', function(req, res, next) {
   res.render('kursliste');
 });
-router.get('/login', function(req, res, next) {
+router.get('/nutzer/login', function(req, res, next) {
   res.render('loginnew');
 });
 /* GET kursRegistrierung. */
-router.get('/kursRegistrierung', function(req, res, next) {
+router.get('/kurse/registrierung', function(req, res, next) {
     res.render('kursRegistrierung');
 });
-router.get('/Kursseite', function(req, res, next) {
+router.get('/kurse/:kursId', function(req, res, next) {
   res.render('Kursseite');
 });
-router.get('/Kontoseite', function(req, res, next) {
+router.get('/nutzer/profil', function(req, res, next) {
   res.render('Kontoseite');
 });
-router.get('/pwlost', function(req, res, next) {
+router.get('/nutzer/passwort', function(req, res, next) {
   res.render('pwlost');
 });
-router.get('/badgelist', function(req, res, next) {
+router.get('/badges', function(req, res, next) {
   res.render('badgelist');
 });
-router.get('/belegteKurse', function(req, res, next) {
+router.get('/kurse/meine', function(req, res, next) {
   res.render('belegteKurse');
 });
 module.exports = router;

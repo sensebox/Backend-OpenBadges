@@ -18,21 +18,27 @@ body(onload="fadeIn()")
     #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.mr-auto
         li.nav-item
-          a.nav-link(href='/begin') Starseite
+          a.nav-link(href='/') Startseite
         li.nav-item
-          a.nav-link(href='/Kursliste') Kursliste
+          a.nav-link(href='/kurse') Kursliste
         li.nav-item
-          a.nav-link(href='/belegteKurse') Belegte Kurse
+          a.nav-link(href='/kurse/meine') Belegte Kurse
         li.nav-item
-          a.nav-link(href='kursRegistrierung') Kurs Erstellung
+          a.nav-link(href='/kurse/registrieren') Kurs Erstellung
         li.nav-item
-          a.nav-link(href='badgelist') Badgeliste
+          a.nav-link(href='/badges') Badgeliste
         li.nav-item
-          a.nav-link(href='Kontaktformular') Admin Kontakt
+          a.nav-link(href='/kontakt') Kontakt
         li.nav-item
-          a.nav-link(href='Kontoseite') Mein Konto
-        li.nav-item
-          a.nav-link(href='#', style='color: red;') Logout
+          a.nav-link(href='/nutzer/profil') Mein Konto
+        if(user)
+          li.nav-item
+            a.nav-link(href='/nutzer/abmelden', style='color: red;') Logout
+        else
+          li.nav-item
+            a.nav-link(href='/nutzer/anmelden', style='color: red;') Anmelden
+          li.nav-item
+            a.nav-link(href='/nutzer/registrieren', style='color: red;') Registrieren
 script(crossorigin='anonymous', src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
 script(crossorigin='anonymous', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js')
 script(crossorigin='anonymous', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js')

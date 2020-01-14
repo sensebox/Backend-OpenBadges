@@ -7,7 +7,6 @@ const chalk = require('chalk');
 
 
 const createAdmin = function(cb){
-  console.log(cb);
 
   const options = {
     url: process.env.API_Domain + '/api/v1/admin/signup',
@@ -33,6 +32,7 @@ const createAdmin = function(cb){
       });
       response.on('end', function(){
         if(response.statusCode !== 201){
+          console.log(body);
           if(!(JSON.parse(body).message === 'Email already exists')){
             return console.log(chalk.red('Error'));
           }
