@@ -2,6 +2,15 @@ extends layout
 block content
     // Sieht zwar nicht so schön aus wie der alte login, ist aber konsistent zum Design
     .container(id='#fadein')
+        // messages from server
+        if (messages.error)
+          for message in messages.error
+            .alert.alert-danger
+              span= message
+        if (messages.success)
+          for message in messages.success
+            .alert.alert-success
+              span= message
         .row
             .col
                 .mt-5

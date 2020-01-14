@@ -50,6 +50,13 @@ block content
       th(style='width:60%;') Name
       th(style='width:40%;') Country
       th(style='width:40%;') Kursleiter
+    if(courses)
+      for course in courses
+        tr
+          td
+            a(href='/kurse/'+course._id)= course.name
+          td= course.courseprovider
+          td= course.address
     tr
       td Alfreds Futterkiste
       td Germany

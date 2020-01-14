@@ -45,14 +45,22 @@ block content
 
                         .form-group.col-auto
                             label(for='inputlocalBadge') Lokale Badges:
-                            input#inputlocalBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Welche Badges können erreicht werden')
+                            select#inputlocalBadge.form-control(multiple, data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen')
+                              for badge in badges
+                                if(badge.global == false)
+                                  option(value=badge._id)=badge.name
+                            //input#inputlocalBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Welche Badges können erreicht werden')
                     .form-row
                         .form-group.col-auto
                             label(for='exampleFormControlFile1') Example file input
                             input#exampleFormControlFile1.form-control-file(type='file', multiple='')
-                        .form-group.col-auto
+                        .form-group.col-authorization
                             label(for='inputglobalBadge') Globale Badges:
-                            input#inputglobalBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen')
+                            select#inputglobalBadge.form-control(multiple, data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen')
+                              for badge in badges
+                                if(badge.global == true)
+                                  option(value=badge._id)=badge.name
+                            //input(type='Text'
                     ul.list-unstyled
                         li.list-group-item
                             img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
@@ -66,6 +74,3 @@ block content
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous')
-
-
-

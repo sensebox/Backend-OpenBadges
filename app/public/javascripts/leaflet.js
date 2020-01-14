@@ -7,7 +7,10 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(mymap);
 
 
-var popup = L.popup()
-    .setLatLng([51.9606649, 7.6261347], 11)
-    .setContent("I am the center.")
-    .openOn(mymap);
+function addMarker(lng, lat, title){
+  mymap.setView(new L.LatLng(lat, lng), 11);
+  L.popup()
+      .setLatLng([lat, lng])
+      .setContent(title)
+      .openOn(mymap);
+}

@@ -28,9 +28,11 @@ router.post('/registrieren', function (req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 201){
+          req.flash('error', 'Es ist ein Fehler beim Registriern aufgetreten.');
           return res.redirect('/nutzer/registrieren');
           // return res.status(400).send(JSON.parse(body));
         }
+        req.flash('success', 'Sie haben sich erfolgreich registriert.');
         res.redirect('/nutzer/anmelden');
       });
     })
@@ -62,7 +64,7 @@ router.post('/anmelden', function (req, res){
         console.log(body);
         if(response.statusCode !== 200){
           // login not successfully
-          req.flash('loginError', JSON.parse(body).message);
+          req.flash('error', 'Benutzername oder Passwort ist falsch.');
           return res.status(400).redirect('/nutzer/anmelden');
         }
         // token is generated
@@ -100,11 +102,18 @@ router.get('/abmelden', function(req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          return refreshToken(req, res, '/nutzer/abmelden');
+          return refreshToken(req, res, function(){
+              // error: users refresh Token is invalid, nothing to do
+              req.flash('error', 'Die angeforderten Informationen stimmen nicht mit Ihrem Benutzerkonto überein. Melden Sie sich bitte wieder an.');
+              return res.redirect('/nutzer/anmelden');
+            }, function(){
+              // token is successfull refreshed
+              return res.redirect('/nutzer/abmelden');
+          });
         }
         res.clearCookie('access');
         res.clearCookie('refresh');
-        req.flash('logoutSuccess', JSON.parse(body).message);
+        req.flash('success', 'Sie haben sich erfolgreich abgemeldet.');
         res.redirect('/nutzer/anmelden');
       });
     })
@@ -113,6 +122,177 @@ router.get('/abmelden', function(req, res){
   });
 });
 
+
+
+router.get('/profil', function (req, res){
+  var token = cookieExtractor(req, 'access');
+  var options = {
+    url: process.env.API_Domain+'/api/v1/user/me',
+    headers: {
+      'Authorization': 'Bearer '+token
+    }
+  };
+  request.get(options)
+  .on('response', function(response) {
+    // concatenate updates from datastream
+    var body = '';
+    response.on('data', function(chunk){
+      //console.log("chunk: " + chunk);
+      body += chunk;
+    });
+    response.on('end', function(){
+      if(response.statusCode !== 200){
+        return refreshToken(req, res, function(){
+            // error: no user signed in
+            req.flash('error', 'Die angeforderten Informationen stimmen nicht mit Ihrem Benutzerkonto überein. Melden Sie sich bitte wieder an.');
+            return res.redirect('/nutzer/anmelden');
+          }, function(){
+            // token is successfull refreshed
+            return res.redirect('/nutzer/profil');
+        });
+      }
+      console.log(3, JSON.parse(body));
+      res.render('Kontoseite', {
+        title: 'Profil',
+        user: JSON.parse(body).user
+      });
+    });
+  });
+});
+
+
+
+router.post('/profil', function (req, res){
+  console.log('Los');
+  var token = cookieExtractor(req, 'access');
+  var options = {
+    method: 'PUT',
+    url: process.env.API_Domain+'/api/v1/user/me',
+    headers: {
+      'Authorization': 'Bearer '+token
+    },
+    form: req.body
+  };
+  request(options)
+  .on('response', function(response) {
+    // concatenate updates from datastream
+    var body = '';
+    response.on('data', function(chunk){
+      //console.log("chunk: " + chunk);
+      body += chunk;
+    });
+    response.on('end', function(){
+      if(response.statusCode !== 200){
+        return refreshToken(req, res, function(){
+            // error: no user signed in
+            req.flash('error', 'Die angeforderten Informationen stimmen nicht mit Ihrem Benutzerkonto überein. Melden Sie sich bitte wieder an.');
+            return res.redirect('/nutzer/anmelden');
+          }, function(){
+            // token is successfull refreshed
+            // return res.redirect('/nutzer/profil');
+            var token = cookieExtractor(req, 'access');
+            var options = {
+              url: process.env.API_Domain+'/api/v1/user/me',
+              headers: {
+                'Authorization': 'Bearer '+token
+              },
+              form: req.body
+            };
+            request.put(options)
+            .on('response', function(response) {
+              // concatenate updates from datastream
+              var body = '';
+              response.on('data', function(chunk){
+                //console.log("chunk: " + chunk);
+                body += chunk;
+              });
+              response.on('end', function(){
+                if(response.statusCode !== 200){
+                  // flash: error
+                  req.flash('error', 'Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.');
+                  return res.redirect('/nutzer/anmelden');
+                }
+                if(JSON.parse(body).message == 'User information updated successfully.'){
+                    req.flash('success', 'Ihre Nutzerdaten wurden erfolgreich aktualisiert.');
+                } else {
+                  req.flash('info', 'Ihre Nutzerdaten haben sich nicht verändert.');
+                }
+                res.redirect('/nutzer/profil');
+              });
+            });
+        });
+      }
+      if(JSON.parse(body).message == 'User information updated successfully.'){
+          req.flash('success', 'Ihre Nutzerdaten wurden erfolgreich aktualisiert.');
+      } else {
+        req.flash('info', 'Ihre Nutzerdaten haben sich nicht verändert.');
+      }
+      res.redirect('/nutzer/profil');
+    });
+  });
+});
+
+
+
+
+router.post('/loeschen', function (req, res){
+  var token = cookieExtractor(req, 'access');
+  var options = {
+    method: 'DELETE',
+    url: process.env.API_Domain+'/api/v1/user/me',
+    headers: {
+      'Authorization': 'Bearer '+token
+    }
+  };
+  request(options)
+  .on('response', function(response) {
+    // concatenate updates from datastream
+    var body = '';
+    response.on('data', function(chunk){
+      //console.log("chunk: " + chunk);
+      body += chunk;
+    });
+    response.on('end', function(){
+      if(response.statusCode !== 200){
+        return refreshToken(req, res, function(){
+            // error: no user signed in
+            req.flash('error', 'Die angeforderten Informationen stimmen nicht mit Ihrem Benutzerkonto überein. Melden Sie sich bitte wieder an.');
+            return res.redirect('/nutzer/anmelden');
+          }, function(){
+            // token is successfull refreshed
+            var token = cookieExtractor(req, 'access');
+            var options = {
+              method: 'delete',
+              url: process.env.API_Domain+'/api/v1/user/me',
+              headers: {
+                'Authorization': 'Bearer '+token
+              }
+            };
+            request(options)
+            .on('response', function(response) {
+              // concatenate updates from datastream
+              var body = '';
+              response.on('data', function(chunk){
+                //console.log("chunk: " + chunk);
+                body += chunk;
+              });
+              response.on('end', function(){
+                if(response.statusCode !== 200){
+                  // error
+                  req.flash('error', 'Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.');
+                  res.redirect('/nutzer/anmelden');
+                }
+                req.flash('success', 'Ihr Konto und alle damit verbundenen Verknüpfungen wurden erfolgreich gelöscht.');
+                res.redirect('/nutzer/anmelden');
+              });
+            });
+        });
+      }
+      req.flash('success', 'Ihr Konto und alle damit verbundenen Verknüpfungen wurden erfolgreich gelöscht.');
+      res.redirect('/nutzer/anmelden');
+    });
+  });
+});
 
 
 module.exports = router;

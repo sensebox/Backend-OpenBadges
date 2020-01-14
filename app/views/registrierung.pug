@@ -2,6 +2,15 @@ extends layout
 block content
     body.bg-white(onload='fadeIn()')
         .container.bg-light.mt-5.border.fadein(id='#fadein')
+            // messages from server
+            if (messages.error)
+              for message in messages.error
+                .alert.alert-danger
+                  span= message
+            if (messages.success)
+              for message in messages.success
+                .alert.alert-success
+                  span= message
             .row
                 .col-lg
                 .col-lg-6

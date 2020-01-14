@@ -16,7 +16,7 @@ const cookieExtractor = function(req, cookieName) {
 };
 
 
-const refreshToken = function(req, res, redirectUrl){
+const refreshToken = function(req, res, error, success){
   var token = cookieExtractor(req, 'refresh');
   var url = process.env.API_Domain+'/api/v1/user/token/refresh';
   request.post(url, {form: {refreshToken: token}})
@@ -29,8 +29,7 @@ const refreshToken = function(req, res, redirectUrl){
     });
     response.on('end', function(){
       if(response.statusCode !== 200){
-        req.flash('loginError', JSON.parse(body).message);
-        return res.redirect('nutzer/anmelden');
+        error();
       }
       else {
         // token is generated
@@ -42,7 +41,7 @@ const refreshToken = function(req, res, redirectUrl){
         cookieOptions.maxAge = process.env.COOKIE_MaxAge;
         res.cookie('refresh', (JSON.parse(body)).refreshToken, cookieOptions);
         console.log('Token refreshed');
-        return res.redirect(redirectUrl);
+        success();
       }
     });
   })
@@ -51,7 +50,8 @@ const refreshToken = function(req, res, redirectUrl){
   });
 };
 
+
+module.exports = {
   refreshToken,
-  module.exports = {
   cookieExtractor
 };
