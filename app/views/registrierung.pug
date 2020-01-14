@@ -1,17 +1,7 @@
-doctype html
-// Required meta tags
-html
-    head
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
-        link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
-        title Open Bades Registrierung!
-    // Bootstrap CSS
-    // Navbar
-    // Keine Navbar im Register
-    // Navbar ende
-    body.bg-white
-        .container.bg-light.mt-5.border
+extends layout
+block content
+    body.bg-white(onload='fadeIn()')
+        .container.bg-light.mt-5.border.fadein(id='#fadein')
             .row
                 .col-lg
                 .col-lg-6
@@ -43,18 +33,21 @@ html
                             .form-group.col-auto
                                 label(for='inputCity') Stadt
                                 input#inputCity.form-control(type='text', name='city' placeholder='Musterstadt', data-toggle='tooltip', data-placement='top', title='Wohnort')
+                                span#city.badge.badge-danger
                             .form-group.col-auto
                                 label(for='inputZip') Postleitzahl
                                 input#inputZip.form-control(type='number', name='postalcode' min='10000', max='99999', placeholder='00000', data-toggle='tooltip', data-placement='top', title='Postleitzahl des Wohnortes')
+                                span#plz.badge.badge-danger
                         .form-row
                             .form-group.col-auto
                                 label(for='inputDate') Geburtsdatum
                                 input#inputDate.form-control(type='date', name='birthday', data-toggle='tooltip', data-placement='top', title='Geburtsdatum')
-                        button.btn.btn-primary(type='submit', onclick='check()') Sign in
+                                span#date.badge.badge-danger
+                       span#date.badge.badge-danger
                 .col-lg
             br
         script.
-            function check() {
+            document.getElementById("Send").addEventListener("click", function (event) {
                 pw1 = document.getElementById('inputPassword').value;
                 pw2 = document.getElementById('inputPassword2').value;
                 pwident = null;
@@ -70,21 +63,61 @@ html
                     pwshort = false;
                 }
                 if (!pwident && !pwshort) {
-                    return;
-                } else
-                if(pwident || pwshort){
+                } else if (pwident || pwshort) {
                     if (pwshort) {
                         document.getElementById('pwtext').innerText = 'Passwort zu Kurz';
-                        return false;
+                        event.preventDefault()
                     }
                     if (pwident) {
                         document.getElementById('pwtext').innerText = 'Passwörter stimmen nicht überein';
-                        return false;
+                        event.preventDefault()
                     }
-                }else{
-                    document.getElementById('pwtext').innerText="f";
+                } else {
+                    document.getElementById('pwtext').innerText = "";
                 }
-            }
-        script(src='/jquery/jquery.min.js')
-        script(src='/popper/umd/popper.min.js')
-        script(src='/bootstrap/js/bootstrap.min.js')
+
+                if (document.getElementById("inputVoname").value == "") {
+                    document.getElementById('vorname').innerText = 'Vorname Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('vorname').innerText = "";
+                }
+
+                if (document.getElementById("inputNachnahme").value == "") {
+                    document.getElementById('nachnahme').innerText = 'Nachnahme Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('nachnahme').innerText = "";
+                }
+
+                if (document.getElementById("inputCity").value == "") {
+                    document.getElementById('city').innerText = 'City Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('city').innerText = "";
+                }
+
+                if (document.getElementById("inputEmail4").value == "") {
+                    document.getElementById('email').innerText = 'Email Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('email').innerText = "";
+                }
+
+                if (document.getElementById("inputZip").value == "") {
+                    document.getElementById('plz').innerText = 'Postleitzahl Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('plz').innerText = "";
+                }
+
+                if (document.getElementById("inputDate").value == "") {
+                    document.getElementById('date').innerText = 'Gebursdatum Eingeben';
+                    event.preventDefault();
+                } else {
+                    document.getElementById('date').innerText = "";
+                }
+            });
+        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', crossorigin='anonymous')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')

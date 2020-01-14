@@ -1,0 +1,21 @@
+extends layout
+block content
+    .container(id='#fadein')
+        .row
+            .col
+            .col-6
+                .container.bg-light.mt-5.border
+                    h1 Badge Liste
+                    p Hier all deine Verdienten Badges Visualisiert!
+                    // Werden hier nur die Grafiken Visualisiert? Soll auch Text dazu? Ist im grunde Erstmal nur ne idee/Grundgerüst
+                    ul.list-unstyled
+                        // Schleife hier starten !
+                        li.media
+                            // Das Darf so nicht online gehen. Wir halten nicht die rechte an dem Bild! !
+                            img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                            .media-body
+                                h5.mt-0.mb-1 Badge Name
+                                |                             Badge Kurzbeschreibung
+                        // Schleife bis hier !
+                    button.btn.btn-primary.btn-lg.btn-block Download aller Badges
+            .col

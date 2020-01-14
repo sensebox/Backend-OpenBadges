@@ -54,4 +54,7 @@ The generated HTML page of the current API documentation are located in [``doc``
 
 ## Authors
 * Dorian
+* Hilal
+* Marius
 * Luc
+* Sven

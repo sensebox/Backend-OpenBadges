@@ -1,0 +1,86 @@
+extends layout
+
+
+block content
+  link(href='/leaflet/leaflet.css' rel='stylesheet')
+  // Filter
+  #group
+      .container(id='#fadein')
+          .row
+              .col-sm
+              .col-auto.mt-2
+                  button.btn.btn-primary(data-parent='#group', type='button', data-toggle='collapse', data-target='#collapsedeactivate', aria-expanded='false', aria-controls='collapseExample')
+                      | Filtern
+              .col-sm
+  #collapsedeactivate.collapse
+      .container.bg-light.mt-5.border
+          p
+              | Hier kannst du deine Kurse filtern.
+          p
+              input#myInput(type='text' onkeyup='myFunction()' placeholder='Suche nach Kursname' title='Type in a name')
+          p
+              input#myInput1(type='text' onkeyup='myFunction1()' placeholder='Ort' title='Type in a name')
+          p
+              input#myInput2(type='text' onkeyup='myFunction2()' placeholder='Kursleiter' title='Type in a name')
+
+              .form-row
+                  .form-group.col-auto
+                      label(for='inputDate') Der Kurs beginnt am:
+                      input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Beginndatum')
+                      span#date.badge.badge-danger
+
+              .form-row
+                  .form-group.col-auto
+                      label(for='inputDate') Der Kurs endet am:
+                      input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Enddatum')
+                      span#date.badge.badge-danger
+          form(action='#')
+
+              // button.btn.btn-danger.btn-lg.btn-block.mt-5(type='button') Kurse filtern
+          p
+
+  // Karte Leaflet
+  #map(style='height:220px;')
+  script(src='/leaflet/leaflet.js')
+  script(src='/javascripts/leaflet.js')
+
+  // Beispiel Tabelle zum Testen
+  table#myTable
+    tr.header
+      th(style='width:60%;') Name
+      th(style='width:40%;') Country
+      th(style='width:40%;') Kursleiter
+    tr
+      td Alfreds Futterkiste
+      td Germany
+      td Hans
+    tr
+      td Berglunds snabbkop
+      td Sweden
+      td Mannfred
+    tr
+      td Island Trading
+      td UK
+      td Hilal
+    tr
+      td Koniglich Essen
+      td Germany
+      td Hilal
+    tr
+      td Laughing Bacchus Winecellars
+      td Canada
+      td Hilal
+    tr
+      td Magazzini Alimentari Riuniti
+      td Italy
+      td Hilal
+    tr
+      td North/South
+      td UK
+      td Hilal
+    tr
+      td Paris specialites
+      td France
+      td Hilal
+
+  script(src='/javascripts/filter.js')

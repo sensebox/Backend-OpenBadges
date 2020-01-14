@@ -1,0 +1,71 @@
+
+extends layout
+block content
+
+    .container.bg-light.mt-5.border.fadein(id='#fadein')
+        .row
+            .col-lg
+            .col-lg-6
+                h1 Open Badges Kurserstellung
+                br
+                form(action='#')
+                    .form-row
+                        .form-group.col-auto
+                            label(for='inputKursName') Kursname:
+                            input#inputKursName.form-control(type='text' placeholder='Java-Kurs' data-toggle='tooltip' data-placement='top' title='Gültiger Name')
+                        .form-group.col-auto
+                            label(for='inputKursanbieter') Kursanbieter:
+                            input#inputKursanbieter.form-control(type='text' placeholder=' Institut oder Privatname ' data-toggle='tooltip' data-placement='top' title='Gültiger Kursanbieter')
+                        .form-group.col-auto
+                            label(for='inputZeitraum') Zeitraum:
+                            input#inputZeitraum.form-control(type='date' placeholder='20.01.2019' data-toggle='tooltip' data-placement='top' title='Gültiger Zeitraum')
+                            span#pwtext.badge.badge-danger
+                        .form-group.col-auto
+                            label(for='inputvonbis') von-bis
+                            input#inputvonbis.form-control(type='date' placeholder='20.02.2019' data-toggle='tooltip' data-placement='top' title='Gültiger Zeitraum')
+                    .form-row
+                        .form-group.col-auto
+                            label(for='inputAdresse') Adresse:
+                            input#inputAdresse.form-control(type='text' placeholder='Baumstraße 2' data-toggle='tooltip' data-placement='top' title='Straße + Hausnummer')
+                        .form-group.col-auto
+                            label(for='inputPLZ') Postleitzahl
+                            input#inputPLZ.form-control(type='number' min='10000' max='99999' placeholder='04936' data-toggle='tooltip' data-placement='top' title='Postleitzahl des Wohnortes')
+                    .form-row
+                        .form-group.col-auto
+                            label(for='inputThema') Thema des Kurses:
+                            input#inputThema.form-control(type='text' placeholder='Java programmieren lernen' data-toggle='tooltip' data-placement='top' title=' ')
+                        .form-group.col-auto
+                            label(for='inputBeschreibung') Kurs Beschreibung:
+                            input#inputBeschreibung.form-control(type='text' placeholder='Eine Beschreibung des Kurses' data-toggle='tooltip' data-placement='top' title='Gültige Beschreibung des Kurses')
+                    .form-row
+                        .form-group.col-auto
+                            label(for='inputVorraussetzungen') Vorraussetzungen:
+                            input#inputVorraussetzungen.form-control(type='text' placeholder=' z.B Java Grundlagen belegt ' data-toggle='tooltip' data-placement='top' title='Gültige Vorraussetzungen')
+                        |
+
+                        .form-group.col-auto
+                            label(for='inputlocalBadge') Lokale Badges:
+                            input#inputlocalBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Welche Badges können erreicht werden')
+                    .form-row
+                        .form-group.col-auto
+                            label(for='exampleFormControlFile1') Example file input
+                            input#exampleFormControlFile1.form-control-file(type='file', multiple='')
+                        .form-group.col-auto
+                            label(for='inputglobalBadge') Globale Badges:
+                            input#inputglobalBadge.form-control(type='Text' data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen')
+                    ul.list-unstyled
+                        li.list-group-item
+                            img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                        li.list-group-item
+                            img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                    .form-row
+                        button.btn.btn-primary(type='submit') Senden
+            .col-lg
+        br
+    script.
+    script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous')
+
+
+

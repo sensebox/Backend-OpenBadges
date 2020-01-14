@@ -1,0 +1,24 @@
+extends layout
+block content
+    // Sieht zwar nicht so schön aus wie der alte login, ist aber konsistent zum Design
+    .container(id='#fadein')
+        .row
+            .col
+                .mt-5
+                    img.img-fluid(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Logo_WWU_M%C3%BCnster.svg/2000px-Logo_WWU_M%C3%BCnster.svg.png', alt='Responsive image')
+            .col-6
+                .container.bg-light.mt-5.border
+                    h1  Open Badges Login
+                    form
+                        .form-group
+                            label(for='exampleInputEmail1') Email Adresse
+                            input#exampleInputEmail1.form-control(type='email', aria-describedby='emailHelp')
+                        .form-group
+                            label(for='exampleInputPassword1') Passwort
+                            input#exampleInputPassword1.form-control(type='password')
+                        button.btn.btn-primary.btn-lg.btn-block(type='submit') Login
+                    br
+                    a(href='pwlost')
+                        button.btn.btn-danger.btn-lg.btn-block(type='Passwort vergessen') Passwort Vergessen
+                    br
+            .col
