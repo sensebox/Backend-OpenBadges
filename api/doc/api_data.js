@@ -2661,6 +2661,69 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/user/contact",
+    "title": "Contact support",
+    "name": "Contact",
+    "description": "<p>Send an email to the support of the deposited API-Email.</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>the email of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>the subject of the email</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>the content of the email (HTML-Syntax is Possible)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Emails are successfully sent.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during sending the email.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/user/contact.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
     "url": "/api/v1/user/email/:emailToken",
     "title": "Confirm Email",
     "name": "confirmEmail",
