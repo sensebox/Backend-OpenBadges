@@ -13,6 +13,7 @@ const UserRouter = express.Router();
 const login = require('./login');
 const authorization = require('./authorization');
 const user = require('./user');
+const contact = require('./contact');
 const {userAuthorization} = require('../../../../helper/authorization/middleware');
 
 
@@ -45,6 +46,9 @@ UserRouter.route('/me')
 
 UserRouter.route('/email/:emailToken')
     .post(login.confirmEmail);
+
+UserRouter.route('/contact')
+    .post(contact.contact);
 
 
 // TODO
