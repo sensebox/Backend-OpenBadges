@@ -11,7 +11,7 @@ const User = require('../../../../models/user');
 /**
  * @api {get} /api/v1/badge Get Badges
  * @apiName getBadges
- * @apiDescription Get (all) Badges by different query.
+ * @apiDescription Get (all) Badges by different query which exist.
  * @apiGroup Badge
  *
  * @apiParam {String} [name] find Badges by its name
@@ -19,11 +19,9 @@ const User = require('../../../../models/user');
  * @apiParam {ObejctId} [issuer] the ID of the issuer you are referring to
  * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
  *
- * @apiSuccess (Success 200) {String} message `Badges found successfully.`
+ * @apiSuccess (Success 200) {String} message `Badges found successfully.` or `Badges not found using the specified parameters.` or `Badges not found.`
  * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}]`
  *
- * @apiError (On error) {Object} 404 `{"message": "Badges not found using the specified parameters."}`
- * @apiError (On error) {Object} 404 `{"message": "Badges not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const getBadges = async function(req, res){
@@ -33,7 +31,9 @@ const getBadges = async function(req, res){
   var qglobal = req.query.global;
 
   try{
-    var query = {};
+    var query = {
+      exists: true
+    };
     if(qname){
       query.name = qname;
     }
@@ -57,13 +57,15 @@ const getBadges = async function(req, res){
     }
     else {
       if(Object.keys(query).length > 0){
-        return res.status(404).send({
+        return res.status(200).send({
           message: 'Badges not found using the specified parameters.',
+          badges: result
         });
       }
       else {
-        return res.status(404).send({
+        return res.status(200).send({
           message: 'Badges not found.',
+          badges: result
         });
       }
     }

@@ -35,7 +35,7 @@ const Course = require('../../../../models/course');
            course.participants.push(req.user.id);
            course.save();
            return res.status(200).send({
-             message: 'User registered in successfully in course.',
+             message: 'User registered successfully in course.',
            });
          }
          else{

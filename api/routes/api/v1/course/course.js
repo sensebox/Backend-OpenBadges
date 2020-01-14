@@ -12,7 +12,7 @@ const User = require('../../../../models/user');
 
 
 /**
- * @api {post} /api/v1/course Create Course
+ * @api {post} /api/v1/course Create course
  * @apiName createCourse
  * @apiDescription Create a new Course.
  * @apiGroup Course
@@ -27,7 +27,7 @@ const User = require('../../../../models/user');
  * @apiParam {String} courseprovider the provider of the course might be specified by the creator
  * @apiParam {String} postalcode postalcode of the building where the course take place
  * @apiParam {String} address adress of the location from the Course
- * @apiParam {Coordinates-Array} coordinates coordinates of the location from the Course; example: `[7, 52]`
+ * @apiParam {Coordinates-Array} coordinates coordinates of the location from the Course; example: `[longitude, latitude]`
  * @apiParam {String} topic topic of the Course
  * @apiParam {String} description a brief summary about the course contents
  * @apiParam {String} requirements a brief summary about the course requirements
@@ -76,13 +76,13 @@ const postCourse = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course Get Courses
+ * @api {get} /api/v1/course Get courses
  * @apiName getCourses
- * @apiDescription Get all courses respectivly get courses by different parameters.
+ * @apiDescription Get all courses respectivly get courses by different parameters which exist.
  * @apiGroup Course
  *
  * @apiParam {String} [name] course name
- * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course; example: `[7, 52]`
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course; example: `[longitude, latitude]`
  * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
  * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
@@ -91,7 +91,8 @@ const postCourse = async function(req, res){
  * @apiSuccess (Success 200) {String} message `Courses found successfully.`
  * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
  *
- * @apiError (On error) {Object} 400 `{"message": "No courses found using the specified parameters."}`
+ * @apiError (On error) {Object} 404 `{"message": "Courses not found using the specified parameters."}`
+ * @apiError (On error) {Object} 404 `{"message": "Courses not found."}`
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
@@ -104,7 +105,134 @@ const getCourses = async function(req, res){
     var qstartdate = req.query.startdate;
     var qenddate = req.query.enddate;
 
-    var query = {};
+    var query = {
+      exists: true
+    };
+    if(qname){
+      query.name = qname;
+    }
+    if(qtopic){
+      query.topic = qtopic;
+    }
+    if(qstartdate){
+      query.startdate = {$gte: qstartdate};
+    }
+    if(qenddate){
+      query.enddate = {$lte: qenddate};
+    }
+    if(qcoordinates || qradius){
+      if(qcoordinates && qradius){
+        var coords = req.query.coordinates.split(",");
+        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), qradius/6378.1]}};
+      }
+      else {
+        return res.status(404).send({
+          message: 'To filter courses in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
+        });
+      }
+    }
+
+    var result = await Course.find(query);
+    if(result.length > 0){
+      return res.status(200).send({
+        message: 'Courses found successfully.',
+        courses: result
+      });
+    }
+    else {
+      if(Object.keys(query).length > 0){
+        return res.status(404).send({
+          message: 'Courses not found using the specified parameters.',
+        });
+      }
+      else {
+        return res.status(404).send({
+          message: 'Courses not found.',
+        });
+      }
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
+
+/**
+ * @api {get} /api/v1/course/:courseId Get course
+ * @apiName getCourse
+ * @apiDescription Get one course by course-id.
+ * @apiGroup Course
+ *
+ * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Course found successfully.`
+ * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}`
+ *
+ * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
+ * @apiError (On error) {Object} 500 Complications during storage.
+ */
+const getCourseID = async function(req, res){
+  try{
+    var course = await Course.findOne({_id: req.params.courseId})
+                             .populate('creator', {firstname:1, lastname: 1})
+                             .populate('badge')
+                             .populate('localbadge');
+    if(course){
+      return res.status(200).send({
+        message: 'Course found successfully.',
+        course: course
+      });
+    }
+    else {
+      return res.status(404).send({
+        message: 'Course not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
+/**
+ * @api {get} /api/v1/course/me Get my courses
+ * @apiName getmyCourses
+ * @apiDescription Get (all) courses of currently signed in User by different queries.
+ * @apiGroup Course
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {String} [name] course name
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course; example: `[longitude, latitude]`
+ * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
+ * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
+ * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
+ * @apiParam {String} [topic] course topic
+ *
+ * @apiSuccess (Success 200) {String} message `Courses found successfully.`
+ * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "No courses found using the specified parameters."}`
+ * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
+ * @apiError (On error) {Object} 500 Complications during storage.
+ */
+const getMyCourses = async function(req, res){
+  try{
+    var qname = req.query.name;
+    var qcoordinates = req.query.coordinates;
+    var qradius = req.query.radius;
+    var qtopic = req.query.topic;
+    var qstartdate = req.query.startdate;
+    var qenddate = req.query.enddate;
+
+    var query = {
+      participants: {$in: req.user.id}
+    };
     if(qname){
       query.name = qname;
     }
@@ -150,41 +278,6 @@ const getCourses = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course/:courseId Get Course
- * @apiName getCourse
- * @apiDescription Get one course by course-id.
- * @apiGroup Course
- *
- * @apiParam {ObjectId} courseId the ID of the course you are referring to
- *
- * @apiSuccess (Success 200) {String} message `Course found successfully.`
- * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}`
- *
- * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
- * @apiError (On error) {Object} 500 Complications during storage.
- */
-const getCourseID = async function(req, res){
-  try{
-    var course = await Course.findOne({_id: req.params.courseId});
-    if(course){
-      return res.status(200).send({
-        message: 'Course found successfully.',
-        course: course
-      });
-    }
-    else {
-      return res.status(404).send({
-        message: 'Course not found.',
-      });
-    }
-  }
-  catch(err){
-    return res.status(500).send(err);
-  }
-};
-
-
-/**
  * @api {put} /api/v1/course/:courseId Change course
  * @apiName putCourse
  * @apiDescription Change information of a course.
@@ -201,7 +294,7 @@ const getCourseID = async function(req, res){
  * @apiParam {String} [courseprovider] the provider of the course might be specified by the creator
  * @apiParam {String} [postalcode] postalcode of the building where the course take place
  * @apiParam {String} [address] adress of the location from the Course
- * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course; example: `[7, 52]`
+ * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course; example: `[longitude, latitude]`
  * @apiParam {String} [topic] topic of the Course
  * @apiParam {String} [description] a biref summary about the course contents
  * @apiParam {String} [requirements] a brief summary about the course requirements
@@ -373,6 +466,7 @@ const putCourseHidden = async function(req, res){
 module.exports = {
   postCourse,
   getCourses,
+  getMyCourses,
   getCourseID,
   putCourse,
   getParticipants,

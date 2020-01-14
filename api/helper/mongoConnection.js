@@ -10,7 +10,8 @@ const connectMongoDB = async function(cb) {
   await mongoose.connect('mongodb://mongo/openBadges', {
     useNewUrlParser: true,
     useCreateIndex: true,
-    autoReconnect: true
+    autoReconnect: true,
+    useFindAndModify: false
   }).then(db => {
     console.log(chalk.green('Connected to MongoDB (databasename: "'+db.connections[0].name+'") on host "'+db.connections[0].host+'" and on port "'+db.connections[0].port+'""'));
     cb();

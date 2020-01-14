@@ -26,11 +26,9 @@ const Course = require('../../../../models/course');
  * @apiParam {ObejctId} [userId] the ID of the user you are referring to
  * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
  *
- * @apiSuccess (Success 200) {String} message `Badges found successfully.`
+ * @apiSuccess (Success 200) {String} message `Badges found successfully.` or `Badges not found using the specified parameters.` or `Badges not found.`
  * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}]`
  *
- * @apiError (On error) {Object} 404 `{"message": "Badges not found using the specified parameters."}`
- * @apiError (On error) {Object} 404 `{"message": "Badges not found."}`
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -81,13 +79,15 @@ const getBadges = async function(req, res){
     }
     else {
       if(Object.keys(query).length > 1){
-        return res.status(404).send({
+        return res.status(200).send({
           message: 'Badges not found using the specified parameters.',
+          badges: result
         });
       }
       else {
-        return res.status(404).send({
+        return res.status(200).send({
           message: 'Badges not found.',
+          badges: result
         });
       }
     }
@@ -156,11 +156,9 @@ const postGlobalBadge = async function(req, res){
  * @apiParam {String} [critera] criterias getting this Badge
  * @apiParam {Boolean} [exists] if false, badge is deactivated
  *
- * @apiSuccess (Success 200) {String} message `Badge updated successfully.`
+ * @apiSuccess (Success 200) {String} message `Badge updated successfully.` or `Badge not changed.` or `Badge not found.`
  * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}`
  *
- * @apiError (On error) {Object} 400 `{"message": "Badge not changed."}`
- * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const putBadge = async function(req, res){
@@ -180,15 +178,16 @@ const putBadge = async function(req, res){
         });
       }
       else {
-        return res.status(400).send({
+        return res.status(200).send({
           message: 'Badge not changed.',
           badge: badge
         });
       }
     }
     else {
-      return res.status(404).send({
+      return res.status(200).send({
         message: 'Badge not found.',
+        badge: badge
       });
     }
   }

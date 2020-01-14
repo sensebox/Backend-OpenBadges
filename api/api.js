@@ -7,11 +7,14 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
 
 const api = express();
 
 //reads in configuration from a .env file
 require('dotenv').config();
+
+api.use(cors());
 
 
 api.use(logger('dev'));

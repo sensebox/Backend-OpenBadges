@@ -14,7 +14,7 @@ const moment = require('moment');
  *
  * @apiParam {String} email the email of the user
  * @apiParam {String} subject the subject of the email
- * @apiParam {String} content the content of the email (HTML-Syntax is Possible)
+ * @apiParam {String} content the content of the email (plaintext)
  *
  * @apiSuccess (Success 200) {String} message `Emails are successfully sent.`
  *
@@ -47,14 +47,14 @@ const contact = function(req, res){
         from: email, // sender address
         to: email,// list of receiver
         subject: subject, // Subject line
-        html: '<p>Mail from: <a href="mailto:'+userEmail+'">'+userEmail+'</a></p><p>'+content+'</p>' // html body
+        text: 'Mail from '+userEmail+'\n\n'+content
     };
 
     var mailOptions2 = {
         from: email, // sender address
         to: userEmail,// list of receiver
         subject: 'copy of your email request', // Subject line
-        html: '<p>Thanks for your email from '+moment.utc().toDate()+'</p><p>'+content+'</p>' // html body
+        text: 'Thanks for your email from '+moment.utc().toDate()+'\n\n'+content
     };
 
     // send mail with defined transport object
