@@ -1,14 +1,23 @@
+// jshint esversion: 6
+// jshint node: true
+"use strict";
+
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Open Badges' });
-});
+const {refreshToken} = require('../helper/middleware/refreshToken');
+
+
+// /* GET home page. */
+// router.get('/', function(req, res, next) {
+//   res.render('index', { title: 'Open Badges' });
+// });
 
 /* GET Start page. */
-router.get('/', function(req, res, next) {
-  res.render('Start');
+router.get('/', refreshToken, function(req, res, next) {
+  res.render('Start', {
+    me: req.me
+  });
 });
 
 
@@ -31,14 +40,16 @@ router.get('/', function(req, res, next) {
 // router.get('/kurse/:kursId', function(req, res, next) {
 //   res.render('Kursseite');
 // });
-router.get('/nutzer/profil', function(req, res, next) {
-  res.render('Kontoseite');
-});
+// router.get('/nutzer/profil', function(req, res, next) {
+//   res.render('Kontoseite');
+// });
 router.get('/nutzer/passwort', function(req, res, next) {
   res.render('pwlost');
 });
-router.get('/badges', function(req, res, next) {
-  res.render('badgelist');
+router.get('/badges', refreshToken, function(req, res, next) {
+  res.render('badgelist', {
+    me: req.me
+  });
 });
 // router.get('/kurse/meine', function(req, res, next) {
 //   res.render('belegteKurse');

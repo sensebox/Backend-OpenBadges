@@ -16,7 +16,7 @@ const cookieExtractor = function(req, cookieName) {
 };
 
 
-const refreshToken = function(req, res, error, success){
+const refreshToken = function(req, res, next){
   var token = cookieExtractor(req, 'refresh');
   var url = process.env.API_Domain+'/api/v1/user/token/refresh';
   request.post(url, {form: {refreshToken: token}})
@@ -29,7 +29,10 @@ const refreshToken = function(req, res, error, success){
     });
     response.on('end', function(){
       if(response.statusCode !== 200){
-        error();
+        req.authorized = false;
+        req.token = undefined;
+        req.me = undefined;
+        next();
       }
       else {
         // token is generated
@@ -37,21 +40,27 @@ const refreshToken = function(req, res, error, success){
         const cookieOptions = {
           httpOnly: true, // the cookie only accessible by the web server
         };
-        res.cookie('access', (JSON.parse(body)).token, cookieOptions);
+        res.cookie('access', JSON.parse(body).token, cookieOptions);
         cookieOptions.maxAge = process.env.COOKIE_MaxAge;
-        res.cookie('refresh', (JSON.parse(body)).refreshToken, cookieOptions);
+        res.cookie('refresh', JSON.parse(body).refreshToken, cookieOptions);
         console.log('Token refreshed');
-        success();
+        req.authorized = true;
+        req.token = JSON.parse(body).token;
+        req.me = JSON.parse(body).user;
+        next();
       }
     });
   })
   .on('error', function(err) {
-    return res.status(400).send("Error");
+    console.log(err);
+    req.authorized = false;
+    req.token = undefined;
+    req.me = undefined;
+    next();
   });
 };
 
 
 module.exports = {
-  refreshToken,
-  cookieExtractor
+  refreshToken
 };
