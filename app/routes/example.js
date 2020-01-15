@@ -1,10 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Open Badges' });
-});
+
 
 /* GET Start page. */
 router.get('/', function(req, res, next) {
@@ -39,6 +36,9 @@ router.get('/nutzer/passwort', function(req, res, next) {
 });
 router.get('/badges', function(req, res, next) {
   res.render('badgelist');
+});
+router.get('/nutzerliste', function(req, res, next) {
+  res.render('Nutzerliste');
 });
 // router.get('/kurse/meine', function(req, res, next) {
 //   res.render('belegteKurse');
