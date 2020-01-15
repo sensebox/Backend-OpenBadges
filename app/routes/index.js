@@ -51,6 +51,9 @@ router.get('/badges', refreshToken, function(req, res, next) {
     me: req.me
   });
 });
+router.get('/nutzerliste', function(req, res, next) {
+  res.render('Nutzerliste');
+});
 // router.get('/kurse/meine', function(req, res, next) {
 //   res.render('belegteKurse');
 // });

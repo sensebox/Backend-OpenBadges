@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 
 const Course = require('../../../../models/course');
 const User = require('../../../../models/user');
+const {courseValidation} = require('../../../../helper/validation/course');
 
 
 
@@ -41,6 +42,9 @@ const User = require('../../../../models/user');
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postCourse = async function(req, res){
+  const {error} = courseValidation(req.body);
+  if(error) return res.status(422).send({message: error.details[0].message});
+
   try{
     const course = new Course({
       _id: new mongoose.Types.ObjectId(),
@@ -311,6 +315,9 @@ const getMyCourses = async function(req, res){
  *
  */
 const putCourse = async function(req, res){
+  const {error} = courseValidation(req.body);
+  if(error) return res.status(422).send({message: error.details[0].message});
+
   try {
     var result = await Course.findOne({_id: req.params.courseId});
     if(result){
