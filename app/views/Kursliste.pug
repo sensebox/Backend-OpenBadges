@@ -21,22 +21,23 @@ block content
           p
               input#myInput1(type='text' onkeyup='myFunction1()' placeholder='Ort' title='Type in a name')
           p
-              input#myInput2(type='text' onkeyup='myFunction2()' placeholder='Kursleiter' title='Type in a name')
+              input#myInput2(type='text' onkeyup='myFunction2()' placeholder='Kursanbieter' title='Type in a name')
+          p
+              input#myInput3(type='text' onkeyup='myFunction3()' placeholder='Kursthema' title='Type in a name')
 
               .form-row
                   .form-group.col-auto
                       label(for='inputDate') Der Kurs beginnt am:
-                      input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Beginndatum')
+                      input#inputDate1.form-control(type='date', onkeyup='myFunction4()', data-toggle='tooltip', data-placement='top', placeholder='Beginndatum', title='Beginndatum')
                       span#date.badge.badge-danger
 
               .form-row
                   .form-group.col-auto
                       label(for='inputDate') Der Kurs endet am:
-                      input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', title='Enddatum')
+                      input#inputDate2.form-control(type='date', onkeyup='myFunction5()' , data-toggle='tooltip', data-placement='top', placeholder='Enddatum', title='Enddatum')
                       span#date.badge.badge-danger
           form(action='#')
 
-              // button.btn.btn-danger.btn-lg.btn-block.mt-5(type='button') Kurse filtern
           p
 
   // Karte Leaflet
@@ -47,47 +48,32 @@ block content
   // Beispiel Tabelle zum Testen
   table#myTable
     tr.header
-      th(style='width:60%;') Name
-      th(style='width:40%;') Country
-      th(style='width:40%;') Kursleiter
-    if(courses)
-      for course in courses
-        tr
-          td
-            a(href='/kurse/'+course._id)= course.name
-          td= course.courseprovider
-          td= course.address
+      th(style='width:30%;') Kursname
+      th(style='width:30%;') Kursort (Postleitzahl)
+      th(style='width:10%;') Kursanbieter
+      th(style='width:30%;') Kursthema
+      th(style='width:30%;') Beginndatum
+      th(style='width:30%;') Enddatum
     tr
-      td Alfreds Futterkiste
-      td Germany
-      td Hans
+      td Einführung in die Geoinformatik
+      td Münster
+      td Prof. Müller
+      td Geoinformatik Anfänger
+      td 01.01.2020
+      td 01.02.2020
     tr
-      td Berglunds snabbkop
-      td Sweden
-      td Mannfred
+      td Löten Einsteigerkurs
+      td Hamm
+      td Laura
+      td Löten für Anfänger
+      td 01.01.2020
+      td 05.01.2020
     tr
-      td Island Trading
-      td UK
-      td Hilal
-    tr
-      td Koniglich Essen
-      td Germany
-      td Hilal
-    tr
-      td Laughing Bacchus Winecellars
-      td Canada
-      td Hilal
-    tr
-      td Magazzini Alimentari Riuniti
-      td Italy
-      td Hilal
-    tr
-      td North/South
-      td UK
-      td Hilal
-    tr
-      td Paris specialites
-      td France
-      td Hilal
+      td Mathematik für 1. Klässler
+      td Münster
+      td Frau Bauer
+      td Mathematik Grundkenntnisse
+      td 06.01.2020
+      td 31.12.2020
 
   script(src='/javascripts/filter.js')
