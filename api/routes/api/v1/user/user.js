@@ -53,18 +53,22 @@ const getMe = async function(req, res){
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} [lastname] Name the new full last name of the user; must consist of at least 6 characters
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} [city] the user's new place of residence; must consist of at least 2 characters
- * @apiParam (Parameters for creating a new OpenBadges-user) {Number} [postalcode] the new postal code of the user's place of residence; minimum 01067, maximal 99998
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} [email] the new email of the user
+ * @apiParam {String} [lastname] Name the new full last name of the user; must consist of at least 6 characters
+ * @apiParam {String} [city] the user's new place of residence; must consist of at least 2 characters
+ * @apiParam {Number} [postalcode] the new postal code of the user's place of residence; minimum 01067, maximal 99998
+ * @apiParam {String} [email] the new email of the user
+ * @apiParam {Base64-String} [image] Base64-String of an image
+ * @apiParam {String} [contentType] contentType (mimeType) of an image<br>Example: `image/jpg`
  *
  * @apiSuccess (Success 200) {String} message `User information updated successfully.` or `User information not changed.`
- * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false}`
+ * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": <Buffer>, "contentType": "image/png"}`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "To update an image, 'image' and 'contentType' are required."}`
  * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const putMe = async function(req, res){
+  console.log(req.body.user);
   try{
     var user = await User.findById(req.user.id);
     if(user){
@@ -85,6 +89,17 @@ const putMe = async function(req, res){
         if(req.body.postalcode != user.postalcode){
           updatedUser.postalcode = req.body.postalcode;
       }}
+      if(req.body.image || req.body.contentType){
+        if(req.body.image && req.body.contentType){
+          if(req.body.image != user.image) {updatedUser.image = new Buffer.from(req.body.image, 'base64');}
+          if(req.body.contentType != user.contentType) {updatedUser.contentType = req.body.contentType;}
+        }
+        else {
+          return res.status(404).send({
+            message: 'To update an image, \'image\' and \'contentType\' are required.',
+          });
+        }
+      }
 
       if(Object.keys(updatedUser).length > 0){
         var newUser = await User.findOneAndUpdate({_id: req.user.id}, updatedUser, {new: true});

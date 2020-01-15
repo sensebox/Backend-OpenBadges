@@ -19,7 +19,7 @@ api.use(cors());
 
 api.use(logger('dev'));
 api.use(express.json());
-api.use(express.urlencoded({ extended: false }));
+api.use(express.urlencoded({ extended: false, limit: '10mb' }));
 api.use(cookieParser());
 
 // api documentation

@@ -5,7 +5,10 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
+const fs = require('fs');
 
+const {base64ArrayBuffer} = require('../helper/upload/base64');
+const {upload} = require('../helper/upload/multerStorage');
 const {refreshToken} = require('../helper/middleware/refreshToken');
 
 router.get('/registrieren', function (req, res){
@@ -146,13 +149,14 @@ router.get('/profil', refreshToken,  function (req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          console.log('nicht funktioniert!');
-          return res.redirect('/');
+
+          return res.redirect('/nutzer/anmelden');
         }
-        console.log(3, JSON.parse(body));
+        var user = JSON.parse(body).user;
+        user.image = 'data:'+ user.contentType+';base64,'+base64ArrayBuffer(user.image.data);
         res.render('Kontoseite', {
           title: 'Profil',
-          user: JSON.parse(body).user,
+          user: user,
           me: req.me
         });
       });
@@ -160,7 +164,7 @@ router.get('/profil', refreshToken,  function (req, res){
   }
   else {
     console.log('not authorized');
-    return res.redirect('/');
+    return res.redirect('/nutzer/anmelden');
   }
 });
 
@@ -168,40 +172,60 @@ router.get('/profil', refreshToken,  function (req, res){
 
 router.post('/profil', refreshToken, function (req, res){
   if(req.authorized){
-    var options = {
-      method: 'PUT',
-      url: process.env.API_Domain+'/api/v1/user/me',
-      headers: {
-        'Authorization': 'Bearer '+ req.token
-      },
-      form: req.body
-    };
-    request(options)
-    .on('response', function(response) {
-      // concatenate updates from datastream
-      var body = '';
-      response.on('data', function(chunk){
-        //console.log("chunk: " + chunk);
-        body += chunk;
-      });
-      response.on('end', function(){
-        if(response.statusCode !== 200){
-          // error: no user signed in
-          req.flash('error', 'Die angeforderten Informationen stimmen nicht mit Ihrem Benutzerkonto überein. Melden Sie sich bitte wieder an.');
-          return res.redirect('/nutzer/anmelden');
+    upload.single('userpicture')(req, res,  (async err => {
+      if (err) {
+        console.log(err);
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          // 'File too large'
+          req.flash('error', 'Datei ist zu groß, erlaubt sind max. 5MB.');
+          return res.redirect('/nutzer/profil');
         }
-        if(JSON.parse(body).message == 'User information updated successfully.'){
-            req.flash('success', 'Ihre Nutzerdaten wurden erfolgreich aktualisiert.');
-        } else {
-          req.flash('info', 'Ihre Nutzerdaten haben sich nicht verändert.');
+        else {
+          req.flash('error', err);
+          return res. redirect('/nutzer/profil');
         }
-        res.redirect('/nutzer/profil');
+      }
+      else {
+        if(req.file != null){
+          req.body.image = fs.readFileSync(req.file.path, 'base64');
+          req.body.contentType = req.file.mimetype;
+        }
+      }
+      var options = {
+        method: 'PUT',
+        url: process.env.API_Domain+'/api/v1/user/me',
+        headers: {
+          'Authorization': 'Bearer '+ req.token
+        },
+        form: req.body
+      };
+      request(options)
+      .on('response', function(response) {
+        // concatenate updates from datastream
+        var body = '';
+        response.on('data', function(chunk){
+          //console.log("chunk: " + chunk);
+          body += chunk;
+        });
+        response.on('end', function(){
+          if(response.statusCode !== 200){
+            // error: no user signed in
+            req.flash('error', 'Die angeforderten Informationen stimmen nicht mit Ihrem Benutzerkonto überein. Melden Sie sich bitte wieder an.');
+            return res.redirect('/nutzer/anmelden');
+          }
+          if(JSON.parse(body).message == 'User information updated successfully.'){
+              req.flash('success', 'Ihre Nutzerdaten wurden erfolgreich aktualisiert.');
+          } else {
+            req.flash('info', 'Ihre Nutzerdaten haben sich nicht verändert.');
+          }
+          res.redirect('/nutzer/profil');
+        });
       });
-    });
+    }));
   }
   else {
     // flash
-    return res.redirect('/');
+    return res.redirect('/nutzer/anmelden');
   }
 });
 
