@@ -6,16 +6,15 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 
-const {refreshToken, cookieExtractor} = require('../helper/refreshToken_Client');
+const {refreshToken} = require('../helper/middleware/refreshToken');
 
 
-router.get('/', function (req, res){
-  var token = cookieExtractor(req, 'access');
-  if(token){
+router.get('/', refreshToken, function (req, res){
+  if(req.authorized){
     var options = {
       url: process.env.API_Domain+'/api/v1/user/me',
       headers: {
-        'Authorization': 'Bearer '+token
+        'Authorization': 'Bearer '+ req.token
       }
     };
     request.get(options)
@@ -28,19 +27,15 @@ router.get('/', function (req, res){
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          return refreshToken(req, res, function(){
-              // error: no user signed in
-              return res.render('Kontaktformular', {
-                title: 'Kontakt'
-              });
-            }, function(){
-              // token is successfull refreshed
-              return res.redirect('/kontakt');
+          // error: no user signed in
+          return res.render('Kontaktformular', {
+            title: 'Kontakt'
           });
         }
         res.render('Kontaktformular', {
           title: 'Kontakt',
-          email: JSON.parse(body).user.email
+          email: JSON.parse(body).user.email,
+          me: req.me
         });
       });
     });
@@ -53,7 +48,7 @@ router.get('/', function (req, res){
 });
 
 
-
+// everybody can contact the support, no authentification needed.
 router.post('/', function (req, res){
   var options = {
     url: process.env.API_Domain+'/api/v1/user/contact',

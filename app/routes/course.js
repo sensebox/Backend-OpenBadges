@@ -6,116 +6,115 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 
-const {refreshToken, cookieExtractor} = require('../helper/refreshToken_Client');
+const {refreshToken} = require('../helper/middleware/refreshToken');
 
 
-router.post('/registrierung', function(req, res){
-  var token = cookieExtractor(req, 'access');
-  var options = {
-    url: process.env.API_Domain+'/api/v1/course',
-    headers: {
-      'Authorization': 'Bearer '+token
-    }
-  };
-  request.post(options)
+
+router.post('/registrierung', refreshToken, function(req, res){
+  if(req.authorized){
+    var options = {
+      url: process.env.API_Domain+'/api/v1/course',
+      headers: {
+        'Authorization': 'Bearer '+ req.token
+      }
+    };
+    request.post(options)
+      .on('response', function(response) {
+        // concatenate updates from datastream
+        var body = '';
+        response.on('data', function(chunk){
+            //console.log("chunk: " + chunk);
+            body += chunk;
+        });
+        response.on('end', function(){
+          if(response.statusCode !== 200){
+            // error: users refresh Token is invalid, nothing to do
+            // falsh?: req.flash('loginError', JSON.parse(body).message);
+            return res.redirect('/nutzer/anmelden');
+          }
+          res.render('kursRegistrierung', {
+            title: 'Kursregistrierung'
+          });
+        });
+      });
+  }
+  else {
+    return res.redirect('/nutzer/anmelden');
+  }
+});
+
+
+router.get('/registrierung', refreshToken, function(req, res){
+  if(req.authorized){
+    var options = {
+      url: process.env.API_Domain+'/api/v1/badge',
+    };
+    request.get(options)
     .on('response', function(response) {
       // concatenate updates from datastream
       var body = '';
       response.on('data', function(chunk){
-          //console.log("chunk: " + chunk);
-          body += chunk;
+        //console.log("chunk: " + chunk);
+        body += chunk;
       });
       response.on('end', function(){
         if(response.statusCode !== 200){
-          return refreshToken(req, res, function(){
-              // error: users refresh Token is invalid, nothing to do
-              // falsh?: req.flash('loginError', JSON.parse(body).message);
-              return res.redirect('/nutzer/anmelden');
-            }, function(){
-              // token is successfull refreshed
-              return res.redirect('/kurse/registrieren');
-          });
+          console.log(response);
+          return res.status(400).send('Fehler');
         }
         res.render('kursRegistrierung', {
-          title: 'Kursregistrierung'
+            title: 'Kursregistrierung',
+            badges: JSON.parse(body).badges,
+            me: req.me
         });
       });
-    })
-    .on('error', function(err) {
-      return res.status(400).send('Fehler');
-  });
+    });
+  }
+  else {
+    return res.redirect('/nutzer/anmelden');
+  }
 });
 
 
-router.get('/registrierung', function(req, res){
-  var options = {
-    url: process.env.API_Domain+'/api/v1/badge',
-  };
-  request.get(options)
-  .on('response', function(response) {
-    // concatenate updates from datastream
-    var body = '';
-    response.on('data', function(chunk){
-      //console.log("chunk: " + chunk);
-      body += chunk;
-    });
-    response.on('end', function(){
-      if(response.statusCode !== 200){
-        console.log(response);
-        return res.status(400).send('Fehler');
+router.get('/meine', refreshToken,  function (req, res){
+  console.log('Authorized', req.authorized);
+  if(req.authorized){
+    var options = {
+      url: process.env.API_Domain+'/api/v1/course/me',
+      headers: {
+        'Authorization': 'Bearer '+ req.token
       }
-      res.render('kursRegistrierung', {
-          title: 'Kursregistrierung',
-          badges: JSON.parse(body).badges
+    };
+    request.get(options)
+    .on('response', function(response) {
+      // concatenate updates from datastream
+      var body = '';
+      response.on('data', function(chunk){
+        //console.log("chunk: " + chunk);
+        body += chunk;
       });
-    });
-  });
-});
-
-
-router.get('/meine', function (req, res){
-  var token = cookieExtractor(req, 'access');
-
-  var options = {
-    url: process.env.API_Domain+'/api/v1/course/me',
-    headers: {
-      'Authorization': 'Bearer '+token
-    }
-  };
-  request.get(options)
-  .on('response', function(response) {
-    // concatenate updates from datastream
-    var body = '';
-    response.on('data', function(chunk){
-      //console.log("chunk: " + chunk);
-      body += chunk;
-    });
-    response.on('end', function(){
-      if(response.statusCode !== 200){
-        return refreshToken(req, res, function(){
-            // error: no user signed in
-            return res.redirect('/nutzer/anmelden');
-          }, function(){
-            // token is successfull refreshed
-            return res.redirect('/kurse/meine');
+      response.on('end', function(){
+        if(response.statusCode !== 200){
+          console.log(body);
+          return res.redirect('/nutzer/anmelden');
+        }
+        res.render('Kursliste', {
+          title: 'meine Kurse',
+          courses: JSON.parse(body).courses,
+          me: req.me
         });
-      }
-      console.log(JSON.parse(body).courses);
-      res.render('Kursliste', {
-        title: 'meine Kurse',
-        courses: JSON.parse(body).courses
       });
     });
-  });
+  }
+  else {
+    return res.redirect('/nutzer/anmelden');
+  }
 });
 
 
-router.get('/:kursId', function (req, res){
+router.get('/:kursId', refreshToken, function (req, res){
   var options = {
-    url: process.env.API_Domain+'/api/v1/course/'+req.params.kursId,
-    // form: {
-    //   startdate: Date.now()
-    // }
+    url: process.env.API_Domain+'/api/v1/course/'+req.params.kursId
   };
   request.get(options)
   .on('response', function(response) {
@@ -126,18 +125,19 @@ router.get('/:kursId', function (req, res){
       body += chunk;
     });
     response.on('end', function(){
-      console.log(JSON.parse(body));
       if(response.statusCode !== 200){
         // flash?
         // Kurs existiert nicht
         return res.render('Kursliste', {
-          title: 'Kursliste'
+          title: 'Kursliste',
+          me: req.me
         });
       }
       var course = JSON.parse(body).course;
       res.render('Kursseite', {
         title: 'Kurs: '+ course.name,
-        course: course
+        course: course,
+        me: req.me
       });
     });
   });
@@ -145,7 +145,7 @@ router.get('/:kursId', function (req, res){
 
 
 
-router.get('/', function (req, res){
+router.get('/', refreshToken, function (req, res){
   var options = {
     url: process.env.API_Domain+'/api/v1/course',
   };
@@ -162,12 +162,14 @@ router.get('/', function (req, res){
       if(response.statusCode !== 200){
         // flash?
         return res.render('Kursliste', {
-          title: 'Kursliste'
+          title: 'Kursliste',
+          me: req.me
         });
       }
       res.render('Kursliste', {
         title: 'Kursliste',
-        courses: JSON.parse(body).courses
+        courses: JSON.parse(body).courses,
+        me: req.me
       });
     });
   });

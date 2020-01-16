@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
-
+const {badgeValidation} = require('../../../../helper/validation/badge');
 
 /**
  * @api {get} /api/v1/badge Get Badges
@@ -207,6 +207,9 @@ const getBadge = async function(req, res){
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postLocalBadge = async function(req, res){
+  const {error} = badgeValidation(req.body);
+  if(error) return res.status(422).send({message: error.details[0].message});
+
   try{
     const badge = new Badge({
       _id: new mongoose.Types.ObjectId(),

@@ -3,6 +3,10 @@ block content
         #group
             .container(id='#fadein')
                 // login-messages from server
+                if (messages.error)
+                  for message in messages.error
+                    .alert.alert-danger
+                      span= message
                 if (messages.info)
                   for message in messages.info
                     .alert.alert-info
@@ -36,7 +40,14 @@ block content
                             h1 Konto Anpassung
                             br
                             if(user)
-                              form#changeInformation(action='/nutzer/profil', method='POST')
+                              form#changeInformation(action='/nutzer/profil', method='POST', enctype='multipart/form-data')
+                                  .form-row
+                                      if(user)
+                                        img(src=user.image)
+                                      .form-group.col-auto
+                                          label(for='picture') Profilbild
+                                          br
+                                          input#picture(type='file' name='userpicture' accept='image/')
                                   .form-row
                                       .form-group.col-auto
                                           label(for='inputEmail4') Email

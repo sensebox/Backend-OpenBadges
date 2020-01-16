@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 
 const Course = require('../../../../models/course');
 const User = require('../../../../models/user');
+const {courseValidation} = require('../../../../helper/validation/course');
 
 
 
@@ -41,6 +42,9 @@ const User = require('../../../../models/user');
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postCourse = async function(req, res){
+  const {error} = courseValidation(req.body);
+  if(error) return res.status(422).send({message: error.details[0].message});
+
   try{
     const course = new Course({
       _id: new mongoose.Types.ObjectId(),
@@ -214,10 +218,9 @@ const getCourseID = async function(req, res){
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
  * @apiParam {String} [topic] course topic
  *
- * @apiSuccess (Success 200) {String} message `Courses found successfully.`
+ * @apiSuccess (Success 200) {String} message `Courses found successfully.` or `No courses found using the specified parameters.`
  * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
  *
- * @apiError (On error) {Object} 400 `{"message": "No courses found using the specified parameters."}`
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
@@ -265,8 +268,9 @@ const getMyCourses = async function(req, res){
       });
     }
     else {
-      return res.status(400).send({
+      return res.status(200).send({
         message: 'No courses found using the specified parameters.',
+        courses: result
       });
     }
   }
@@ -311,6 +315,9 @@ const getMyCourses = async function(req, res){
  *
  */
 const putCourse = async function(req, res){
+  const {error} = courseValidation(req.body);
+  if(error) return res.status(422).send({message: error.details[0].message});
+
   try {
     var result = await Course.findOne({_id: req.params.courseId});
     if(result){

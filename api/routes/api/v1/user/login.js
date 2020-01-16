@@ -20,29 +20,30 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
  * @apiDescription Sign up a new OpenBadges-User.
  * @apiGroup User
  *
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} firstname Name the full first name of the user; must consist of at least 6 characters
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} lastname Name the full last name of the user; must consist of at least 6 characters
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} city the user's place of residence; must consist of at least 2 characters
- * @apiParam (Parameters for creating a new OpenBadges-user) {Number} postalcode the postal code of the user's place of residence; minimum 01067, maximal 99998
- * @apiParam (Parameters for creating a new OpenBadges-user) {Date} birthday the birthday of the user
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} email the email for the user
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} username the username for the user; it is used for signing in
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} password the desired password for the user; must consist of at least 6 characters
- * @apiParam (Parameters for creating a new OpenBadges-user) {String} confirmPassword confirm the desired password for the user; must consist the same string as password
+ * @apiParam {String} firstname first name of the user; must consist of at least 6 characters
+ * @apiParam {String} lastname last name of the user; must consist of at least 6 characters
+ * @apiParam {String} city the user's place of residence; must consist of at least 2 characters
+ * @apiParam {Number} postalcode the postal code of the user's place of residence; minimum 01067, maximal 99998
+ * @apiParam {Date} birthday the birthday of the user
+ * @apiParam {String} email the email for the user
+ * @apiParam {String} username the username for the user; it is used for signing in
+ * @apiParam {String} password the desired password for the user; must consist of at least 6 characters
+ * @apiParam {String} confirmPassword confirm the desired password for the user; must consist the same string as password
+ * @apiParam {Base64-String} [image] Base64-String of an image
+ * @apiParam {String} [contentType] contentType (mimeType) of an image<br>Example: `image/jpg`
  *
  * @apiSuccess (Created 201) {String} message `User is successfully registered.`
- * @apiSuccess (Created 201) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":["earner"]}`
+ * @apiSuccess (Created 201) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":["earner"], "image": <Buffer>, "contentType": "image/png"}`
  *
- * @apiError (On error) {Object} 400 Passed parameters are not valid
+ * @apiError (On error) {Object} 404 `{"message": "To store an image, \'image\' and \'contentType\' are required."}
  * @apiError (On error) {Object} 409 `{"message": "Email already exists"}`
  * @apiError (On error) {Object} 409 `{"message": "Username already exists"}`
  * @apiError (On error) {Object} 500 Complications during storage
  */
 const postRegister = async function(req, res){
-  console.log(req.body);
   // validate incoming data
   const {error} = registerValidation(req.body);
-  if(error) return res.status(400).send({message: error.details[0].message});
+  if(error) return res.status(422).send({message: error.details[0].message});
   // checking if user is already in db
   const emailExists = await User.findOne({email: req.body.email});
   if(emailExists) return res.status(409).send({message: 'Email already exists'});
@@ -52,8 +53,7 @@ const postRegister = async function(req, res){
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
   const emailToken = uuid();
-  // create a new user
-  const user = new User({
+  var body = {
     _id: new mongoose.Types.ObjectId(),
     lastname: req.body.lastname,
     firstname: req.body.firstname,
@@ -63,8 +63,21 @@ const postRegister = async function(req, res){
     postalcode: req.body.postalcode,
     username: req.body.username,
     password: hashedPassword,
-    emailConfirmationToken: emailToken
-  });
+    emailConfirmationToken: emailToken,
+  };
+  if(req.body.image || req.body.contentType){
+    if(req.body.image && req.body.contentType){
+      body.image = new Buffer.from(req.body.image, 'base64');
+      body.contentType = req.body.contentType;
+    }
+    else {
+      return res.status(404).send({
+        message: 'To store an image, \'image\' and \'contentType\' are required.',
+      });
+    }
+  }
+  // create a new user
+  const user = new User(body);
   try{
     const savedUser = await user.save();
 
@@ -105,7 +118,9 @@ const postRegister = async function(req, res){
         birthday: savedUser.birthday,
         email: savedUser.email,
         username: savedUser.username,
-        role: savedUser.role
+        role: savedUser.role,
+        image: savedUser.image,
+        contentType: savedUser.contentType
       }
     });
 
@@ -122,7 +137,7 @@ const postRegister = async function(req, res){
  * @apiDescription Confirm an email of an user.
  * @apiGroup User
  *
- * @apiParam (Parameters) {String} emailToken Email-Token, to confirm the email-address
+ * @apiParam {String} emailToken Email-Token, to confirm the email-address
  *
  * @apiSuccess (Created 200) {String} message `Email is successfully confirmed.`
  *
@@ -157,8 +172,8 @@ const confirmEmail = async function (req, res){
  * @apiDescription Sign in the user.
  * @apiGroup User
  *
- * @apiParam {String} username the username of the user
- * @apiParam {String} password the password of the user
+ * @apiParam {String} username username of the user
+ * @apiParam {String} password password of the user
  *
  * @apiSuccess (Success 200) {String} message `User successfully signed in`
  * @apiSuccess (Success 200) {String} token valid JSON Web Token

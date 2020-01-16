@@ -63,6 +63,7 @@ const CourseSchema = new mongoose.Schema({
     type: String
   },
   // zeitraum des Kurses
+  // muss nicht angegeben werden da es auch ein Online Kurs sein kann
   startdate: {
     type: Date
   },

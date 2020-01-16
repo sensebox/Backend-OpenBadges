@@ -21,7 +21,8 @@ const BadgeSchema = new mongoose.Schema({
   },
   issuer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   global: {
     type: Boolean,

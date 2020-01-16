@@ -43,6 +43,12 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  image: {
+    type: Buffer
+  },
+  contentType: {
+    type: String
+  },
   role: {
     type: [String],
     required: true,
