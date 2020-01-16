@@ -7,15 +7,16 @@ block content
                 .col-lg
                 .col-lg-6
                     //Ersetzen durch badge, Schleifen einfügen
-                    if(true)
+                    if(name)
                         form
                             table.table.table-striped
                                 thead
                                     tr
                                         th(scope='col') #
                                         th(scope='col') Name
-                                        th(scope='col') //Badge
-
+                                        for n in name
+                                            th(scope='col')
+                                                input.form-control(value=n, readonly='')
                                 tbody
                                     tr
                                         th(scope='row') 1
