@@ -51,14 +51,6 @@ router.get('/badges', refreshToken, function(req, res, next) {
     me: req.me
   });
 });
-//Nur testdaten zum ausprobieren später löschen!
-router.get('/nutzerliste', function(req, res, next) {
-  res.render('Nutzerliste',{
-    name: ['Badge1','Badge2','Badge3'],
-    nutzer: ['nutzer1','nutzer2','nutzer3']
-  }
-);
-});
 // router.get('/kurse/meine', function(req, res, next) {
 //   res.render('belegteKurse');
 // });

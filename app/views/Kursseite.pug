@@ -36,6 +36,7 @@ block content
                         .form-group
                             label(for='beschreibung') Beschreibung
                             textarea#beschreibung.form-control(rows='3', style='resize: none', readonly='')= course.description
+                    button.btn.btn-primary.btn-lg.btn-block(type='submit') An-/Abmelden
                     if(course.coordinates)
                       // JSON.stringify(course.coordinates)
                       // Karte für die Anzeige

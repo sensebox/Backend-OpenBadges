@@ -6,37 +6,32 @@ block content
             .row
                 .col-lg
                 .col-lg-6
-                    //Ersetzen durch badge, Schleifen einfügen
-                    if(name)
                         form
                             table.table.table-striped
                                 thead
                                     tr
                                         th(scope='col') #
                                         th(scope='col') Name
-                                        for n in name
-                                            th(scope='col')
-                                                input.form-control(value=n, readonly='')
+                                        //Logik einfügen
+                                        th(scope='col')
+                                            input.form-control(value="Placeholder Badge", readonly='')
                                 tbody
                                     tr
                                         th(scope='row') 1
-                                        td Mark
+                                        td
+                                            input.form-control(value="Placeholder Name", readonly='')
                                         td
                                             input.form-check-input(type='checkbox', value='Badge')
-                                        td
-                                            input.form-check-input(type='checkbox', value='option1')
                                     tr
                                         th(scope='row') 2
-                                        td Jacob
                                         td
-                                            input.form-check-input(type='checkbox', value='option1')
+                                            input.form-control(value="Placeholder Name", readonly='')
                                         td
                                             input.form-check-input(type='checkbox', value='option1')
                                     tr
                                         th(scope='row') 3
-                                        td Larry
                                         td
-                                            input.form-check-input(type='checkbox', value='option1')
+                                            input.form-control(value="Placeholder Name", readonly='')
                                         td
                                             input.form-check-input(type='checkbox', value='option1')
                             button.btn.btn-primary.mb-2(type='submit') Badge Vergabe Bestätigen
