@@ -5,6 +5,19 @@ block content
     link(rel='stylesheet', href='https://unpkg.com/leaflet@1.0.3/dist/leaflet.css')
     if(course)
       .container(id='#fadein')
+        // messages from server
+        if (messages.error)
+          for message in messages.error
+            .alert.alert-danger
+              span= message
+        if (messages.success)
+          for message in messages.success
+            .alert.alert-success
+              span= message
+        if (messages.info)
+          for message in messages.info
+            .alert.alert-info
+              span= message
         .row
             .col
             .col-6
@@ -36,7 +49,7 @@ block content
                         .form-group
                             label(for='beschreibung') Beschreibung
                             textarea#beschreibung.form-control(rows='3', style='resize: none', readonly='')= course.description
-                    button.btn.btn-primary.btn-lg.btn-block(type='submit') An-/Abmelden
+
                     if(course.coordinates)
                       // JSON.stringify(course.coordinates)
                       // Karte für die Anzeige
@@ -46,6 +59,29 @@ block content
                         coordinates = "#{course.coordinates.coordinates}"
                         title = "#{course.courseprovider}"
                         addMarker(Number(coordinates.split(',')[0]), Number(coordinates.split(',')[1]), title)
+                    p
+                      if(me && me.id == course.creator._id)
+                        p
+                          form(action="/kurse/"+course._id+"/bearbeiten", method="GET")
+                              button.btn.btn-primary.btn-lg.btn-block(type='submit') Bearbeiten
+                        p
+                          form(action="/kurse/"+course._id+"/teilnehmer", method="GET")
+                              button.btn.btn-primary.btn-lg.btn-block(type='submit') Teilnehmer anzeigen
+                        p
+                          form(action="/kurse/"+course._id+"/teilnehmer/badge", method="GET")
+                              button.btn.btn-primary.btn-lg.btn-block(type='submit') Badges vergeben
+                        p
+                          form(action="/kurse/"+course._id+"/deaktivieren", method="POST")
+                              button.btn.btn-danger.btn-lg.btn-block(type='submit') Deaktivieren
+
+                      else
+                        if(me && course.participants.includes(me.id))
+                          form(action="/kurse/"+course._id+"/abmelden", method="POST")
+                                button.btn.btn-primary.btn-lg.btn-block(type='submit') Abmelden
+                        else
+                          form(action="/kurse/"+course._id+"/anmelden", method="POST")
+                                button.btn.btn-primary.btn-lg.btn-block(type='submit') Anmelden
+
 
                 div
                     .container.bg-light.mt-5.border

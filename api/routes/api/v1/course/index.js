@@ -22,6 +22,9 @@ CourseRouter.route('/')
 CourseRouter.route('/me')
     .get(userAuthorization, require('./course').getMyCourses);
 
+CourseRouter.route('/creator/me')
+    .get(userAuthorization, require('./course').getMyCreatedCourses);
+
 CourseRouter.route('/:courseId')
     .get(require('./course').getCourseID);
 

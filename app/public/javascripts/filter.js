@@ -1,113 +1,36 @@
-function myFunction() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
+$("#submit").click(function(e){
+  e.preventDefault();
+  filter();
+});
 
-function myFunction1() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput1");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
 
-function myFunction2() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput2");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[2];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
+function filter(){
+  var coordinates = $('#inputCoordinates').val();
+  var radius = $('#inputRadius').val();
+  if(coordinates){
+    if(!radius){
+      alert('Für die Ortssuche bedarf es der Eingabe einer Addresse und des Radius.');
+      return false;
     }
   }
-}
+  else {
+    if(radius){
+      alert('Für die Ortssuche bedarf es der Eingabe einer Addresse und des Radius.');
+      return false;
+    }
+  }
+  var name = $('#inputName').val();
+  var topic = $('#inputTopic').val();
+  var enddate = $('#inputDate2').val();
+  var startdate = $('#inputDate').val();
 
-function myFunction3() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput3");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[3];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
-
-function myFunction4() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("inputDate1");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[2];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
-
-function myFunction5() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("inputDate2");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[2];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
+  var body = {};
+  if(name) body.name = name;
+  if(topic) body.topic = topic;
+  if(startdate) body.startdate = startdate;
+  if(enddate) body.enddate = enddate;
+  if(coordinates) body.coordinates = coordinates;
+  if(radius) body.radius = radius;
+  var querystring = $.param(body);
+  window.location.href= window.location.pathname+'?'+querystring;
 }

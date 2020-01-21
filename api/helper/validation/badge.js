@@ -9,10 +9,9 @@ const Joi = require('@hapi/joi');
 const badgeValidation = data => {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
-    description: Joi.string().min(5),
+    description: Joi.string().min(5).required(),
     image: Joi.string().min(1),
-    criteria: Joi.string().min(4),
-    criteria: Joi.string().min(4),
+    criteria: Joi.string().min(4).required(),
     issuer: Joi.string().min(4),
     global: Joi.boolean(),
     exists: Joi.boolean()

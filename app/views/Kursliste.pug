@@ -6,6 +6,19 @@ block content
   // Filter
   #group
       .container(id='#fadein')
+          // messages from server
+          if (messages.error)
+            for message in messages.error
+              .alert.alert-danger
+                span= message
+          if (messages.success)
+            for message in messages.success
+              .alert.alert-success
+                span= message
+          if (messages.info)
+            for message in messages.info
+              .alert.alert-info
+                span= message
           .row
               .col-sm
               .col-auto.mt-2
@@ -15,65 +28,60 @@ block content
   #collapsedeactivate.collapse
       .container.bg-light.mt-5.border
           p
-              | Hier kannst du deine Kurse filtern.
+            label(for='inputName') Name des Kurses:
+            input#inputName.form-control(type='text',data-toggle='tooltip', data-placement='top', placeholder='Kursname', title='Name des Kurses')
           p
-              input#myInput(type='text' onkeyup='myFunction()' placeholder='Suche nach Kursname' title='Type in a name')
+            label(for='inputPlace') Adresse des Kurses:
+            input#inputPlace.form-control(type='text', onchange="adressSearch()" onkeyup="if (event.keyCode === 13) adressSearch()", data-toggle='tooltip', data-placement='top', placeholder='Adresse', title='Adresse des Kurses')
+            input#inputCoordinates.form-control(type='hidden')
+            div#adressResult
           p
-              input#myInput1(type='text' onkeyup='myFunction1()' placeholder='Ort' title='Type in a name')
+            label(for='inputRadius') Suchradius:
+            input#inputRadius.form-control(type='number', data-toggle='tooltip', data-placement='top', placeholder='Radius', title='Suchradius des Kurses')
           p
-              input#myInput2(type='text' onkeyup='myFunction2()' placeholder='Kursanbieter' title='Type in a name')
+            label(for='inputTopic') Thema des Kurses:
+            input#inputTopic.form-control(type='text', data-toggle='tooltip', data-placement='top', placeholder='Thema', title='Thema des Kurses')
           p
-              input#myInput3(type='text' onkeyup='myFunction3()' placeholder='Kursthema' title='Type in a name')
+            label(for='inputDate') Der Kurs beginnt frühestens am:
+            input#inputDate.form-control(type='date', data-toggle='tooltip', data-placement='top', placeholder='Beginndatum', title='Beginndatum')
+          p
+            label(for='inputDate2') Der Kurs endet spätestens am:
+            input#inputDate2.form-control(type='date', data-toggle='tooltip', data-placement='top', placeholder='Enddatum', title='Enddatum')
 
-              .form-row
-                  .form-group.col-auto
-                      label(for='inputDate') Der Kurs beginnt am:
-                      input#.form-control(type='date', onkeyup='myFunction4()', data-toggle='tooltip', data-placement='top', placeholder='Beginndatum', title='Beginndatum')
-                      span#date.badge.badge-danger
-
-              .form-row
-                  .form-group.col-auto
-                      label(for='inputDate') Der Kurs endet am:
-                      input#inputDate2.form-control(type='date', onkeyup='myFunction5()' , data-toggle='tooltip', data-placement='top', placeholder='Enddatum', title='Enddatum')
-                      span#date.badge.badge-danger
-          form(action='#')
-
+          button#submit.btn.btn-primary(type='submit')
+                | Filtern
           p
 
-  // Karte Leaflet
-  #map(style='height:220px;')
-  script(src='/leaflet/leaflet.js')
-  script(src='/javascripts/leaflet.js')
+  p
+  if(courses.length > 0)
+    // Karte Leaflet
+    div#map(style='height:220px;')
+    script(src='/leaflet/leaflet.js')
+    script(src='/javascripts/leaflet.js')
+    script.
+      addMarkers(!{JSON.stringify(courses)})
+      
+    p
+    table#myTable
+      tr.header
+        th(style='width:30%;') Kursname
+        th(style='width:30%;') Kursort (Postleitzahl)
+        th(style='width:10%;') Kursanbieter
+        th(style='width:30%;') Kursthema
+        th(style='width:30%;') Beginndatum
+        th(style='width:30%;') Enddatum
 
-  // Beispiel Tabelle zum Testen
-  table#myTable
-    tr.header
-      th(style='width:30%;') Kursname
-      th(style='width:30%;') Kursort (Postleitzahl)
-      th(style='width:10%;') Kursanbieter
-      th(style='width:30%;') Kursthema
-      th(style='width:30%;') Beginndatum
-      th(style='width:30%;') Enddatum
-    tr
-      td Einführung in die Geoinformatik
-      td Münster
-      td Prof. Müller
-      td Geoinformatik Anfänger
-      td 01.01.2020
-      td 01.02.2020
-    tr
-      td Löten Einsteigerkurs
-      td Hamm
-      td Laura
-      td Löten für Anfänger
-      td 01.01.2020
-      td 05.01.2020
-    tr
-      td Mathematik für 1. Klässler
-      td Münster
-      td Frau Bauer
-      td Mathematik Grundkenntnisse
-      td 06.01.2020
-      td 31.12.2020
+        for course in courses
+          tr
+            td
+              a(href='/kurse/'+course._id)=course.name
+            td= course.address
+            td= course.courseprovider
+            td= course.topic
+            td= new Date(course.startdate).toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'})
+            td= new Date(course.enddate).toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'})
+  else
+    p Keine Kurse verfügbar.
 
+  script(src='/javascripts/adresssearch.js')
   script(src='/javascripts/filter.js')

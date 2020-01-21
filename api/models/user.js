@@ -40,7 +40,7 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
   postalcode: {
-    type: Number,
+    type: String,
     required: true
   },
   image: {

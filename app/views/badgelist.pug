@@ -6,16 +6,20 @@ block content
             .col-6
                 .container.bg-light.mt-5.border
                     h1 Badge Liste
-                    p Hier all deine Verdienten Badges Visualisiert!
+                    p Hier werden all deine Verdienten Badges visualisiert!
                     // Werden hier nur die Grafiken Visualisiert? Soll auch Text dazu? Ist im grunde Erstmal nur ne idee/Grundgerüst
                     ul.list-unstyled
                         // Schleife hier starten !
-                        li.media
-                            // Das Darf so nicht online gehen. Wir halten nicht die rechte an dem Bild! !
-                            img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
-                            .media-body
-                                h5.mt-0.mb-1 Badge Name
-                                |                             Badge Kurzbeschreibung
-                        // Schleife bis hier !
+                        if(badges && badges.length > 0)
+                          for badge in badges
+                            li.media
+                                // Das Darf so nicht online gehen. Wir halten nicht die rechte an dem Bild! !
+                                img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
+                                .media-body
+                                    h5.mt-0.mb-1= badge.name
+                                    |                             Badge Kurzbeschreibung
+                          // Schleife bis hier !
+                        else
+                          p Aktuell sind noch keine Badges erlangt worden.
                     button.btn.btn-primary.btn-lg.btn-block Download aller Badges
             .col

@@ -42,6 +42,7 @@ const {courseValidation} = require('../../../../helper/validation/course');
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postCourse = async function(req, res){
+  console.log(req.body);
   const {error} = courseValidation(req.body);
   if(error) return res.status(422).send({message: error.details[0].message});
 
@@ -49,13 +50,13 @@ const postCourse = async function(req, res){
     const course = new Course({
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
-      badge: JSON.parse(req.body.badge),
-      localbadge: JSON.parse(req.body.localbadge),
+      badge: req.body.badge,
+      localbadge: req.body.localbadge,
       creator: req.user.id,
       courseprovider: req.body.courseprovider,
       postalcode: req.body.postalcode,
       address: req.body.address,
-      'coordinates.coordinates': JSON.parse(req.body.coordinates),
+      'coordinates.coordinates': req.body.coordinates,
       topic: req.body.topic,
       description: req.body.description,
       requirements: req.body.requirements,
@@ -65,7 +66,7 @@ const postCourse = async function(req, res){
     });
     const savedCourse = await course.save();
     // updates the role to issuer, because the user issues a new course.
-    if(req.user.role === 'earner'){
+    if(req.user.role == 'earner'){
       await User.updateOne({_id: req.user.id}, {role: 'issuer'});
     }
     return res.status(201).send({
@@ -74,6 +75,7 @@ const postCourse = async function(req, res){
     });
   }
   catch(err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 };
@@ -127,7 +129,7 @@ const getCourses = async function(req, res){
     if(qcoordinates || qradius){
       if(qcoordinates && qradius){
         var coords = req.query.coordinates.split(",");
-        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), qradius/6378.1]}};
+        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), Number(qradius)/6378.1]}};
       }
       else {
         return res.status(404).send({
@@ -234,7 +236,8 @@ const getMyCourses = async function(req, res){
     var qenddate = req.query.enddate;
 
     var query = {
-      participants: {$in: req.user.id}
+      participants: {$in: req.user.id},
+      exists: true
     };
     if(qname){
       query.name = qname;
@@ -251,7 +254,87 @@ const getMyCourses = async function(req, res){
     if(qcoordinates || qradius){
       if(qcoordinates && qradius){
         var coords = req.query.coordinates.split(",");
-        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), qradius/6378.1]}};
+        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), Number(qradius)/6378.1]}};
+      }
+      else {
+        return res.status(404).send({
+          message: 'To filter courses in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
+        });
+      }
+    }
+
+    var result = await Course.find(query);
+    if(result.length > 0){
+      return res.status(200).send({
+        message: 'Courses found successfully.',
+        courses: result
+      });
+    }
+    else {
+      return res.status(200).send({
+        message: 'No courses found using the specified parameters.',
+        courses: result
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
+
+/**
+ * @api {get} /api/v1/course/creator/me/ Get my courses
+ * @apiName getmyCreatedCourses
+ * @apiDescription Get (all) created courses of currently signed in User by different queries.
+ * @apiGroup Course
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {String} [name] course name
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course; example: `[longitude, latitude]`
+ * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
+ * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
+ * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
+ * @apiParam {String} [topic] course topic
+ *
+ * @apiSuccess (Success 200) {String} message `Courses found successfully.` or `No courses found using the specified parameters.`
+ * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
+ *
+ * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
+ * @apiError (On error) {Object} 500 Complications during storage.
+ */
+const getMyCreatedCourses = async function(req, res){
+  try{
+    var qname = req.query.name;
+    var qcoordinates = req.query.coordinates;
+    var qradius = req.query.radius;
+    var qtopic = req.query.topic;
+    var qstartdate = req.query.startdate;
+    var qenddate = req.query.enddate;
+
+    var query = {
+      creator: req.user.id
+    };
+    if(qname){
+      query.name = qname;
+    }
+    if(qtopic){
+      query.topic = qtopic;
+    }
+    if(qstartdate){
+      query.startdate = {$gte: qstartdate};
+    }
+    if(qenddate){
+      query.enddate = {$lte: qenddate};
+    }
+    if(qcoordinates || qradius){
+      if(qcoordinates && qradius){
+        var coords = req.query.coordinates.split(",");
+        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), Number(qradius)/6378.1]}};
       }
       else {
         return res.status(404).send({
@@ -327,13 +410,13 @@ const putCourse = async function(req, res){
         result.postalcode = req.body.postalcode || result.postalcode;
         result.address = req.body.address || result.address;
         if(req.body.badge){
-          result.badge = JSON.parse(req.body.badge);
+          result.badge = req.body.badge;
         }
         if(req.body.localbadge){
-          result.localbadge = JSON.parse(req.body.localbadge);
+          result.localbadge = req.body.localbadge;
         }
         if(req.body.coordinates){
-          result.coordinates.coordinates = JSON.parse(req.body.coordinates);
+          result.coordinates.coordinates = req.body.coordinates;
         }
         result.topic = req.body.topic || result.topic;
         result.description = req.body.description || result.description;
@@ -474,6 +557,7 @@ module.exports = {
   postCourse,
   getCourses,
   getMyCourses,
+  getMyCreatedCourses,
   getCourseID,
   putCourse,
   getParticipants,

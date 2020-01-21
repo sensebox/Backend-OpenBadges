@@ -91,11 +91,9 @@ const getBadges = async function(req, res){
  * @apiParam {ObejctId} [issuer] find Badges by its issuer
  * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
  *
- * @apiSuccess (Success 200) {String} message `Badges found successfully.`
+ * @apiSuccess (Success 200) {String} message `Badges found successfully.` or `Badges not found using the specified parameters.` or `Badges not found.`
  * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}]`
  *
- * @apiError (On error) {Object} 404 `{"message": "Badges not found using the specified parameters."}`
- * @apiError (On error) {Object} 404 `{"message": "Badges not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const getBadgesMe = async function(req, res){
@@ -133,12 +131,12 @@ const getBadgesMe = async function(req, res){
     }
     else {
       if(Object.keys(query).length > 1){
-        return res.status(404).send({
+        return res.status(200).send({
           message: 'Badges not found using the specified parameters.',
         });
       }
       else {
-        return res.status(404).send({
+        return res.status(200).send({
           message: 'Badges not found.',
         });
       }

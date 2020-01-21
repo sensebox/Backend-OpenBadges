@@ -15,6 +15,7 @@ const {refreshToken} = require('../helper/middleware/refreshToken');
 
 /* GET Start page. */
 router.get('/', refreshToken, function(req, res, next) {
+  console.log(req.me);
   res.render('Start', {
     me: req.me
   });
@@ -46,11 +47,11 @@ router.get('/', refreshToken, function(req, res, next) {
 router.get('/nutzer/passwort', function(req, res, next) {
   res.render('pwlost');
 });
-router.get('/badges', refreshToken, function(req, res, next) {
-  res.render('badgelist', {
-    me: req.me
-  });
-});
+// router.get('/badges', refreshToken, function(req, res, next) {
+//   res.render('badgelist', {
+//     me: req.me
+//   });
+// });
 // router.get('/kurse/meine', function(req, res, next) {
 //   res.render('belegteKurse');
 // });

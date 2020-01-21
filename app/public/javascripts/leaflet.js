@@ -6,11 +6,19 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   id: "osm"
 }).addTo(mymap);
 
+var markers = L.featureGroup().addTo(mymap);
+
+function addMarkers(locations){
+  for(var i = 0; i < locations.length; i++){
+    if(locations[i].coordinates){
+      addMarker(locations[i].coordinates.coordinates[0],locations[i].coordinates.coordinates[1], locations[i].name);
+    }
+  }
+}
 
 function addMarker(lng, lat, title){
-  mymap.setView(new L.LatLng(lat, lng), 11);
-  L.popup()
-      .setLatLng([lat, lng])
-      .setContent(title)
-      .openOn(mymap);
+  var marker = L.marker([lat, lng]);
+  marker.bindPopup(title).openPopup();
+  markers.addLayer(marker);
+  mymap.fitBounds(markers.getBounds());
 }

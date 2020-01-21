@@ -19,46 +19,46 @@ block content
         .row
             .col-lg
             .col-lg-6
-                h1 Open Badges Kurserstellung
+                h1 Open Badges Kursbearbeitung
                 br
-                form(action='/kurse/registrierung', method="POST")
+                form(action='/kurse/'+course._id +'/bearbeiten', method="POST")
                     .form-row
                         .form-group.col-auto
                             label(for='inputKursName') Kursname:
-                            input#inputKursName.form-control(name='name', type='text' placeholder='Java-Kurs' data-toggle='tooltip' data-placement='top' title='Gültiger Name' required)
+                            input#inputKursName.form-control(name='name', value=course.name, type='text' placeholder='Java-Kurs' data-toggle='tooltip' data-placement='top' title='Gültiger Name' required)
                         .form-group.col-auto
                             label(for='inputKursanbieter') Kursanbieter:
-                            input#inputKursanbieter.form-control(name="courseprovider", type='text' placeholder=' Institut oder Privatname ' data-toggle='tooltip' data-placement='top' title='Gültiger Kursanbieter' required)
+                            input#inputKursanbieter.form-control(name="courseprovider", value=course.courseprovider, type='text' placeholder=' Institut oder Privatname ' data-toggle='tooltip' data-placement='top' title='Gültiger Kursanbieter' required)
                         .form-group.col-auto
                             label(for='inputZeitraum') Zeitraum:
-                            input#inputZeitraum.form-control(name="startdate", type='date' placeholder='20.01.2019' data-toggle='tooltip' data-placement='top' title='Gültiger Zeitraum' required)
+                            input#inputZeitraum.form-control(name="startdate", value=course.startdate.split('T')[0], type='date' placeholder='20.01.2019' data-toggle='tooltip' data-placement='top' title='Gültiger Zeitraum' required)
                             span#pwtext.badge.badge-danger
                         .form-group.col-auto
                             label(for='inputvonbis') von-bis
-                            input#inputvonbis.form-control(name="enddate", type='date' placeholder='20.02.2019' data-toggle='tooltip' data-placement='top' title='Gültiger Zeitraum' required)
+                            input#inputvonbis.form-control(name="enddate", value=course.enddate.split('T')[0], type='date' placeholder='20.02.2019' data-toggle='tooltip' data-placement='top' title='Gültiger Zeitraum' required)
                         .form-group.col-auto
                             label(for='inputSize') Kursgröße
-                            input#inputSize.form-control(name="size", type='number' placeholder='10' data-toggle='tooltip' data-placement='top' title='Gültige Kursgröße' required)
+                            input#inputSize.form-control(name="size", value=course.size, type='number' placeholder='10' data-toggle='tooltip' data-placement='top' title='Gültige Kursgröße' required)
                     .form-row
                         .form-group.col-auto
                             label(for='inputPlace') Adresse:
-                            input#inputPlace.form-control(name="address", type='text', onchange="adressSearch()" onkeyup="if (event.keyCode === 13) adressSearch()", placeholder='Baumstraße 2' data-toggle='tooltip' data-placement='top' title='Straße + Hausnummer' required)
+                            input#inputPlace.form-control(name="address", value=course.address, type='text', onchange="adressSearch()" onkeyup="if (event.keyCode === 13) adressSearch()", placeholder='Baumstraße 2' data-toggle='tooltip' data-placement='top' title='Straße + Hausnummer' required)
                             div#adressResult
-                        input#inputCoordinates.form-control(name="coordinates", type='hidden' required)
+                        input#inputCoordinates.form-control(name="coordinates", type='hidden', value=JSON.stringify(course.coordinates.coordinates), required)
                         .form-group.col-auto
                             label(for='inputPLZ') Postleitzahl
-                            input#inputPLZ.form-control(name="postalcode", type='number' min='10000' max='99999' placeholder='04936' data-toggle='tooltip' data-placement='top' title='Postleitzahl des Wohnortes' required)
+                            input#inputPLZ.form-control(name="postalcode", value=course.postalcode, type='number' min='10000' max='99999' placeholder='04936' data-toggle='tooltip' data-placement='top' title='Postleitzahl des Wohnortes' required)
                     .form-row
                         .form-group.col-auto
                             label(for='inputThema') Thema des Kurses:
-                            input#inputThema.form-control(name="topic", type='text' placeholder='Java programmieren lernen' data-toggle='tooltip' data-placement='top' title=' ' required)
+                            input#inputThema.form-control(name="topic", value=course.topic, type='text' placeholder='Java programmieren lernen' data-toggle='tooltip' data-placement='top' title=' ' required)
                         .form-group.col-auto
                             label(for='inputBeschreibung') Kurs Beschreibung:
-                            input#inputBeschreibung.form-control(name="description", type='text' placeholder='Eine Beschreibung des Kurses' data-toggle='tooltip' data-placement='top' title='Gültige Beschreibung des Kurses' required)
+                            input#inputBeschreibung.form-control(name="description", value=course.description, type='text' placeholder='Eine Beschreibung des Kurses' data-toggle='tooltip' data-placement='top' title='Gültige Beschreibung des Kurses' required)
                     .form-row
                         .form-group.col-auto
                             label(for='inputVorraussetzungen') Vorraussetzungen:
-                            input#inputVorraussetzungen.form-control(name="requirements", type='text' placeholder=' z.B Java Grundlagen belegt ' data-toggle='tooltip' data-placement='top' title='Gültige Vorraussetzungen' required)
+                            input#inputVorraussetzungen.form-control(name="requirements", value=course.requirements, type='text' placeholder=' z.B Java Grundlagen belegt ' data-toggle='tooltip' data-placement='top' title='Gültige Vorraussetzungen' required)
 
                     .form-row
                         .form-group.col-auto
@@ -66,7 +66,11 @@ block content
                             select#inputlocalBadge.form-control(name="localbadge", multiple, style="width:250px;" data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen' required)
                               for badge in badges
                                 if(badge.global == false)
-                                  option(value=badge._id)=badge.name
+                                  for localbadge in course.localbadge
+                                    if(badge._id == localbadge._id)
+                                      option(value=badge._id, selected)=badge.name
+                                    else
+                                      option(value=badge._id)=badge.name
                         .form-group.col-auto
                             br
                             a.btn.btn-primary(href='/badge/registrierung') neues Badge erstellen
@@ -76,7 +80,11 @@ block content
                             select#inputglobalBadge.form-control(name="badge", multiple, style="width:250px;" data-toggle='tooltip' data-placement='top' title='Aus der Liste wählen' required)
                               for badge in badges
                                 if(badge.global == true)
-                                  option(value=badge._id)=badge.name
+                                  for global in course.badge
+                                    if(badge._id == global._id)
+                                      option(value=badge._id, selected)=badge.name
+                                    else
+                                      option(value=badge._id)=badge.name
                     .form-row
                         button#send.btn.btn-primary(type='submit') Senden
             .col-lg

@@ -47,8 +47,10 @@ const usersRouter = require('./routes/users');
 const indexRouter = require('./routes/index');
 const contactRouter = require('./routes/contact');
 const courseRouter = require('./routes/course');
+const badgeRouter = require('./routes/badge');
 
 
+app.use('/badge', badgeRouter);
 app.use('/kontakt', contactRouter);
 app.use('/kurse', courseRouter);
 app.use('/nutzer', usersRouter);
