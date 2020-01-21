@@ -265,4 +265,80 @@ router.post('/loeschen', refreshToken, function (req, res){
 });
 
 
+router.get('/passwort', function(req, res, next) {
+  res.render('pwlost');
+});
+
+
+router.post('/passwort', function (req, res){
+  var url = process.env.API_Domain+'/api/v1/user/password/request';
+  request.post(url, {form: req.body})
+    .on('response', function(response) {
+      // concatenate updates from datastream
+      var body = '';
+      response.on('data', function(chunk){
+          //console.log("chunk: " + chunk);
+          body += chunk;
+      });
+      response.on('end', function(){
+        if(response.statusCode !== 200){
+          req.flash('error', 'Fehler beim senden der Passwort-Zurücksetzen-Email.');
+          return res.redirect('/nutzer/anmelden');
+          // return res.status(400).send(JSON.parse(body));
+        }
+        req.flash('success', 'Sie erhalten umgehend eine Email mit weiteren Instruktionen.');
+        res.redirect('/nutzer/anmelden');
+      });
+    })
+    .on('error', function(err) {
+      return res.status(400).send('Fehler');
+  });
+});
+
+
+router.get('/passwort/reset', function(req, res, next) {
+  var token = req.query.token;
+  console.log(token);
+  res.render('pwlostReset', {
+    title: 'Passwort zurücksetzen',
+    token: token
+  });
+});
+
+
+router.post('/passwort/reset/', function (req, res){
+  console.log(req.body);
+  var url = process.env.API_Domain+'/api/v1/user/password/reset';
+  request.post(url, {form: req.body})
+    .on('response', function(response) {
+      // concatenate updates from datastream
+      var body = '';
+      response.on('data', function(chunk){
+          //console.log("chunk: " + chunk);
+          body += chunk;
+      });
+      response.on('end', function(){
+        console.log(body);
+        if(response.statusCode !== 200){
+          if(JSON.parse(body).message == 'Request password reset expired.'){
+            req.flash('error', 'Der Link ist bereits abgelaufen.');
+            return res.redirect('/nutzer/passwort');
+          }
+          req.flash('error', 'Fehler beim Zurücksetzen des Passwortes.');
+          return res.redirect('/nutzer/anmelden');
+          // return res.status(400).send(JSON.parse(body));
+        }
+        req.flash('success', 'Sie haben Ihr Passwort erfolgreich zurückgesetzt.');
+        res.redirect('/nutzer/anmelden');
+      });
+    })
+    .on('error', function(err) {
+      return res.status(400).send('Fehler');
+  });
+});
+
+
+
+
+
 module.exports = router;

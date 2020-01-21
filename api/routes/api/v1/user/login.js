@@ -289,7 +289,7 @@ const requestResetPassword = async function (req, res){
           from: '"OpenBadges"'+email, // sender address
           to: user.email, // list of receiver
           subject: 'Passwort zurücksetzen', // Subject line
-          html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/user/resetPassword?=token'+token+'">Link</a> ermöglicht das Zurücksetzen des Passwortes.<br>Bitte beachten Sie, dass die Gültigkeit des Links auf 12 Stunden begrenzt ist.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+          html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/nutzer/passwort/reset?token='+token+'">Link</a> ermöglicht das Zurücksetzen des Passwortes.<br>Bitte beachten Sie, dass die Gültigkeit des Links auf 12 Stunden begrenzt ist.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
       };
 
       // send mail with defined transport object

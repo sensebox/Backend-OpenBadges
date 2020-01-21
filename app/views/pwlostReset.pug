@@ -1,0 +1,23 @@
+extends layout
+block content
+    .container(id='#fadein')
+        .row
+            .col
+                .mt-5
+                    img.img-fluid(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Logo_WWU_M%C3%BCnster.svg/2000px-Logo_WWU_M%C3%BCnster.svg.png', alt='Responsive image')
+            .col-6
+                .container.bg-light.mt-5.border
+                    h1 Passwort Vergessen?
+                    p
+                        | Gib die Email Adresse die deinem Konto zugeordnet ist ein und wir Schicken dir ein neues Passwort zu!
+                    // Keine Ahnung ob die Action so korrekt ist. Müsste man das Backend Team Fragen !
+                    form(action='/nutzer/passwort/reset', method='POST')
+                        .form-group
+                            label(for='password') Passwort
+                            input#password.form-control(type='password', name='password', aria-describedby='emailHelp')
+                            label(for='confirmPassword') Passwort besätigen
+                            input#confirmPassword.form-control(type='password', name='confirmPassword', aria-describedby='emailHelp')
+                        input#token.form-control(type='hidden', value=token, name='resetPasswordToken')
+                        button.btn.btn-primary.btn-lg.btn-block(type='submit') Zurücksetzen
+                    br
+            .col

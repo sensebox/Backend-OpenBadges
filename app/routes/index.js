@@ -81,9 +81,6 @@ router.get('/', refreshToken, function (req, res){
 // router.get('/nutzer/profil', function(req, res, next) {
 //   res.render('Kontoseite');
 // });
-router.get('/nutzer/passwort', function(req, res, next) {
-  res.render('pwlost');
-});
 // router.get('/badges', refreshToken, function(req, res, next) {
 //   res.render('badgelist', {
 //     me: req.me
