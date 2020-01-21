@@ -338,6 +338,38 @@ router.post('/passwort/reset/', function (req, res){
 });
 
 
+router.get('/email', function (req, res){
+  var token = req.query.token;
+  var url = process.env.API_Domain+'/api/v1/user/email/'+token;
+  request.post(url)
+    .on('response', function(response) {
+      // concatenate updates from datastream
+      var body = '';
+      response.on('data', function(chunk){
+          //console.log("chunk: " + chunk);
+          body += chunk;
+      });
+      response.on('end', function(){
+        console.log(body);
+        if(response.statusCode !== 200){
+          if(JSON.parse(body).message == 'Email-Token is not valid.'){
+            req.flash('error', 'Der Link ist bereits abgelaufen.');
+            return res.redirect('/nutzer/anmelden');
+          }
+          req.flash('error', 'Fehler beim Validieren der Email.');
+          return res.redirect('/nutzer/anmelden');
+          // return res.status(400).send(JSON.parse(body));
+        }
+        req.flash('success', 'Sie haben Ihre Email erfolgreich validiert.');
+        res.redirect('/nutzer/anmelden');
+      });
+    })
+    .on('error', function(err) {
+      return res.status(400).send('Fehler');
+  });
+});
+
+
 
 
 

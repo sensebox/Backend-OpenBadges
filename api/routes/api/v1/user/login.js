@@ -102,7 +102,7 @@ const postRegister = async function(req, res){
         from: '"OpenBadges"'+email, // sender address
         to: savedUser.email, // list of receiver
         subject: 'Email verifizieren', // Subject line
-        html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/user/confirmEmail?=token'+savedUser.emailConfirmationToken+'">Link</a> ermöglicht das Verifizieren Ihrer Email-Adresse.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+        html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/nutzer/email?token='+savedUser.emailConfirmationToken+'">Link</a> ermöglicht das Verifizieren Ihrer Email-Adresse.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
     };
 
     // send mail with defined transport object
