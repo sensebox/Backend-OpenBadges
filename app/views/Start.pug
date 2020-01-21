@@ -12,18 +12,15 @@ block content
                         ul.list-unstyled
                           for course in courses
                             if(course.participants.includes(me.id))
-                              script.
-                                console.log(!{JSON.stringify(course)})
-                              // Schleife hier starten !
-                              li.media
+                              a(href='/kurse/'+course._id)
+                                  li.media
                                   // Das Darf so nicht online gehen. Wir halten nicht die rechte an dem Bild! !
                                   img.mr-3(src='https://bit.ly/2QD9HVz', width='64px', height='64px')
                                   .media-body
-                                      a(href='/kurse/'+course._id)h5.mt-0.mb-1= course.name
+                                      h5.mt-0.mb-1= course.name
                                       p=course.description
                                       p=new Date(course.startdate).toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'})
-                                      br
-                            // Schleife bis hier !
+                          // Schleife bis hier !
 
                     .container.bg-light.mt-5.border
                         h3 Vorgeschlagene Kurstermine
