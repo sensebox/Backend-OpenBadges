@@ -11,13 +11,18 @@ const BadgeSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String
+    type: String,
+    required: true
   },
   image: {
+    type: Buffer
+  },
+  contentType: {
     type: String
   },
   criteria: {
-    type: String
+    type: String,
+    required: true
   },
   issuer: {
     type: mongoose.Schema.Types.ObjectId,

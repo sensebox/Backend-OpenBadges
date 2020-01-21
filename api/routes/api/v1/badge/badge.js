@@ -198,10 +198,13 @@ const getBadge = async function(req, res){
  * @apiParam {String} name title of Badge
  * @apiParam {String} description a brief summary of the Badge
  * @apiParam {String} critera criterias getting this Badge
+ * @apiParam {Base64-String} [image] Base64-String of an image
+ * @apiParam {String} [contentType] contentType (mimeType) of an image<br>Example: `image/jpg`
  *
  * @apiSuccess (Created 201) {String} message `Local Badge is succesfully created.`
- * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true}`
+ * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": <Buffer>, "contentType": "image/png"}`
  *
+ * @apiError (On error) {Object} 404 `{"message": "To store an image, \'image\' and \'contentType\' are required."}
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postLocalBadge = async function(req, res){
@@ -209,13 +212,26 @@ const postLocalBadge = async function(req, res){
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try{
-    const badge = new Badge({
+    var body = {
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
       description: req.body.description,
       criteria: req.body.criteria,
       issuer: req.user.id
-    });
+    };
+    if(req.body.image || req.body.contentType){
+      if(req.body.image && req.body.contentType){
+        body.image = new Buffer.from(req.body.image, 'base64');
+        body.contentType = req.body.contentType;
+      }
+      else {
+        return res.status(404).send({
+          message: 'To store an image, \'image\' and \'contentType\' are required.',
+        });
+      }
+    }
+
+    const badge = new Badge(body);
     const savedBadge = await badge.save();
     return res.status(201).send({
       message: 'Local Badge is succesfully created.',
@@ -243,21 +259,34 @@ const postLocalBadge = async function(req, res){
  * @apiParam {String} [name] title of Badge
  * @apiParam {String} [description] a brief summary of the Badge
  * @apiParam {String} [critera] criterias getting this Badge
+ * @apiParam {Base64-String} [image] Base64-String of an image
+ * @apiParam {String} [contentType] contentType (mimeType) of an image<br>Example: `image/jpg`
  *
- * @apiSuccess (Success 200) {String} message `Local Badge updated successfully.`
- * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true}`
+ * @apiSuccess (Success 200) {String} message `Local Badge updated successfully.` or `Local Badge not changed.`
+ * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": <Buffer>, "contentType": "image/png"}`
  *
- * @apiError (On error) {Object} 400 `{"message": "Local Badge not changed."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission putting the local Badge."}`
+ * @apiError (On error) {Object} 404 `{"message": "To update an image, \'image\' and \'contentType\' are required."}`
  * @apiError (On error) {Object} 404 `{"message": "Local Badge not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const putBadgeLocal = async function(req, res){
-  var updatedBadge = {};
-  if(req.body.name) updatedBadge.name = req.body.name;
-  if(req.body.description) updatedBadge.description = req.body.description;
-  if(req.body.criteria) updatedBadge.criteria = req.body.criteria;
   try {
+    var updatedBadge = {};
+    if(req.body.name) updatedBadge.name = req.body.name;
+    if(req.body.description) updatedBadge.description = req.body.description;
+    if(req.body.criteria) updatedBadge.criteria = req.body.criteria;
+    if(req.body.image || req.body.contentType){
+      if(req.body.image && req.body.contentType){
+        if(req.body.image) updatedBadge.image = new Buffer.from(req.body.image, 'base64');
+        if(req.body.contentType) updatedBadge.contentType = req.body.contentType;
+      }
+      else {
+        return res.status(404).send({
+          message: 'To update an image, \'image\' and \'contentType\' are required.',
+        });
+      }
+    }
     var badge = await Badge.findById(req.params.badgeId);
     if(badge){
       if(badge.issuer == req.user.id){
@@ -269,7 +298,7 @@ const putBadgeLocal = async function(req, res){
           });
         }
         else {
-          return res.status(400).send({
+          return res.status(200).send({
             message: 'Local Badge not changed.',
             badge: badge
           });
