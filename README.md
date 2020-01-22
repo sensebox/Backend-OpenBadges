@@ -7,7 +7,7 @@
 
 ## Getting Started
 
-1. [Download](https://github.com/dhenn12/OpenBadges/archive/dev.zip) or clone the GitHub Repository ``git clone https://github.com/dhenn12/OpenBadges`` and checkout to branch ``dev``.
+1. [Download](https://github.com/dhenn12/OpenBadges/archive/master.zip) or clone the GitHub Repository ``git clone https://github.com/dhenn12/OpenBadges`` and checkout to branch ``master``.
 
 
 ## Starting with Docker:
@@ -42,10 +42,21 @@
 
 
 
-## Credentials
-   | username  | password |
-   | --------- | -------- |
-   | admin     | admin123 |
+## Demo 
+1. open shell and navigate to MongoDB (for windows: `C:\Program Files\MongoDB\Server\4.2\bin`)
+2. import the demo data via run `mongoimport --db=openBadges --collection=users --file=\path\to\demo\users.json`
+   [further information](https://docs.mongodb.com/manual/reference/program/mongoimport/)
+   
+   #### Credentials
+      | username  | password |
+      | --------- | -------- |
+      | admin     | admin123 |
+      | d_hen06   | 1234567  |
+      | h.k98     | 1234567  |
+      | l_nisk01  | 1234567  |
+      | m_ster15  | 1234567  |
+      | s_buse01  | 1234567  |
+   
 
 
 ## API
