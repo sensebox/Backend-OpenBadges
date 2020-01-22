@@ -1,4 +1,3 @@
-# OpenBadges API
 <br />Documentation of the routes and methods to manage [users](#api-User), [courses](#api-Course), [badges](#api-Badge) and [admin](#api-Admin) in the OpenBadges API.
 You can find the API running at [http://localhost:3001/](http://localhost:3001/).
 
@@ -21,7 +20,7 @@ Example:
 
 ## Parameters
 
-All requests assume the payload encoded as JSON with `Content-type: application/json` header. Parameters prepended with a colon (`:`) are parameters which should be specified through the URL.
+All requests assume the payload encoded as JSON with `Content-type: application/x-www-form-urlencoded` header. Parameters prepended with a colon (`:`) are parameters which should be specified through the URL. Incorrect or missing parameters result in a response with the status code `422` and a message for further information.
 
 ## Source code
 
