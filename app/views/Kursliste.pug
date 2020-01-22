@@ -60,7 +60,7 @@ block content
     script(src='/javascripts/leaflet.js')
     script.
       addMarkers(!{JSON.stringify(courses)})
-      
+
     p
     table#myTable
       tr.header
@@ -73,8 +73,11 @@ block content
 
         for course in courses
           tr
-            td
-              a(href='/kurse/'+course._id)=course.name
+            if(new Date(course.startdate) >= Date.now())
+              td
+                a(href='/kurse/'+course._id)=course.name
+            else
+              td=course.name
             td= course.address
             td= course.courseprovider
             td= course.topic

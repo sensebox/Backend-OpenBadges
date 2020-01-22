@@ -493,6 +493,16 @@ router.get('/', refreshToken, function (req, res){
 });
 
 
+router.get('/:kursId/teilnehmer/badge', refreshToken,  function (req, res){
+  if(req.authorized){
+    res.render('Nutzerliste', {
+      title: 'Badgevergabe'
+    });
+  }
+  else {
+    return res.redirect('/nutzer/anmelden');
+  }
+});
 
 
 module.exports = router;

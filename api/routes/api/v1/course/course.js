@@ -285,7 +285,7 @@ const getMyCourses = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course/creator/me/ Get my courses
+ * @api {get} /api/v1/course/creator/me/ Get my created courses
  * @apiName getmyCreatedCourses
  * @apiDescription Get (all) created courses of currently signed in User by different queries.
  * @apiGroup Course
@@ -317,7 +317,8 @@ const getMyCreatedCourses = async function(req, res){
     var qenddate = req.query.enddate;
 
     var query = {
-      creator: req.user.id
+      creator: req.user.id,
+      exists: true
     };
     if(qname){
       query.name = qname;

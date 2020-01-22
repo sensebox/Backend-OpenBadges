@@ -14,7 +14,7 @@ const createAdmin = function(cb){
       lastname: 'Bartoschek',
       firstname: 'Thomas',
       email: 'OpenBadges@gmx.de',
-      birthday: '09-03-1995',
+      birthday: '01-01-1985',
       city: 'Münster',
       postalcode: '48159',
       username: 'admin',

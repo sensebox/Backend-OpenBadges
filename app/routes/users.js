@@ -153,7 +153,9 @@ router.get('/profil', refreshToken,  function (req, res){
           return res.redirect('/nutzer/anmelden');
         }
         var user = JSON.parse(body).user;
-        user.image = 'data:'+ user.contentType+';base64,'+base64ArrayBuffer(user.image.data);
+        if(user.image){
+          user.image = 'data:'+ user.contentType+';base64,'+base64ArrayBuffer(user.image.data);
+        }
         res.render('Kontoseite', {
           title: 'Profil',
           user: user,
