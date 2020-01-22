@@ -28,16 +28,16 @@
     └── api
    ```
 
- * run ``npm install``
- * run ``npm start``
+    * run ``npm install``
+    * run ``npm start``
 4. open another shell and navigate to folder ``app``
    ```
    OpenBadges
    └── app
    ```
 
- * run ``npm install``
- * run ``npm start``
+    * run ``npm install``
+    * run ``npm start``
 5. open  [localhost:3000](http://localhost:3000)
 
 
