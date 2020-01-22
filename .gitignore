@@ -1,6 +1,7 @@
 node_modules
 start_server.bat
 package-lock.json
+data
 .idea
 *.xml
 views/.DS_Store
