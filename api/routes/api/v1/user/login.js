@@ -102,7 +102,7 @@ const postRegister = async function(req, res){
         from: '"OpenBadges"'+email, // sender address
         to: savedUser.email, // list of receiver
         subject: 'Email verifizieren', // Subject line
-        html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/nutzer/email?token='+savedUser.emailConfirmationToken+'">Link</a> ermöglicht das Verifizieren Ihrer Email-Adresse.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+        html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://'+process.env.APP_HOST+':'+process.env.APP_PORT+process.env.EMAIL_TOKEN_URL+'?token='+savedUser.emailConfirmationToken+'">Link</a> ermöglicht das Verifizieren Ihrer Email-Adresse.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
     };
 
     // send mail with defined transport object
@@ -289,7 +289,7 @@ const requestResetPassword = async function (req, res){
           from: '"OpenBadges"'+email, // sender address
           to: user.email, // list of receiver
           subject: 'Passwort zurücksetzen', // Subject line
-          html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://localhost:3000/nutzer/passwort/reset?token='+token+'">Link</a> ermöglicht das Zurücksetzen des Passwortes.<br>Bitte beachten Sie, dass die Gültigkeit des Links auf 12 Stunden begrenzt ist.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+          html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="http://'+process.env.APP_HOST+':'+process.env.APP_PORT+process.env.PASSWORD_TOKEN_URL+'?token='+token+'">Link</a> ermöglicht das Zurücksetzen des Passwortes.<br>Bitte beachten Sie, dass die Gültigkeit des Links auf 12 Stunden begrenzt ist.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
       };
 
       // send mail with defined transport object
