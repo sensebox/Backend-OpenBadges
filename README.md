@@ -14,8 +14,13 @@
 
 1. install Docker on your local machine
 2. open shell and navigate to folder ``OpenBadges``
-3. run ``docker-compose up``
-4. open  [192.168.99.100:3000](http://192.168.99.100:3000/)
+3. ensure that the correct API domain is used in lines 11 and 19 of docker-compose.yml (default: http://192.168.99.100:3001)
+   ```
+   OpenBadges
+    └── docker-compose.yml
+   ```
+4. run ``docker-compose up``
+5. open [192.168.99.100:3000](http://192.168.99.100:3000/) respectively your individual domain (e.g. [localhost:3000](http://localhost:3000))
 
 
 ## Starting without Docker:
@@ -44,8 +49,18 @@
 
 ## Demo 
 1. open shell and navigate to MongoDB (for windows: `C:\Program Files\MongoDB\Server\4.2\bin`)
-2. import the demo data via run `mongoimport --db=openBadges --collection=users --file=\path\to\demo\users.json`
-   [further information](https://docs.mongodb.com/manual/reference/program/mongoimport/)
+2. import the demo data (e.g. users)
+    * run `mongoimport --db=openBadges --collection=users --file=\path\to\api\demo\users.json`
+    * [further information](https://docs.mongodb.com/manual/reference/program/mongoimport/)
+
+   #### Troubleshoot
+   ensure that some "enddate" in courses.json are in the future to experience all functionalities of the application
+   ```
+   OpenBadges
+   └── api
+       └── demo
+           └── courses.json
+   ```
    
    #### Credentials
       | username  | password |
@@ -60,7 +75,7 @@
 
 
 ## API
-The generated HTML page of the current API documentation are located in [``doc``](../dev/api/doc) and can be accessed in the browser at [localhost:3001/docs](http://localhost:3001/docs/) respectively [192.168.99.100:3001/docs](http://192.168.99.100:3001/docs/).
+The generated HTML page of the current API documentation are located in [``doc``](../master/api/doc) and can be accessed in the browser at [https://dhenn12.github.io/OpenBadges/api/doc/index.html](https://dhenn12.github.io/OpenBadges/api/doc/index.html) or local at [localhost:3001/docs](http://localhost:3001/docs/) respectively [192.168.99.100:3001/docs](http://192.168.99.100:3001/docs/).
 
 
 ## Authors
