@@ -14,7 +14,15 @@ var storage = multer.diskStorage({
     }
 });
 var upload = multer({
-  storage: storage
+  storage: storage,
+  fileFilter: function (req, file, callback) {
+    var extensionType = file.mimetype.split('image/')[1];
+    if(extensionType !== 'png' && extensionType !== 'jpg' && extensionType !== 'gif' && extensionType !== 'jpeg') {
+      req.fileValidationError = "Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.";
+      return callback(null, false, req.fileValidationError);
+    }
+    callback(null, true);
+  }
 });
 
 module.exports = {

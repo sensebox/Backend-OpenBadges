@@ -66,13 +66,16 @@ const getMe = async function(req, res){
  * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": <Buffer>, "contentType": "image/png"}`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Object} 404 `{"message": "To update an image, 'image' and 'contentType' are required."}`
+ * @apiError (On error) {Object} 404 `{"message": "Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed."}`
  * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const putMe = async function(req, res){
   console.log(req.body);
   console.log(req.file);
   try{
+    if(req.fileValidationError){
+      return res.status(404).send({message: req.fileValidationError});
+    }
     var user = await User.findById(req.user.id);
     if(user){
       var updatedUser = {};
@@ -99,17 +102,19 @@ const putMe = async function(req, res){
           contentType: req.file.mimetype,
           originalName: req.file.originalname,
         };
-        fs.unlink(path.join(__dirname, '..', '..', '..', '..', 'upload', user.image.path), function(err) {
-          // if(err && err.code == 'ENOENT') {
-          //   // file doens't exist
-          //   console.info("File doesn't exist, won't remove it.");
-          // } else if (err) {
-          //   // other errors, e.g. maybe we don't have enough permission
-          //   console.error("Error occurred while trying to remove file");
-          // } else {
-          //   console.info(`removed`);
-          // }
-        });
+        if(user.image.path){
+          fs.unlink(path.join(__dirname, '..', '..', '..', '..', 'upload', user.image.path), function(err) {
+            // if(err && err.code == 'ENOENT') {
+            //   // file doens't exist
+            //   console.info("File doesn't exist, won't remove it.");
+            // } else if (err) {
+            //   // other errors, e.g. maybe we don't have enough permission
+            //   console.error("Error occurred while trying to remove file");
+            // } else {
+            //   console.info(`removed`);
+            // }
+          });
+        }
         updatedUser.image = image;
       }
 
