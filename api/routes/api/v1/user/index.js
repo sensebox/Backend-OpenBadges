@@ -15,6 +15,7 @@ const authorization = require('./authorization');
 const user = require('./user');
 const contact = require('./contact');
 const {userAuthorization} = require('../../../../helper/authorization/middleware');
+const {upload} = require('../../../../helper/imageUpload');
 
 
 UserRouter.route('/signup')
@@ -39,7 +40,7 @@ UserRouter.route('/me')
     .get(userAuthorization, user.getMe);
 
 UserRouter.route('/me')
-    .put(userAuthorization, user.putMe);
+    .put(userAuthorization, upload.single('profile'), user.putMe);
 
 UserRouter.route('/me')
     .delete(userAuthorization, user.deleteMe);

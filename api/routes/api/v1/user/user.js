@@ -5,6 +5,8 @@
 const User = require('../../../../models/user');
 const Course = require('../../../../models/user');
 
+const fs = require('fs');
+const path = require('path');
 
 /**
  * @api {get} /api/v1/user/me Get details
@@ -69,6 +71,7 @@ const getMe = async function(req, res){
  */
 const putMe = async function(req, res){
   console.log(req.body);
+  console.log(req.file);
   try{
     var user = await User.findById(req.user.id);
     if(user){
@@ -89,16 +92,25 @@ const putMe = async function(req, res){
         if(req.body.postalcode != user.postalcode){
           updatedUser.postalcode = req.body.postalcode;
       }}
-      if(req.body.image || req.body.contentType){
-        if(req.body.image && req.body.contentType){
-          if(req.body.image != user.image) {updatedUser.image = new Buffer.from(req.body.image, 'base64');}
-          if(req.body.contentType != user.contentType) {updatedUser.contentType = req.body.contentType;}
-        }
-        else {
-          return res.status(404).send({
-            message: 'To update an image, \'image\' and \'contentType\' are required.',
-          });
-        }
+      if(req.file){
+        const image = {
+          path: req.file.filename,
+          size: req.file.size,
+          contentType: req.file.mimetype,
+          originalName: req.file.originalname,
+        };
+        fs.unlink(path.join(__dirname, '..', '..', '..', '..', 'upload', user.image.path), function(err) {
+          // if(err && err.code == 'ENOENT') {
+          //   // file doens't exist
+          //   console.info("File doesn't exist, won't remove it.");
+          // } else if (err) {
+          //   // other errors, e.g. maybe we don't have enough permission
+          //   console.error("Error occurred while trying to remove file");
+          // } else {
+          //   console.info(`removed`);
+          // }
+        });
+        updatedUser.image = image;
       }
 
       if(Object.keys(updatedUser).length > 0){

@@ -24,6 +24,8 @@ api.use(cookieParser());
 
 // api documentation
 api.use('/docs', express.static(path.join(__dirname, 'doc')));
+// uploaded images
+api.use('/media', express.static(path.join(__dirname, 'upload')));
 
 // setup routes
 // @see https://medium.com/@sesitamakloe/how-we-structure-our-express-js-routes-58933d02e491

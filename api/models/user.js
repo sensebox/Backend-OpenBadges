@@ -44,10 +44,18 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
   image: {
-    type: Buffer
-  },
-  contentType: {
-    type: String
+    path: {
+      type: String
+    },
+    size: {
+      type: Number
+    },
+    contentType: {
+      type: String
+    },
+    originalName: {
+      type: String
+    }
   },
   role: {
     type: [String],
