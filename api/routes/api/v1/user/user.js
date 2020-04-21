@@ -68,7 +68,7 @@ const getMe = async function(req, res){
  * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const putMe = async function(req, res){
-  console.log(req.body.user);
+  console.log(req.body);
   try{
     var user = await User.findById(req.user.id);
     if(user){
@@ -103,15 +103,19 @@ const putMe = async function(req, res){
 
       if(Object.keys(updatedUser).length > 0){
         var newUser = await User.findOneAndUpdate({_id: req.user.id}, updatedUser, {new: true});
+        const {_doc, ...rest} = newUser;
+        const {_id, __v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
         return res.status(200).send({
           message: 'User information updated successfully.',
-          badge: newUser
+          user: restUser
         });
       }
       else {
+        const {_doc, ...rest} = user;
+        const {_id, __v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
         return res.status(200).send({
           message: 'User information not changed.',
-          badge: user
+          user: restUser
         });
       }
     }

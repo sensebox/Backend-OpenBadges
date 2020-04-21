@@ -1,4 +1,4 @@
-// jshint esversion: 8
+// jshint esversion: 9
 // jshint node: true
 "use strict";
 
@@ -178,6 +178,7 @@ const confirmEmail = async function (req, res){
  * @apiSuccess (Success 200) {String} message `User successfully signed in`
  * @apiSuccess (Success 200) {String} token valid JSON Web Token
  * @apiSuccess (Success 200) {String} refreshToken valid refresh token
+ * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": <Buffer>, "contentType": "image/png"}`
  *
  * @apiError (On error) {Object} 403 `{"message": "Username or password is wrong"}`
  * @apiError (On error) {Obejct} 500 Complications during querying the database or creating a JWT.
@@ -191,11 +192,14 @@ const postLogin = async function(req, res){
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if(!validPassword) return res.status(403).send({message:'Username or password is wrong'});
     // create JWT-Token and refresh-Token
-    const {token: token, refreshToken: refreshToken } = await createToken(user);
+    const {token: token, refreshToken: refreshtoken } = await createToken(user);
+    const {_doc, ...rest} = user;
+    const {_id, __v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
     return res.status(200).send({
       message: 'User successfully signed in',
       token: token,
-      refreshToken: refreshToken
+      refreshToken: refreshtoken,
+      user: restUser
     });
   }
   catch(err) {
