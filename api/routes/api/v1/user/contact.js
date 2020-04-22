@@ -7,7 +7,7 @@ const moment = require('moment');
 
 
 /**
- * @api {post} /user/contact Contact support
+ * @api {post} /api/v1/user/contact Contact support
  * @apiName Contact
  * @apiDescription Send an email to the support of the deposited API-Email.
  * @apiGroup User
