@@ -11,10 +11,11 @@ const express = require('express');
 const CourseRouter = express.Router();
 const user = require('./user');
 const {userAuthorization} = require('../../../../helper/authorization/middleware');
+const {upload} = require('../../../../helper/imageUpload');
 
 
 CourseRouter.route('/')
-    .post(userAuthorization, require('./course').postCourse);
+    .post(userAuthorization, upload.single('image'), require('./course').postCourse);
 
 CourseRouter.route('/')
     .get(require('./course').getCourses);
@@ -41,7 +42,7 @@ CourseRouter.route('/:courseId/user/deregistration')
     .put(userAuthorization, user.putCourseSignOut);
 
 CourseRouter.route('/:courseId')
-    .put(userAuthorization, require('./course').putCourse);
+    .put(userAuthorization, upload.single('image'), require('./course').putCourse);
 
 
 module.exports = CourseRouter;
