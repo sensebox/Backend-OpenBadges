@@ -15,10 +15,18 @@ const BadgeSchema = new mongoose.Schema({
     required: true
   },
   image: {
-    type: Buffer
-  },
-  contentType: {
-    type: String
+    path: {
+      type: String
+    },
+    size: {
+      type: Number
+    },
+    contentType: {
+      type: String
+    },
+    originalName: {
+      type: String
+    }
   },
   criteria: {
     type: String,

@@ -11,10 +11,11 @@ const express = require('express');
 const BadgeRouter = express.Router();
 
 const {userAuthorization} = require('../../../../helper/authorization/middleware');
+const {upload} = require('../../../../helper/imageUpload');
 
 
 BadgeRouter.route('/')
-    .post(userAuthorization, require('./badge').postLocalBadge);
+    .post(userAuthorization, upload.single('image'), require('./badge').postLocalBadge);
 
 BadgeRouter.route('/')
     .get(require('./badge').getBadges);
@@ -26,7 +27,7 @@ BadgeRouter.route('/:badgeId')
     .get(require('./badge').getBadge);
 
 BadgeRouter.route('/:badgeId')
-    .put(userAuthorization, require('./badge').putBadgeLocal);
+    .put(userAuthorization, upload.single('image'), require('./badge').putBadgeLocal);
 
 BadgeRouter.route('/:badgeId/deactivation')
     .put(userAuthorization, require('./badge').putBadgeLocalHidden);

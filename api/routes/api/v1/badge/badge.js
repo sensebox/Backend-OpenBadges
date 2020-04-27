@@ -3,6 +3,8 @@
 "use strict";
 
 const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
 
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
@@ -219,16 +221,14 @@ const postLocalBadge = async function(req, res){
       criteria: req.body.criteria,
       issuer: req.user.id
     };
-    if(req.body.image || req.body.contentType){
-      if(req.body.image && req.body.contentType){
-        body.image = new Buffer.from(req.body.image, 'base64');
-        body.contentType = req.body.contentType;
-      }
-      else {
-        return res.status(404).send({
-          message: 'To store an image, \'image\' and \'contentType\' are required.',
-        });
-      }
+    if(req.file){
+      const image = {
+        path: req.file.filename,
+        size: req.file.size,
+        contentType: req.file.mimetype,
+        originalName: req.file.originalname,
+      };
+      body.image = image;
     }
 
     const badge = new Badge(body);
@@ -272,24 +272,36 @@ const postLocalBadge = async function(req, res){
  */
 const putBadgeLocal = async function(req, res){
   try {
-    var updatedBadge = {};
-    if(req.body.name) updatedBadge.name = req.body.name;
-    if(req.body.description) updatedBadge.description = req.body.description;
-    if(req.body.criteria) updatedBadge.criteria = req.body.criteria;
-    if(req.body.image || req.body.contentType){
-      if(req.body.image && req.body.contentType){
-        if(req.body.image) updatedBadge.image = new Buffer.from(req.body.image, 'base64');
-        if(req.body.contentType) updatedBadge.contentType = req.body.contentType;
-      }
-      else {
-        return res.status(404).send({
-          message: 'To update an image, \'image\' and \'contentType\' are required.',
-        });
-      }
-    }
     var badge = await Badge.findById(req.params.badgeId);
     if(badge){
       if(badge.issuer == req.user.id){
+        var updatedBadge = {};
+        if(req.body.name) updatedBadge.name = req.body.name;
+        if(req.body.description) updatedBadge.description = req.body.description;
+        if(req.body.criteria) updatedBadge.criteria = req.body.criteria;
+        if(req.file){
+          const image = {
+            path: req.file.filename,
+            size: req.file.size,
+            contentType: req.file.mimetype,
+            originalName: req.file.originalname,
+          };
+          if(badge.image.path){
+            fs.unlink(path.join(__dirname, '..', '..', '..', '..', 'upload', badge.image.path), function(err) {
+              // if(err && err.code == 'ENOENT') {
+              //   // file doens't exist
+              //   console.info("File doesn't exist, won't remove it.");
+              // } else if (err) {
+              //   // other errors, e.g. maybe we don't have enough permission
+              //   console.error("Error occurred while trying to remove file");
+              // } else {
+              //   console.info(`removed`);
+              // }
+            });
+          }
+          updatedBadge.image = image;
+        }
+
         if(Object.keys(updatedBadge).length > 0){
           var newBadge = await Badge.findOneAndUpdate({_id: req.params.badgeId}, updatedBadge, {new: true});
           return res.status(200).send({
