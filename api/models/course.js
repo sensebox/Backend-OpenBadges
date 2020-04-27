@@ -48,20 +48,6 @@ const CourseSchema = new mongoose.Schema({
       type: [Number]
     }
   },
-  image: {
-    path: {
-      type: String
-    },
-    size: {
-      type: Number
-    },
-    contentType: {
-      type: String
-    },
-    originalName: {
-      type: String
-    }
-  },
   // das übergeordnete Thema des Kurses
   topic:{
     type: String,

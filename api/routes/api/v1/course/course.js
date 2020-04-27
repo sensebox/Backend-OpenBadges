@@ -5,8 +5,6 @@
 const express = require('express');
 
 const mongoose = require('mongoose');
-const fs = require('fs');
-const path = require('path');
 
 const Course = require('../../../../models/course');
 const User = require('../../../../models/user');
@@ -49,7 +47,7 @@ const postCourse = async function(req, res){
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try{
-    const body = {
+    const course = new Course({
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
       badge: req.body.badge,
@@ -65,17 +63,7 @@ const postCourse = async function(req, res){
       startdate: req.body.startdate,
       enddate: req.body.enddate,
       size: req.body.size
-    };
-    if(req.file){
-      const image = {
-        path: req.file.filename,
-        size: req.file.size,
-        contentType: req.file.mimetype,
-        originalName: req.file.originalname,
-      };
-      body.image = image;
-    }
-    const course = new Course(body);
+    });
     const savedCourse = await course.save();
     // updates the role to issuer, because the user issues a new course.
     if(req.user.role == 'earner'){
@@ -438,29 +426,6 @@ const putCourse = async function(req, res){
         result.enddate = req.body.enddate || result.enddate;
         if(result.participants.length <= req.body.size){
           result.size = req.body.size;
-        }
-
-        if(req.file){
-          const image = {
-            path: req.file.filename,
-            size: req.file.size,
-            contentType: req.file.mimetype,
-            originalName: req.file.originalname,
-          };
-          if(result.image.path){
-            fs.unlink(path.join(__dirname, '..', '..', '..', '..', 'upload', result.image.path), function(err) {
-              // if(err && err.code == 'ENOENT') {
-              //   // file doens't exist
-              //   console.info("File doesn't exist, won't remove it.");
-              // } else if (err) {
-              //   // other errors, e.g. maybe we don't have enough permission
-              //   console.error("Error occurred while trying to remove file");
-              // } else {
-              //   console.info(`removed`);
-              // }
-            });
-          }
-          result.image = image;
         }
 
         await result.save();
