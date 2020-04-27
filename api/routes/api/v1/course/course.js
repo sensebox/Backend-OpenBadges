@@ -28,15 +28,16 @@ const {courseValidation} = require('../../../../helper/validation/course');
  * @apiParam {ObjectId-Array} badge the ObjectId of global badges for the course (min: 1); example: `["5e1b0bafeafe4a84c4ac31a9"]`
  * @apiParam {ObjectId-Array} localbadge the ObjectId of local badges for the Course (min: 1); example: `["5e1b0bafeafe4a84c4ac31a9"]`
  * @apiParam {String} courseprovider the provider of the course might be specified by the creator
- * @apiParam {String} postalcode postalcode of the building where the course take place
- * @apiParam {String} address adress of the location from the Course
- * @apiParam {Coordinates-Array} coordinates coordinates of the location from the Course; example: `[longitude, latitude]`
+ * @apiParam {String} [postalcode] postalcode of the building where the course take place
+ * @apiParam {String} [address] adress of the location from the Course
+ * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course; example: `[longitude, latitude]`
  * @apiParam {String} topic topic of the Course
  * @apiParam {String} description a brief summary about the course contents
  * @apiParam {String} requirements a brief summary about the course requirements
  * @apiParam {Date} startdate Date of the start of the course
  * @apiParam {Date} enddate Date of the end of the course
  * @apiParam {Number} size maximal amount of the course participants
+ * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Created 201) {String} message `Course is successfully created.`
  * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}'
@@ -49,6 +50,7 @@ const postCourse = async function(req, res){
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try{
+    console.log(req.body);
     const body = {
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
@@ -56,9 +58,6 @@ const postCourse = async function(req, res){
       localbadge: req.body.localbadge,
       creator: req.user.id,
       courseprovider: req.body.courseprovider,
-      postalcode: req.body.postalcode,
-      address: req.body.address,
-      'coordinates.coordinates': req.body.coordinates,
       topic: req.body.topic,
       description: req.body.description,
       requirements: req.body.requirements,
@@ -66,6 +65,13 @@ const postCourse = async function(req, res){
       enddate: req.body.enddate,
       size: req.body.size
     };
+    // presence course
+    if(req.body.coordinates && req.body.address && req.body.postalcode){
+      body.coordinates = {type: 'Point', coordinates: req.body.coordinates};
+      body.address = req.body.address;
+      body.postalcode = req.body.postalcode;
+    }
+    // course image
     if(req.file){
       const image = {
         path: req.file.filename,
@@ -105,6 +111,7 @@ const postCourse = async function(req, res){
  * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
  * @apiParam {String} [topic] course topic
+ * @apiParam {String} [type] course type (`online` or `presence`)
  *
  * @apiSuccess (Success 200) {String} message `Courses found successfully.`
  * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
@@ -122,6 +129,7 @@ const getCourses = async function(req, res){
     var qtopic = req.query.topic;
     var qstartdate = req.query.startdate;
     var qenddate = req.query.enddate;
+    var qtype = req.query.type;
 
     var query = {
       exists: true
@@ -138,10 +146,17 @@ const getCourses = async function(req, res){
     if(qenddate){
       query.enddate = {$lte: qenddate};
     }
+    if(qtype){
+      if(qtype === 'online'){
+        query.postalcode = { $exists: false};
+      }
+      else if(qtype === 'presence'){
+        query.postalcode = { $exists: true};
+      }
+    }
     if(qcoordinates || qradius){
       if(qcoordinates && qradius){
-        var coords = req.query.coordinates.split(",");
-        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), Number(qradius)/6378.1]}};
+        query.coordinates = {$geoWithin: {$centerSphere: [qcoordinates, qradius/6378.1]}};
       }
       else {
         return res.status(404).send({
