@@ -116,8 +116,6 @@ const postCourse = async function(req, res){
  * @apiSuccess (Success 200) {String} message `Courses found successfully.`
  * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
  *
- * @apiError (On error) {Object} 404 `{"message": "Courses not found using the specified parameters."}`
- * @apiError (On error) {Object} 404 `{"message": "Courses not found."}`
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
@@ -135,10 +133,12 @@ const getCourses = async function(req, res){
       exists: true
     };
     if(qname){
-      query.name = qname;
+      var regExpEscapeName = qname.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.name = new RegExp(regExpEscapeName, "i");
     }
     if(qtopic){
-      query.topic = qtopic;
+      var regExpEscapeTopic = qtopic.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.topic = new RegExp(regExpEscapeTopic, "i");
     }
     if(qstartdate){
       query.startdate = {$gte: qstartdate};
@@ -166,24 +166,10 @@ const getCourses = async function(req, res){
     }
 
     var result = await Course.find(query);
-    if(result.length > 0){
-      return res.status(200).send({
-        message: 'Courses found successfully.',
-        courses: result
-      });
-    }
-    else {
-      if(Object.keys(query).length > 0){
-        return res.status(404).send({
-          message: 'Courses not found using the specified parameters.',
-        });
-      }
-      else {
-        return res.status(404).send({
-          message: 'Courses not found.',
-        });
-      }
-    }
+    return res.status(200).send({
+      message: 'Courses found successfully.',
+      courses: result
+    });
   }
   catch(err){
     return res.status(500).send(err);
@@ -246,8 +232,9 @@ const getCourseID = async function(req, res){
  * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
  * @apiParam {String} [topic] course topic
+ * @apiParam {String} [type] course type (`online` or `presence`)
  *
- * @apiSuccess (Success 200) {String} message `Courses found successfully.` or `No courses found using the specified parameters.`
+ * @apiSuccess (Success 200) {String} message `Courses found successfully.`
  * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
@@ -261,16 +248,19 @@ const getMyCourses = async function(req, res){
     var qtopic = req.query.topic;
     var qstartdate = req.query.startdate;
     var qenddate = req.query.enddate;
+    var qtype = req.query.type;
 
     var query = {
       participants: {$in: req.user.id},
       exists: true
     };
     if(qname){
-      query.name = qname;
+      var regExpEscapeName = qname.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.name = new RegExp(regExpEscapeName, "i");
     }
     if(qtopic){
-      query.topic = qtopic;
+      var regExpEscapeTopic = qtopic.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.topic = new RegExp(regExpEscapeTopic, "i");
     }
     if(qstartdate){
       query.startdate = {$gte: qstartdate};
@@ -278,10 +268,17 @@ const getMyCourses = async function(req, res){
     if(qenddate){
       query.enddate = {$lte: qenddate};
     }
+    if(qtype){
+      if(qtype === 'online'){
+        query.postalcode = { $exists: false};
+      }
+      else if(qtype === 'presence'){
+        query.postalcode = { $exists: true};
+      }
+    }
     if(qcoordinates || qradius){
       if(qcoordinates && qradius){
-        var coords = req.query.coordinates.split(",");
-        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), Number(qradius)/6378.1]}};
+        query.coordinates = {$geoWithin: {$centerSphere: [qcoordinates, qradius/6378.1]}};
       }
       else {
         return res.status(404).send({
@@ -291,18 +288,10 @@ const getMyCourses = async function(req, res){
     }
 
     var result = await Course.find(query);
-    if(result.length > 0){
-      return res.status(200).send({
-        message: 'Courses found successfully.',
-        courses: result
-      });
-    }
-    else {
-      return res.status(200).send({
-        message: 'No courses found using the specified parameters.',
-        courses: result
-      });
-    }
+    return res.status(200).send({
+      message: 'Courses found successfully.',
+      courses: result
+    });
   }
   catch(err){
     return res.status(500).send(err);
@@ -327,8 +316,9 @@ const getMyCourses = async function(req, res){
  * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
  * @apiParam {String} [topic] course topic
+ * @apiParam {String} [type] course type (`online` or `presence`)
  *
- * @apiSuccess (Success 200) {String} message `Courses found successfully.` or `No courses found using the specified parameters.`
+ * @apiSuccess (Success 200) {String} message `Courses found successfully.`
  * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
@@ -342,16 +332,19 @@ const getMyCreatedCourses = async function(req, res){
     var qtopic = req.query.topic;
     var qstartdate = req.query.startdate;
     var qenddate = req.query.enddate;
+    var qtype = req.query.type;
 
     var query = {
       creator: req.user.id,
       exists: true
     };
     if(qname){
-      query.name = qname;
+      var regExpEscapeName = qname.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.name = new RegExp(regExpEscapeName, "i");
     }
     if(qtopic){
-      query.topic = qtopic;
+      var regExpEscapeTopic = qtopic.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.topic = new RegExp(regExpEscapeTopic, "i");
     }
     if(qstartdate){
       query.startdate = {$gte: qstartdate};
@@ -359,10 +352,17 @@ const getMyCreatedCourses = async function(req, res){
     if(qenddate){
       query.enddate = {$lte: qenddate};
     }
+    if(qtype){
+      if(qtype === 'online'){
+        query.postalcode = { $exists: false};
+      }
+      else if(qtype === 'presence'){
+        query.postalcode = { $exists: true};
+      }
+    }
     if(qcoordinates || qradius){
       if(qcoordinates && qradius){
-        var coords = req.query.coordinates.split(",");
-        query.coordinates = {$geoWithin: {$centerSphere: [JSON.parse(qcoordinates), Number(qradius)/6378.1]}};
+        query.coordinates = {$geoWithin: {$centerSphere: [qcoordinates, qradius/6378.1]}};
       }
       else {
         return res.status(404).send({
@@ -372,18 +372,10 @@ const getMyCreatedCourses = async function(req, res){
     }
 
     var result = await Course.find(query);
-    if(result.length > 0){
-      return res.status(200).send({
-        message: 'Courses found successfully.',
-        courses: result
-      });
-    }
-    else {
-      return res.status(200).send({
-        message: 'No courses found using the specified parameters.',
-        courses: result
-      });
-    }
+    return res.status(200).send({
+      message: 'Courses found successfully.',
+      courses: result
+    });
   }
   catch(err){
     return res.status(500).send(err);
