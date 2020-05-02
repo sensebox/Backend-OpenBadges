@@ -194,7 +194,7 @@ const postLogin = async function(req, res){
     // create JWT-Token and refresh-Token
     const {token: token, refreshToken: refreshtoken } = await createToken(user);
     const {_doc, ...rest} = user;
-    const {_id, __v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
+    const {__v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
     return res.status(200).send({
       message: 'User successfully signed in',
       token: token,
