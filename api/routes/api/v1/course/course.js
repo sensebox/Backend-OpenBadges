@@ -408,6 +408,7 @@ const getMyCreatedCourses = async function(req, res){
  * @apiParam {Date} [startdate] Date of the start of the course
  * @apiParam {Date} [enddate] Date of the end of the course
  * @apiParam {Number} [size] maximal amount of the course participants; must be greater (equal) than the current signed participants
+ * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Success 200) {String} message `Course is updated successfully.`
  * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>}`
@@ -471,9 +472,13 @@ const putCourse = async function(req, res){
         }
 
         await result.save();
+        const updatedCourse = await Course.findById(result._id)
+                                          .populate('creator', {firstname:1, lastname: 1})
+                                          .populate('badge')
+                                          .populate('localbadge');
         return res.status(200).send({
           message: 'Course is updated successfully.',
-          course: result
+          course: updatedCourse
         });
       }
       else {
