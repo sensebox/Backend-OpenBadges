@@ -524,7 +524,7 @@ const getParticipants = async function(req, res){
     var course = await Course.findById(courseId);
     if(course){
       if(course.creator == req.user.id){
-        var participants = await User.find({_id: {$in: course.participants}}, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+        var participants = await User.find({_id: {$in: course.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
         return res.status(200).send({
           message: 'Participants found successfully.',
           participants: participants
