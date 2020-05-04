@@ -9,20 +9,23 @@ const CourseSchema = new mongoose.Schema({
   // Kurs name
   name: {
     type: String,
-    required: true,
+    required: true
   },
   badge: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Badge'
+    ref: 'Badge',
+    required: true
   }],
   localbadge: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Badge'
+    ref: 'Badge',
+    required: true
   }],
   // Nutzername der den Kurs erstellt
   creator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   // Falls der Nutzer es für eine organisation etc anbietet (zb. Kreativwerkstatt Münster)
   courseprovider: {
@@ -41,11 +44,11 @@ const CourseSchema = new mongoose.Schema({
   coordinates: {
     type: {
       type: String,
-      enum: ['Point'],
-      default: 'Point'
+      enum: ['Point']
     },
     coordinates: {
-      type: [Number]
+      type: [Number],
+      default: undefined
     }
   },
   image: {
@@ -74,15 +77,18 @@ const CourseSchema = new mongoose.Schema({
   },
   // mögliche Kenntnisse die man bringen sollen
   requirements:{
-    type: String
+    type: String,
+    required: true
   },
   // zeitraum des Kurses
   // muss nicht angegeben werden da es auch ein Online Kurs sein kann
   startdate: {
-    type: Date
+    type: Date,
+    required: true
   },
   enddate: {
-    type: Date
+    type: Date,
+    required: true
   },
   participants: {
     type: [mongoose.Schema.Types.ObjectId],

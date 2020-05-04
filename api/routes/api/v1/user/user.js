@@ -28,7 +28,7 @@ const getMe = async function(req, res){
   var id;
   if(req.user) id = req.user.id;
   try{
-    const user = await User.findById(id, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    const user = await User.findById(id, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
     if(user){
       return res.status(200).send({
         message: 'User found successfully.',
@@ -121,7 +121,7 @@ const putMe = async function(req, res){
       if(Object.keys(updatedUser).length > 0){
         var newUser = await User.findOneAndUpdate({_id: req.user.id}, updatedUser, {new: true});
         const {_doc, ...rest} = newUser;
-        const {_id, __v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
+        const {__v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
         return res.status(200).send({
           message: 'User information updated successfully.',
           user: restUser
@@ -129,7 +129,7 @@ const putMe = async function(req, res){
       }
       else {
         const {_doc, ...rest} = user;
-        const {_id, __v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
+        const {__v, password, emailConfirmationToken, resetPasswordToken, resetPasswordExpiresIn, refreshToken, refreshTokenExpiresIn, ...restUser} = _doc;
         return res.status(200).send({
           message: 'User information not changed.',
           user: restUser
