@@ -230,7 +230,6 @@ const assigneBadge = async function(req, res){
 const assigneMultipleBadges = async function(req, res){
   var courseId = req.params.courseId;
   var badges = req.body.badges;
-  console.log(badges);
   try{
     var course = await Course.findById(courseId);
     if(course){
@@ -240,7 +239,7 @@ const assigneMultipleBadges = async function(req, res){
         const promises = Object.keys(badges).map(async function(key){
           var user = await User.findById(key);
           if(user){
-            const promises1 = badges[key].map(async function(badgeId) {
+            badges[key].map(async function(badgeId) {
               var badge = await Badge.findById(badgeId);
               if(badge){
                 if(course.localbadge.indexOf(badgeId) > -1){
@@ -248,11 +247,9 @@ const assigneMultipleBadges = async function(req, res){
                   if(user.localbadge.indexOf(badgeId) < 0){
                     // badge is not assigned to user
                     user.localbadge.push(badgeId);
-                    return user.save();
                   }
                   else {
                     info.alreadyAssigned += 1;
-                    return;
                   }
                 }
                 else {
@@ -260,7 +257,6 @@ const assigneMultipleBadges = async function(req, res){
                   if(user.badge.indexOf(badgeId) < 0){
                     // badge is not assigned to user
                     user.badge.push(badgeId);
-                    return;
                   }
                   else {
                     info.alreadyAssigned += 1;
@@ -270,14 +266,12 @@ const assigneMultipleBadges = async function(req, res){
               }
               else {
                 info.badgeNotFound += 1;
-                return;
               }
             });
-            return Promise.all(promises1);
+            return user.save();
           }
           else {
             info.userNotFound += 1;
-            return;
           }
         });
         const assignedBadges = await Promise.all(promises);
