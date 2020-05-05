@@ -27,7 +27,7 @@ const {createToken, invalidateToken} = require('../../../../helper/authorization
 const postRefreshToken = async function(req, res){
   var refreshToken = req.body.refreshToken;
   try{
-    const user = await User.findOne({refreshToken: refreshToken, refreshTokenExpiresIn: { $gte: moment.utc().toDate() } });
+    const user = await User.findOne({refreshToken: refreshToken, refreshTokenExpiresIn: { $gte: moment.utc().toDate() } }, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
     if (!user) {
       return res.status(403).send({
         message: 'Refresh token is invalid or too old. Please sign in with your user credentials.'
@@ -42,10 +42,7 @@ const postRefreshToken = async function(req, res){
         message: 'Authorization successfully refreshed',
         token: token,
         refreshToken: newRefreshToken,
-        user: {
-          id: user._id,
-          role: user.role
-        }
+        user: user
       });
     }
   }
