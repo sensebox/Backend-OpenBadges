@@ -15,10 +15,12 @@ const user = require('./user');
 const badge = require('./badge');
 const course = require('./course');
 const {adminAuthorization} = require('../../../../helper/authorization/middleware');
+const {upload} = require('../../../../helper/imageUpload');
+
 
 
 AdminRouter.route('/signup')
-    .post(adminAuthorization, login.postRegister);
+    .post(adminAuthorization, upload.single('profile'), login.postRegister);
 
 AdminRouter.route('/signin')
     .post(login.postLogin);
@@ -35,10 +37,10 @@ AdminRouter.route('/badge')
     .get(adminAuthorization, badge.getBadges);
 
 AdminRouter.route('/badge')
-    .post(adminAuthorization, badge.postGlobalBadge);
+    .post(adminAuthorization, upload.single('image'), badge.postGlobalBadge);
 
 AdminRouter.route('/badge')
-    .put(adminAuthorization, badge.putBadge);
+    .put(adminAuthorization, upload.single('image'), badge.putBadge);
 
 AdminRouter.route('/badge/:badgeId/course/:courseId/assigne/user/:userId')
     .put(adminAuthorization, badge.assigneBadge);

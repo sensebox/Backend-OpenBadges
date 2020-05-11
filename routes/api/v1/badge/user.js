@@ -23,13 +23,11 @@ const Course = require('../../../../models/course');
  * @apiParam {ObjectId} courseId the ID of the Course you are referring to
  * @apiParam {ObjectId} userId the ID of the user you are referring to
  *
- * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or `Global Badge is unassigned successfully to user.`
+ * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or </br> `Global Badge is unassigned successfully to user.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or `{"message": "Global Badge is already unassigned to user."}`
+ * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or </br> `{"message": "Global Badge is already unassigned to user."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission unassigning the Badge to an user."}`
- * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
- * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
- * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const unassigneBadge = async function(req, res){
@@ -128,9 +126,7 @@ const unassigneBadge = async function(req, res){
  *
  * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or `{"message": "Global Badge is already assigned to user."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission assigning the Badge to an user."}`
- * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
- * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
- * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
 const assigneBadge = async function(req, res){
@@ -221,10 +217,10 @@ const assigneBadge = async function(req, res){
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam {ObjectId} courseId the ID of the Course you are referring to
- * @apiParam {Object} badges JSON-Object with userIds as Object-Key and the badgeIds in an array as value. (e.g. `{<userId>: [<badgeId>, <badgeId>]}`)
+ * @apiParam {Object} badges JSON-Object with userIds as Object-Key and the badgeIds in an array as value. </br> (e.g. `{<userId>: [<badgeId>, <badgeId>]}`)
  *
  * @apiSuccess (Success 200) {String} message `Badges are assigned successfully to users.`
- * @apiSuccess (Success 200) {Object} info `{"alreadyAssigned": <Number>, "userNotFound": <Number>, "badgeNotFound": <Number>};'
+ * @apiSuccess (Success 200) {Object} info `{"alreadyAssigned": <Number>, "userNotFound": <Number>, "badgeNotFound": <Number>}`
  *
  * @apiError (On error) {Object} 403 `{"message": "No permission assigning the Badges to the users."}`
  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`

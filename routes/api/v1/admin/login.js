@@ -38,14 +38,16 @@ const {hashJWT} = require('../../../../helper/authorization/refreshToken');
  * @apiSuccess (Created 201) {String} message `Admin is successfully registered.`
  * @apiSuccess (Created 201) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"admin", "emailIsConfirmed": false, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
- * @apiError (On error) {Object} 400 Passed parameters are not valid.
- * @apiError (On error) {Object} 409 `{"message": "Email already exists."}` or `{"error": "Username already exists."}`
+ * @apiError (On error) {Object} 409 `{"message": "Email already exists."}` or </br> `{"error": "Username already exists."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postRegister = async function(req, res){
   // validate incoming data
+  if(req.fileValidationError){
+    return res.status(422).send({message: req.fileValidationError});
+  }
   const {error} = registerValidation(req.body);
-  if(error) return res.status(400).send({message: error.details[0].message});
+  if(error) return res.status(422).send({message: error.details[0].message});
   // checking if user is already in db
   const emailExists = await User.findOne({email: req.body.email});
   if(emailExists) return res.status(409).send({message: 'Email already exists'});

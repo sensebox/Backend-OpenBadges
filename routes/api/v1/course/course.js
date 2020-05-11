@@ -25,12 +25,12 @@ const {courseValidation} = require('../../../../helper/validation/course');
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam {String} name name of the course
- * @apiParam {ObjectId-Array} badge the ObjectId of global badges for the course (min: 1); example: `["5e1b0bafeafe4a84c4ac31a9"]`
- * @apiParam {ObjectId-Array} localbadge the ObjectId of local badges for the Course (min: 1); example: `["5e1b0bafeafe4a84c4ac31a9"]`
+ * @apiParam {ObjectId-Array} badge the ObjectId of global badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
+ * @apiParam {ObjectId-Array} localbadge the ObjectId of local badges for the Course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
  * @apiParam {String} courseprovider the provider of the course might be specified by the creator
  * @apiParam {String} [postalcode] postalcode of the building where the course take place
  * @apiParam {String} [address] adress of the location from the Course
- * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course; example: `[longitude, latitude]`
+ * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course </br> example: `[longitude, latitude]`
  * @apiParam {String} topic topic of the Course
  * @apiParam {String} description a brief summary about the course contents
  * @apiParam {String} requirements a brief summary about the course requirements
@@ -40,12 +40,14 @@ const {courseValidation} = require('../../../../helper/validation/course');
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Created 201) {String} message `Course is successfully created.`
- * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}'
+ * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postCourse = async function(req, res){
-  console.log(req.body);
+  if(req.fileValidationError){
+    return res.status(422).send({message: req.fileValidationError});
+  }
   const {error} = courseValidation(req.body);
   if(error) return res.status(422).send({message: error.details[0].message});
 
@@ -106,7 +108,7 @@ const postCourse = async function(req, res){
  * @apiGroup Course
  *
  * @apiParam {String} [name] course name
- * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course; example: `[longitude, latitude]`
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course </br> example: `[longitude, latitude]`
  * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
  * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
@@ -227,7 +229,7 @@ const getCourseID = async function(req, res){
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam {String} [name] course name
- * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course; example: `[longitude, latitude]`
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course </br> example: `[longitude, latitude]`
  * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
  * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
@@ -311,7 +313,7 @@ const getMyCourses = async function(req, res){
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam {String} [name] course name
- * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course; example: `[longitude, latitude]`
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course </br> example: `[longitude, latitude]`
  * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
  * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
  * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
@@ -396,12 +398,12 @@ const getMyCreatedCourses = async function(req, res){
  *
  * @apiParam {ObjectId} courseId the ID of the course you are referring to
  * @apiParam {String} [name] name of the course
- * @apiParam {ObjectId-Array} [badge] the ObjectId of global badges for the course (min: 1); example: `["5e1b0bafeafe4a84c4ac31a9"]`
- * @apiParam {ObjectId-Array} [localbadge] the ObjectId of local badges for the course (min: 1); example: `["5e1b0bafeafe4a84c4ac31a9"]`
+ * @apiParam {ObjectId-Array} [badge] the ObjectId of global badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
+ * @apiParam {ObjectId-Array} [localbadge] the ObjectId of local badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
  * @apiParam {String} [courseprovider] the provider of the course might be specified by the creator
  * @apiParam {String} [postalcode] postalcode of the building where the course take place
  * @apiParam {String} [address] adress of the location from the Course
- * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course; example: `[longitude, latitude]`
+ * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course </br> example: `[longitude, latitude]`
  * @apiParam {String} [topic] topic of the Course
  * @apiParam {String} [description] a biref summary about the course contents
  * @apiParam {String} [requirements] a brief summary about the course requirements
@@ -512,7 +514,7 @@ const putCourse = async function(req, res){
  * @apiParam {ObjectId} courseId the ID of the course you are referring to
  *
  * @apiSuccess (Success 200) {String} message `Participants found successfully.`
- * @apiSuccess (Success 200) {Object} participants `[{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]'
+ * @apiSuccess (Success 200) {Object} participants `[{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 400 `{"message": "Course not found."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission getting the participants of the course."}`

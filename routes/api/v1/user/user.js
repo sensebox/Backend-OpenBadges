@@ -61,17 +61,16 @@ const getMe = async function(req, res){
  * @apiParam {String} [email] the new email of the user
  * @apiParam {File} [profile] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
- * @apiSuccess (Success 200) {String} message `User information updated successfully.` or `User information not changed.`
+ * @apiSuccess (Success 200) {String} message `User information updated successfully.` or </br> `User information not changed.`
  * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
- * @apiError (On error) {Object} 404 `{"message": "Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed."}`
  * @apiError (On error) {Obejct} 500 Complications during querying the database.
  */
 const putMe = async function(req, res){
   try{
     if(req.fileValidationError){
-      return res.status(404).send({message: req.fileValidationError});
+      return res.status(422).send({message: req.fileValidationError});
     }
     var user = await User.findById(req.user.id);
     if(user){

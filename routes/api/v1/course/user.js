@@ -20,8 +20,7 @@ const Course = require('../../../../models/course');
  * @apiSuccess (Success 200) {String} message `User registered successfully in course.`
  *
  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
- * @apiError (On error) {Object} 400 `{"message": "Course size is already reached."}`
- * @apiError (On error) {Object} 400 `{"message": "User is already registered in course."}`
+ * @apiError (On error) {Object} 400 `{"message": "Course size is already reached."}` or </br> `{"message": "User is already registered in course."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
  const putCourseSignIn = async function(req, res){
@@ -76,8 +75,8 @@ const Course = require('../../../../models/course');
   *
   * @apiSuccess (Success 200) {String} message `User deregistered successfully from course.`
   *
-  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
   * @apiError (On error) {Object} 400 `{"message": "User is not registered in course."}`
+  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
   * @apiError (On error) {Object} 500 Complications during querying the database
   */
   const putCourseSignOut = async function(req, res){

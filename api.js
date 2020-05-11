@@ -19,11 +19,11 @@ api.use(cors());
 
 api.use(logger('dev'));
 api.use(express.json());
-api.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// api.use(express.urlencoded({ extended: true, limit: '10mb' }));
 api.use(cookieParser());
 
 // api documentation
-api.use('/docs', express.static(path.join(__dirname, 'doc')));
+api.use('/docs', express.static(path.join(__dirname, 'docs')));
 // uploaded images
 api.use('/media', express.static(path.join(__dirname, 'upload')));
 

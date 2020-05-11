@@ -178,6 +178,9 @@ const getBadge = async function(req, res){
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postLocalBadge = async function(req, res){
+  if(req.fileValidationError){
+    return res.status(422).send({message: req.fileValidationError});
+  }
   const {error} = badgeValidation(req.body);
   if(error) return res.status(422).send({message: error.details[0].message});
 
@@ -229,7 +232,7 @@ const postLocalBadge = async function(req, res){
  * @apiParam {String} [critera] criterias getting this Badge
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
- * @apiSuccess (Success 200) {String} message `Local Badge updated successfully.` or `Local Badge not changed.`
+ * @apiSuccess (Success 200) {String} message `Local Badge updated successfully.` or </br> `Local Badge not changed.`
  * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 403 `{"message": "No permission putting the local Badge."}`
@@ -238,6 +241,9 @@ const postLocalBadge = async function(req, res){
  */
 const putBadgeLocal = async function(req, res){
   try {
+    if(req.fileValidationError){
+      return res.status(422).send({message: req.fileValidationError});
+    }
     var badge = await Badge.findById(req.params.badgeId);
     if(badge){
       if(badge.issuer == req.user.id){
