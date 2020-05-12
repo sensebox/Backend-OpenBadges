@@ -9,7 +9,7 @@ const User = require('../../../../models/user');
 
 
 /**
- * @api {get} /api/v1/course/:courseId/participants Participants of one course
+ * @api {get} /api/v1/course/:courseId/participants Get participants of one course
  * @apiName adminGetParticipants
  * @apiDescription Getting all participants of one course by ID
  * @apiGroup Admin

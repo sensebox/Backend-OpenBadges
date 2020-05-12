@@ -1,4 +1,4 @@
-<br />Documentation of the routes and methods to manage [users](#api-User), [courses](#api-Course), [badges](#api-Badge) and [admin](#api-Admin) in the OpenBadges API.
+<br />Documentation of the routes and methods to manage [users](#api-User), [badges](#api-Badge), [courses](#api-Course) and [admins](#api-Admin) in the OpenBadges API.
 You can find the API running at [http://localhost:3001/](http://localhost:3001/).
 
 ## Date

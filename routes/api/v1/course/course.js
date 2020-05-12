@@ -220,7 +220,7 @@ const getCourseID = async function(req, res){
 
 /**
  * @api {get} /api/v1/course/me Get my courses
- * @apiName getmyCourses
+ * @apiName getMyCourses
  * @apiDescription Get (all) courses of currently signed in User by different queries.
  * @apiGroup Course
  *
@@ -304,7 +304,7 @@ const getMyCourses = async function(req, res){
 
 /**
  * @api {get} /api/v1/course/creator/me/ Get my created courses
- * @apiName getmyCreatedCourses
+ * @apiName getMyCreatedCourses
  * @apiDescription Get (all) created courses of currently signed in User by different queries.
  * @apiGroup Course
  *

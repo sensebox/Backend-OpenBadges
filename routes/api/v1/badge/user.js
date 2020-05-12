@@ -207,8 +207,8 @@ const assigneBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/badge/course/:courseId/assigne Assigne multiple badges
- * @apiName assigneLocalBadge
+ * @api {put} /api/v1/badge/course/:courseId/assigne Assigne multiple Badges
+ * @apiName assigneMultipleLocalBadges
  * @apiDescription Assigne mutliple badges of a course to users from the course.
  * @apiGroup Badge
  *

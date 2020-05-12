@@ -129,7 +129,7 @@ const postRegister = async function(req, res){
 
 
 /**
- * @api {post} /api/v1/user/email/:emailToken Confirm Email
+ * @api {post} /api/v1/user/email/:emailToken Confirm email
  * @apiName confirmEmail
  * @apiDescription Confirm an email of an user.
  * @apiGroup User

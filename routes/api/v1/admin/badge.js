@@ -140,8 +140,8 @@ const postGlobalBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/admin/badge/:badgeId Update Badge
- * @apiName AdminPutBadge
+ * @api {put} /api/v1/admin/badge/:badgeId Change Badge
+ * @apiName adminPutBadge
  * @apiDescription Change information of a Badge (global | local).
  * @apiGroup Admin
  *
