@@ -1,25 +1,11 @@
-version: '2.4'
+version: '3'
 services:
   app:
-    build: ./app
-    ports:
-      - "3000:3000"
-    depends_on:
-      api:
-        condition: service_healthy
-    environment:
-      - API_Domain=http://192.168.99.100:3001
-  api:
-    build: ./api
+    build: .
     ports:
       - "3001:3001"
     depends_on:
       - mongo
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://192.168.99.100:3001/docs"]
-      interval: 5s
-      timeout: 2s
-      retries: 5
   mongo:
     image: mongo
     ports:
