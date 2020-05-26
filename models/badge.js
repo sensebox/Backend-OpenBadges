@@ -41,6 +41,10 @@ const BadgeSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  independent: {
+    type: Boolean,
+    default: false
+  },
   exists: {
     type: Boolean,
     default: true

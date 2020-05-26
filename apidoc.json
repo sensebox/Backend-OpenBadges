@@ -44,11 +44,13 @@
     "signInAdmin",
     "getAllUser",
     "getOneUser",
-    "createGlobalBadge",
+    "createIndependentGlobalBadge",
     "adminPutBadge",
     "adminFindBadge",
     "adminAssigneLocalBadge",
     "adminUnassigneLocalBadge",
+    "adminAssigneIndependentBadge",
+    "adminUnassigneIndependentBadge",
     "adminGetParticipants"
   ],
   "template": {

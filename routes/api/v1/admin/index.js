@@ -48,6 +48,11 @@ AdminRouter.route('/badge/:badgeId/course/:courseId/assigne/user/:userId')
 AdminRouter.route('/badge/:badgeId/course/:courseId/unassigne/user/:userId')
     .put(adminAuthorization, badge.unassigneBadge);
 
+AdminRouter.route('/badge/:badgeId/assigne/user/:userId')
+    .put(adminAuthorization, badge.assigneIndependentBadge);
+
+AdminRouter.route('/badge/:badgeId/unassigne/user/:userId')
+    .put(adminAuthorization, badge.unassigneIndependentBadge);
 
 AdminRouter.route('/course/:courseId/participants')
     .get(adminAuthorization, course.getParticipants);

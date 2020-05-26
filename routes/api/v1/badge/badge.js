@@ -20,6 +20,7 @@ const {badgeValidation} = require('../../../../helper/validation/badge');
  * @apiParam {String} [description] find Badges by its description
  * @apiParam {ObejctId} [issuer] the ID of the issuer you are referring to
  * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
+ * @apiParam {Boolean} [independent] if true, get independent Badges; if false, get course-related Badges
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
  * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
@@ -31,6 +32,7 @@ const getBadges = async function(req, res){
   var qdescription = req.query.description;
   var qissuer = req.query.issuer;
   var qglobal = req.query.global;
+  var qindependent = req.query.independent;
 
   try{
     var query = {
@@ -47,6 +49,9 @@ const getBadges = async function(req, res){
     }
     if(qglobal){
       query.global = qglobal;
+    }
+    if(qindependent){
+      query.independent = qindependent;
     }
 
     var result = await Badge.find(query);
@@ -76,6 +81,7 @@ const getBadges = async function(req, res){
  * @apiParam {String} [description] find Badges by its description
  * @apiParam {ObejctId} [issuer] find Badges by its issuer
  * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
+ * @apiParam {Boolean} [independent] if true, get independent Badges; if false, get course-related Badges
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
  * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
@@ -87,6 +93,7 @@ const getBadgesMe = async function(req, res){
   var qdescription = req.query.description;
   var qissuer = req.query.issuer;
   var qglobal = req.query.global;
+  var qindependent = req.query.independent;
 
   try{
     // find all badges from current user
@@ -105,6 +112,9 @@ const getBadgesMe = async function(req, res){
     }
     if(qglobal){
       query.global = qglobal;
+    }
+    if(qindependent){
+      query.independent = qindependent;
     }
 
     var result = await Badge.find(query);

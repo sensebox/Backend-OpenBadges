@@ -27,6 +27,7 @@ const Course = require('../../../../models/course');
  * @apiParam {ObejctId} [badgeId] the ID of the Badge you are referring to
  * @apiParam {ObejctId} [userId] the ID of the user you are referring to
  * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
+ * @apiParam {Boolean} [independent] if true, get independent Badges; if false, get course-related Badges
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
  * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
@@ -40,6 +41,7 @@ const getBadges = async function(req, res){
   var qissuer = req.query.issuer;
   var qid = req.query.badgeId;
   var qglobal = req.query.global;
+  var qindependent = req.query.independent;
   var quserId = req.query.userId;
 
   try{
@@ -58,6 +60,9 @@ const getBadges = async function(req, res){
     }
     if(qglobal){
       query.global = qglobal;
+    }
+    if(qindependent){
+      query.independent = qindependent;
     }
     if(quserId){
       var user = await User.findById(quserId, {badge: 1, localbadge: 1, _id:0});
@@ -85,9 +90,9 @@ const getBadges = async function(req, res){
 
 
 /**
- * @api {post} /api/v1/admin/badge Create global Badge
- * @apiName createGlobalBadge
- * @apiDescription Create a new global Badge.
+ * @api {post} /api/v1/admin/badge Create Badge
+ * @apiName createIndependentGlobalBadge
+ * @apiDescription Create a new (independent) global | local Badge.
  * @apiGroup Admin
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -98,9 +103,11 @@ const getBadges = async function(req, res){
  * @apiParam {String} description a brief summary of the Badge
  * @apiParam {String} critera criterias getting this Badge
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
+ * @apiParam {Boolean} global is Badge global or local
+ * @apiParam {Boolean} independent if true, create independent Badge; if false, create course-related Badge
  *
- * @apiSuccess (Created 201) {String} message `Global Badge is succesfully created.`
- * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Created 201) {String} message `Badge is succesfully created.`
+ * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "independent": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 500 Complications during storage.
  */
@@ -115,7 +122,8 @@ const postGlobalBadge = async function(req, res){
       description: req.body.description,
       criteria: req.body.criteria,
       issuer: req.user.id,
-      global: true
+      global: req.body.global,
+      independent: req.body.independent
     };
     if(req.file){
       const image = {
@@ -129,7 +137,7 @@ const postGlobalBadge = async function(req, res){
     const badge = new Badge(body);
     const savedBadge = await badge.save();
     return res.status(201).send({
-      message: 'Global Badge is succesfully created.',
+      message: 'Badge is succesfully created.',
       badge: savedBadge
     });
   }
@@ -142,7 +150,7 @@ const postGlobalBadge = async function(req, res){
 /**
  * @api {put} /api/v1/admin/badge/:badgeId Change Badge
  * @apiName adminPutBadge
- * @apiDescription Change information of a Badge (global | local).
+ * @apiDescription Change information of a Badge (global | local | independent).
  * @apiGroup Admin
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -154,6 +162,8 @@ const postGlobalBadge = async function(req, res){
  * @apiParam {String} [description] a brief summary of the Badge
  * @apiParam {String} [critera] criterias getting this Badge
  * @apiParam {Boolean} [exists] if false, badge is deactivated
+ * @apiParam {Boolean} [global] if false, badge is local
+ * @apiParam {Boolean} [independent]  if false, badge is course-related
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Success 200) {String} message `Badge updated successfully.` or </br> `Badge not changed.`
@@ -174,6 +184,8 @@ const putBadge = async function(req, res){
       if(req.body.description) updatedBadge.description = req.body.description;
       if(req.body.criteria) updatedBadge.criteria = req.body.criteria;
       if(req.body.exists) updatedBadge.exists = req.body.exists;
+      if(req.body.global) updatedBadge.global = req.body.global;
+      if(req.body.independent) updatedBadge.independent = req.body.independent;
       if(req.file){
         const image = {
           path: req.file.filename,
@@ -395,11 +407,204 @@ const assigneBadge = async function(req, res){
 };
 
 
+/**
+ * @api {put} /api/v1/admin/badge/:badgeId/unassigne/user/:userId Unassigne an independent Badge
+ * @apiName adminUnassigneIndependentBadge
+ * @apiDescription Unassigne an independent Badge to an user.
+ * @apiGroup Admin
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or </br> `Global Badge is unassigned successfully to user.`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or </br> `{"message": "Global Badge is already unassigned to user."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission unassigning the Badge to an user."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge is not independent."}` or </br> `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
+ */
+const unassigneIndependentBadge = async function(req, res){
+  var badgeId = req.params.badgeId;
+  var userId = req.params.userId;
+
+  try{
+    var badge = await Badge.findById(badgeId);
+    if(badge){
+      if(badge.independent){
+        // only the badge issuer has the permission to assigne the Badge
+        if(badge.issuer == req.user.id){
+          var user = await User.findById(userId);
+          if(user){
+            if(!badge.global){
+              // badge is a local badge
+              if(user.localbadge.indexOf(badgeId) > -1){
+                // badge is not unassigned to user
+                user.localbadge.splice(user.localbadge.indexOf(badgeId), 1);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Local Badge is unassigned successfully to user.',
+                });
+              }
+              else{
+                return res.status(400).send({
+                  message: 'Local Badge is already unassigned to user.',
+                });
+              }
+            }
+            else {
+              // badge is a global badge
+              if(user.badge.indexOf(badgeId) > -1){
+                // badge is not unassigned to user
+                user.badge.splice(user.badge.indexOf(badgeId), 1);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Global Badge is unassigned successfully to user.',
+                });
+              }
+              else{
+                return res.status(400).send({
+                  message: 'Global Badge is already unassigned to user.',
+                });
+              }
+            }
+          }
+          else {
+            return res.status(404).send({
+              message: 'User not found.',
+            });
+          }
+        }
+        else {
+          return res.status(403).send({
+            message: 'No permission unassigning the Badge to an user.',
+          });
+        }
+      }
+      else {
+        return res.status(404).send({
+          message: 'Badge is not independent.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Badge not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
+
+/**
+ * @api {put} /api/v1/admin/badge/:badgeId/assigne/user/:userId Assigne an independent Badge
+ * @apiName adminAssigneIndependentBadge
+ * @apiDescription Assigne an independent Badge to an user.
+ * @apiGroup Admin
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or </br> `GLobal Badge is assigned successfully to user.`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or </br> `{"message": "Global Badge is already assigned to user."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission assigning the Badge to an user."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge is not independent."}` or </br> `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
+ */
+const assigneIndependentBadge = async function(req, res){
+  var badgeId = req.params.badgeId;
+  var userId = req.params.userId;
+
+  try{
+    var badge = await Badge.findById(badgeId);
+    if(badge){
+      if(badge.independent){
+        // only the badge issuer has the permission to assigne the Badge
+        if(badge.issuer == req.user.id){
+          var user = await User.findById(userId);
+          if(user){
+            if(!badge.global){
+              // badge is a local badge
+              if(user.localbadge.indexOf(badgeId) < 0){
+                // badge is not assigned to user
+                user.localbadge.push(badgeId);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Local Badge is assigned successfully to user.',
+                });
+              }
+              else {
+                return res.status(400).send({
+                  message: 'Local Badge is already assigned to user.',
+                });
+              }
+            }
+            else {
+              // badge is a global badge
+              if(user.badge.indexOf(badgeId) < 0){
+                // badge is not assigned to user
+                user.badge.push(badgeId);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Global Badge is assigned successfully to user.',
+                });
+              }
+              else {
+                return res.status(400).send({
+                  message: 'Global Badge is already assigned to user.',
+                });
+              }
+            }
+          }
+          else {
+            return res.status(404).send({
+              message: 'User not found.',
+            });
+          }
+        }
+        else {
+          return res.status(403).send({
+            message: 'No permission unassigning the Badge to an user.',
+          });
+        }
+      }
+      else {
+        return res.status(404).send({
+          message: 'Badge is not independent.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Badge not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
 
 module.exports = {
  getBadges,
  postGlobalBadge,
  putBadge,
  assigneBadge,
- unassigneBadge
+ unassigneBadge,
+ unassigneIndependentBadge,
+ assigneIndependentBadge
 };

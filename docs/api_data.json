@@ -1,6 +1,104 @@
 [
   {
     "type": "put",
+    "url": "/api/v1/admin/badge/:badgeId/assigne/user/:userId",
+    "title": "Assigne an independent Badge",
+    "name": "adminAssigneIndependentBadge",
+    "description": "<p>Assigne an independent Badge to an user.</p>",
+    "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is assigned successfully to user.</code> or </br> <code>GLobal Badge is assigned successfully to user.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission assigning the Badge to an user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is not independent.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/badge.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId",
     "title": "Assigne a Badge",
     "name": "adminAssigneLocalBadge",
@@ -168,6 +266,13 @@
             "optional": true,
             "field": "global",
             "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "independent",
+            "description": "<p>if true, get independent Badges; if false, get course-related Badges</p>"
           }
         ]
       }
@@ -307,7 +412,7 @@
     "url": "/api/v1/admin/badge/:badgeId",
     "title": "Change Badge",
     "name": "adminPutBadge",
-    "description": "<p>Change information of a Badge (global | local).</p>",
+    "description": "<p>Change information of a Badge (global | local | independent).</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -369,6 +474,20 @@
           },
           {
             "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "global",
+            "description": "<p>if false, badge is local</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "independent",
+            "description": "<p>if false, badge is course-related</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "File",
             "optional": true,
             "field": "image",
@@ -413,6 +532,104 @@
             "optional": false,
             "field": "500",
             "description": "<p>Complications during storage.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/badge.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/admin/badge/:badgeId/unassigne/user/:userId",
+    "title": "Unassigne an independent Badge",
+    "name": "adminUnassigneIndependentBadge",
+    "description": "<p>Unassigne an independent Badge to an user.</p>",
+    "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or </br> <code>Global Badge is unassigned successfully to user.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission unassigning the Badge to an user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is not independent.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
           }
         ]
       }
@@ -522,9 +739,9 @@
   {
     "type": "post",
     "url": "/api/v1/admin/badge",
-    "title": "Create global Badge",
-    "name": "createGlobalBadge",
-    "description": "<p>Create a new global Badge.</p>",
+    "title": "Create Badge",
+    "name": "createIndependentGlobalBadge",
+    "description": "<p>Create a new (independent) global | local Badge.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -576,6 +793,20 @@
             "optional": true,
             "field": "image",
             "description": "<p>image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "global",
+            "description": "<p>is Badge global or local</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "independent",
+            "description": "<p>if true, create independent Badge; if false, create course-related Badge</p>"
           }
         ]
       }
@@ -588,14 +819,14 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Global Badge is succesfully created.</code></p>"
+            "description": "<p><code>Badge is succesfully created.</code></p>"
           },
           {
             "group": "Created 201",
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;independent&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1412,6 +1643,13 @@
             "optional": true,
             "field": "global",
             "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "independent",
+            "description": "<p>if true, get independent Badges; if false, get course-related Badges</p>"
           }
         ]
       }
@@ -1510,6 +1748,13 @@
             "optional": true,
             "field": "global",
             "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "independent",
+            "description": "<p>if true, get independent Badges; if false, get course-related Badges</p>"
           }
         ]
       }
