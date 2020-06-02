@@ -53,7 +53,7 @@ const getBadges = async function(req, res){
       query.description=qdescription;
     }
     if(qissuer){
-      query.issuer=qissuer;
+      query.issuer={$in: qissuer};
     }
     if(qid){
       query.id=qid;

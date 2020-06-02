@@ -45,7 +45,7 @@ const getBadges = async function(req, res){
       query.description=qdescription;
     }
     if(qissuer){
-      query.issuer=qissuer;
+      query.issuer={$in: qissuer};
     }
     if(qglobal){
       query.global = qglobal;
@@ -54,7 +54,9 @@ const getBadges = async function(req, res){
       query.independent = qindependent;
     }
 
+    console.log(query);
     var result = await Badge.find(query);
+    console.log(result.length);
 
     return res.status(200).send({
       message: 'Badges found succesfully.',
@@ -108,7 +110,7 @@ const getBadgesMe = async function(req, res){
       query.description=qdescription;
     }
     if(qissuer){
-      query.issuer=qissuer;
+      query.issuer={$in: qissuer};
     }
     if(qglobal){
       query.global = qglobal;
