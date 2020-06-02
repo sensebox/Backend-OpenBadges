@@ -23,7 +23,7 @@ const {badgeValidation} = require('../../../../helper/validation/badge');
  * @apiParam {Boolean} [independent] if true, get independent Badges; if false, get course-related Badges
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
- * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -55,7 +55,9 @@ const getBadges = async function(req, res){
     }
 
     console.log(query);
-    var result = await Badge.find(query);
+    var result = await Badge.find(query)
+                            .populate('issuer', {firstname:1, lastname: 1})
+                            .populate('request', {firstname:1, lastname: 1});
     console.log(result.length);
 
     return res.status(200).send({
@@ -86,7 +88,7 @@ const getBadges = async function(req, res){
  * @apiParam {Boolean} [independent] if true, get independent Badges; if false, get course-related Badges
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
- * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -119,8 +121,9 @@ const getBadgesMe = async function(req, res){
       query.independent = qindependent;
     }
 
-    var result = await Badge.find(query);
-
+    var result = await Badge.find(query)
+                            .populate('issuer', {firstname:1, lastname: 1})
+                            .populate('request', {firstname:1, lastname: 1});
     return res.status(200).send({
       message: 'Badges found succesfully.',
       badges: result

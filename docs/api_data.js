@@ -294,7 +294,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -1669,7 +1669,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -1774,7 +1774,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }

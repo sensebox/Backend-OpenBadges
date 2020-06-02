@@ -54,7 +54,9 @@ const postCourse = async function(req, res){
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try{
-    var badgesError = req.body.localbadge.concat(req.body.badge).filter(async (badgeId) => {var badge = await Badge.findById(badgeId); badge.issuer.indexOf(req.user.id) < 0});
+    const promises = req.body.localbadge.concat(req.body.badge).map(async function(badgeId){return await Badge.findById(badgeId);});
+    const badges = await Promise.all(promises);
+    var badgesError = badges.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
     if(badgesError.length > 0){
       return res.status(400).send({message: "All badges must be assignable by the course-creator."});
     }
@@ -439,14 +441,19 @@ const putCourse = async function(req, res){
         result.postalcode = req.body.postalcode || result.postalcode;
         result.address = req.body.address || result.address;
         if(req.body.badge){
-          var badgesError = req.body.badge.filter(async (badgeId) => {var badge = await Badge.findById(badgeId); badge.issuer.indexOf(req.user.id) < 0});
+          const promises = req.body.badge.map(async function(badgeId){return await Badge.findById(badgeId);});
+          const badges = await Promise.all(promises);
+          console.log(badges);
+          var badgesError = badges.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
           if(badgesError.length > 0){
             return res.status(400).send({message: "All badges must be assignable by the course-creator."});
           }
           result.badge = req.body.badge;
         }
         if(req.body.localbadge){
-          var localbadgesError = req.body.localbadge.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
+          const promises = req.body.localbadge.map(async function(badgeId){return await Badge.findById(badgeId);});
+          const badges = await Promise.all(promises);
+          var localbadgesError = badges.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
           if(localbadgesError.length > 0){
             return res.status(400).send({message: "All badges must be assignable by the course-creator."});
           }

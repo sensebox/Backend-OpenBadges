@@ -30,7 +30,7 @@ const Course = require('../../../../models/course');
  * @apiParam {Boolean} [independent] if true, get independent Badges; if false, get course-related Badges
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
- * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
@@ -76,7 +76,9 @@ const getBadges = async function(req, res){
       }
     }
     const badge= new Badge();
-    var result = await badge.find(query);
+    var result = await badge.find(query)
+                            .populate('issuer', {firstname:1, lastname: 1})
+                            .populate('request', {firstname:1, lastname: 1});
     return res.status(200).send({
       message: 'Badges found succesfully.',
       badges: result
