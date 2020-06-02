@@ -41,4 +41,13 @@ BadgeRouter.route('/:badgeId/course/:courseId/unassigne/user/:userId')
 BadgeRouter.route('/course/:courseId/assigne')
     .put(userAuthorization, require('./user').assigneMultipleBadges);
 
+BadgeRouter.route('/:badgeId/grant/:userId')
+    .put(userAuthorization, require('./user').grantPermissionAssignBadge);
+
+BadgeRouter.route('/:badgeId/revoke/:userId')
+    .put(userAuthorization, require('./user').revokePermissionAssignBadge);
+
+BadgeRouter.route('/:badgeId/request')
+    .put(userAuthorization, require('./user').requestPermissionAssignBadge);
+
 module.exports = BadgeRouter;

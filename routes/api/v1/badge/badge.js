@@ -200,7 +200,7 @@ const postLocalBadge = async function(req, res){
       name: req.body.name,
       description: req.body.description,
       criteria: req.body.criteria,
-      issuer: req.user.id
+      issuer: [req.user.id]
     };
     if(req.file){
       const image = {

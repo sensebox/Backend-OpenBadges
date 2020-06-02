@@ -121,7 +121,7 @@ const postGlobalBadge = async function(req, res){
       name: req.body.name,
       description: req.body.description,
       criteria: req.body.criteria,
-      issuer: req.user.id,
+      issuer: [req.user.id],
       global: req.body.global,
       independent: req.body.independent
     };

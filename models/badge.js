@@ -32,11 +32,16 @@ const BadgeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  issuer: {
+  issuer: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  },
+  }],
+  request: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }],
   global: {
     type: Boolean,
     default: false
