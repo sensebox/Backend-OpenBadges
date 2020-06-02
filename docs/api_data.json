@@ -1798,6 +1798,104 @@
   },
   {
     "type": "put",
+    "url": "/api/v1/badge/badgeId/grant/userId",
+    "title": "Grant permission to (un)assign a badge",
+    "name": "grantPermissionAssignBadge",
+    "description": "<p>Grant a user permission to (un)assign a badge. (Only &quot;original issuer&quot; has the permission.)</p>",
+    "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User has successfully received permission to assign the badge.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;User has already permission to assigned the badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission to grant permissions regarding the badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
     "url": "/api/v1/badge/:badgeId",
     "title": "Change local Badge",
     "name": "putLocalBadge",
@@ -2004,6 +2102,188 @@
     },
     "version": "0.0.0",
     "filename": "./routes/api/v1/badge/badge.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/badge/badgeId/request",
+    "title": "Request permission to (un)assign a badge",
+    "name": "requestPermissionAssignBadge",
+    "description": "<p>Request permission to (un)assign a badge.</p>",
+    "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User has successfully submitted his request.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;User has already submitted his request.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User has already permission to assigned the badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/badge/badgeId/revoke/userId",
+    "title": "Revoke permission to (un)assign a badge",
+    "name": "revokePermissionAssignBadge",
+    "description": "<p>Revoke a user permission to (un)assign a badge. (Only &quot;original issuer&quot; has the permission.)</p>",
+    "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User has successfully received no permission to assign the badge.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;User has already no permission to assigned the badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission to revoke permissions regarding the badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
     "groupTitle": "Badge"
   },
   {
@@ -2461,6 +2741,13 @@
     "error": {
       "fields": {
         "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;All badges must be assignable by the course-creator.&quot;}</code></p>"
+          },
           {
             "group": "On error",
             "type": "Object",
@@ -3154,7 +3441,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;All badges must be assignable by the course-creator.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -3162,6 +3449,13 @@
             "optional": false,
             "field": "403",
             "description": "<p><code>{&quot;message&quot;: &quot;No permission putting the course.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
           },
           {
             "group": "On error",

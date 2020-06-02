@@ -436,7 +436,7 @@ const unassigneIndependentBadge = async function(req, res){
     if(badge){
       if(badge.independent){
         // only the badge issuer has the permission to assigne the Badge
-        if(badge.issuer == req.user.id){
+        if(badge.issuer.indexOf(req.user.id) > -1){
           var user = await User.findById(userId);
           if(user){
             if(!badge.global){
@@ -532,7 +532,7 @@ const assigneIndependentBadge = async function(req, res){
     if(badge){
       if(badge.independent){
         // only the badge issuer has the permission to assigne the Badge
-        if(badge.issuer == req.user.id){
+        if(badge.issuer.indexOf(req.user.id) > -1){
           var user = await User.findById(userId);
           if(user){
             if(!badge.global){
