@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 
 const Course = require('../../../../models/course');
+const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
 const {courseValidation} = require('../../../../helper/validation/course');
 
@@ -42,6 +43,7 @@ const {courseValidation} = require('../../../../helper/validation/course');
  * @apiSuccess (Created 201) {String} message `Course is successfully created.`
  * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
+ * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the course-creator."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const postCourse = async function(req, res){
@@ -52,7 +54,10 @@ const postCourse = async function(req, res){
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try{
-    console.log(req.body);
+    var badgesError = req.body.localbadge.concat(req.body.badge).filter(async (badgeId) => {var badge = await Badge.findById(badgeId); badge.issuer.indexOf(req.user.id) < 0});
+    if(badgesError.length > 0){
+      return res.status(400).send({message: "All badges must be assignable by the course-creator."});
+    }
     const body = {
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
@@ -415,8 +420,9 @@ const getMyCreatedCourses = async function(req, res){
  * @apiSuccess (Success 200) {String} message `Course is updated successfully.`
  * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
- * @apiError (On error) {Object} 400 `{"message": "Course not found."}`
+ * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the course-creator."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission putting the course."}`
+ * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
  * @apiError (On error) {Obejct} 500 Complications during storage.
  *
  */
@@ -433,9 +439,17 @@ const putCourse = async function(req, res){
         result.postalcode = req.body.postalcode || result.postalcode;
         result.address = req.body.address || result.address;
         if(req.body.badge){
+          var badgesError = req.body.badge.filter(async (badgeId) => {var badge = await Badge.findById(badgeId); badge.issuer.indexOf(req.user.id) < 0});
+          if(badgesError.length > 0){
+            return res.status(400).send({message: "All badges must be assignable by the course-creator."});
+          }
           result.badge = req.body.badge;
         }
         if(req.body.localbadge){
+          var localbadgesError = req.body.localbadge.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
+          if(localbadgesError.length > 0){
+            return res.status(400).send({message: "All badges must be assignable by the course-creator."});
+          }
           result.localbadge = req.body.localbadge;
         }
         if(req.body.coordinates){
