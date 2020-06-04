@@ -12,3 +12,17 @@ services:
       - "27017:27017"
     volumes:
       - ./data:/data/db
+
+  mongo-seed:
+      image: stefanwalther/mongo-seed
+      container_name: mongo-seed
+      environment:
+        - MONGODB_HOST=mongo
+        - MONGODB_PORT=27017
+      volumes:
+        - ./demo:/data
+      depends_on:
+        - mongo
+      command: [
+        "mongoimport --host=mongo \ --db=openBadges --collection=users --file=/data/users.json && mongoimport --host=mongo \ --db=openBadges --collection=courses --file=/data/courses.json && mongoimport --host=mongo \ --db=openBadges --collection=badges --file=/data/badges.json"
+      ]
