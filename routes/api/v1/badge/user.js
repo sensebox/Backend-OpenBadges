@@ -11,7 +11,7 @@ const Course = require('../../../../models/course');
 
 /**
  * @api {put} /api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId Unassigne a course-related Badge
- * @apiName unassigneLocalBadge
+ * @apiName unassigneCourseBadge
  * @apiDescription Unassigne a course-related Badge to a specified user of given course.
  * @apiGroup Badge
  *
@@ -30,7 +30,7 @@ const Course = require('../../../../models/course');
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
-const unassigneBadge = async function(req, res){
+const unassigneCourseBadge = async function(req, res){
   var badgeId = req.params.badgeId;
   var userId = req.params.userId;
   var courseId = req.params.courseId;
@@ -117,7 +117,7 @@ const unassigneBadge = async function(req, res){
 
 /**
  * @api {put} /api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId Assigne a course-related Badge
- * @apiName assigneLocalBadge
+ * @apiName assigneCourseBadge
  * @apiDescription Assigne a course-related Badge to a specified user of given course.
  * @apiGroup Badge
  *
@@ -136,7 +136,7 @@ const unassigneBadge = async function(req, res){
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
-const assigneBadge = async function(req, res){
+const assigneCourseBadge = async function(req, res){
   var badgeId = req.params.badgeId;
   var userId = req.params.userId;
   var courseId = req.params.courseId;
@@ -222,8 +222,8 @@ const assigneBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/badge/course/:courseId/assigne Assigne multiple Badges
- * @apiName assigneMultipleLocalBadges
+ * @api {put} /api/v1/badge/course/:courseId/assigne Assigne multiple course-related Badges
+ * @apiName assigneMultipleCourseBadges
  * @apiDescription Assigne mutliple badges of a course to users of the given course.
  * @apiGroup Badge
  *
@@ -520,10 +520,190 @@ const requestPermissionAssignBadge = async function(req, res){
   }
 };
 
+
+/**
+ * @api {put} /api/v1/admin/badge/:badgeId/unassigne/user/:userId Unassigne a Badge
+ * @apiName unassigneBadge
+ * @apiDescription Unassigne a Badge to an user.
+ * @apiGroup Badge
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or </br> `Global Badge is unassigned successfully to user.`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or </br> `{"message": "Global Badge is already unassigned to user."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission unassigning the Badge to an user."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
+ */
+const unassigneBadge = async function(req, res){
+  var badgeId = req.params.badgeId;
+  var userId = req.params.userId;
+
+  try{
+    var badge = await Badge.findById(badgeId);
+    if(badge){
+      // only the badge issuer has the permission to assigne the Badge
+      if(badge.issuer.indexOf(req.user.id) > -1){
+        var user = await User.findById(userId);
+        if(user){
+          if(!badge.global){
+            // badge is a local badge
+            if(user.localbadge.indexOf(badgeId) > -1){
+              // badge is not unassigned to user
+              user.localbadge.splice(user.localbadge.indexOf(badgeId), 1);
+              const updatedUser = await user.save();
+              return res.status(200).send({
+                message: 'Local Badge is unassigned successfully to user.',
+              });
+            }
+            else{
+              return res.status(400).send({
+                message: 'Local Badge is already unassigned to user.',
+              });
+            }
+          }
+          else {
+            // badge is a global badge
+            if(user.badge.indexOf(badgeId) > -1){
+              // badge is not unassigned to user
+              user.badge.splice(user.badge.indexOf(badgeId), 1);
+              const updatedUser = await user.save();
+              return res.status(200).send({
+                message: 'Global Badge is unassigned successfully to user.',
+              });
+            }
+            else{
+              return res.status(400).send({
+                message: 'Global Badge is already unassigned to user.',
+              });
+            }
+          }
+        }
+        else {
+          return res.status(404).send({
+            message: 'User not found.',
+          });
+        }
+      }
+      else {
+        return res.status(403).send({
+          message: 'No permission unassigning the Badge to an user.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Badge not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
+
+/**
+ * @api {put} /api/v1/badge/:badgeId/assigne/user/:userId Assigne a Badge
+ * @apiName assigneBadge
+ * @apiDescription Assigne a Badge to an user.
+ * @apiGroup Badge
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or </br> `GLobal Badge is assigned successfully to user.`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or </br> `{"message": "Global Badge is already assigned to user."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission assigning the Badge to an user."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
+ */
+const assigneBadge = async function(req, res){
+  var badgeId = req.params.badgeId;
+  var userId = req.params.userId;
+
+  try{
+    var badge = await Badge.findById(badgeId);
+    if(badge){
+      // only the badge issuer has the permission to assigne the Badge
+      if(badge.issuer.indexOf(req.user.id) > -1){
+        var user = await User.findById(userId);
+        if(user){
+          if(!badge.global){
+            // badge is a local badge
+            if(user.localbadge.indexOf(badgeId) < 0){
+              // badge is not assigned to user
+              user.localbadge.push(badgeId);
+              const updatedUser = await user.save();
+              return res.status(200).send({
+                message: 'Local Badge is assigned successfully to user.',
+              });
+            }
+            else {
+              return res.status(400).send({
+                message: 'Local Badge is already assigned to user.',
+              });
+            }
+          }
+          else {
+            // badge is a global badge
+            if(user.badge.indexOf(badgeId) < 0){
+              // badge is not assigned to user
+              user.badge.push(badgeId);
+              const updatedUser = await user.save();
+              return res.status(200).send({
+                message: 'Global Badge is assigned successfully to user.',
+              });
+            }
+            else {
+              return res.status(400).send({
+                message: 'Global Badge is already assigned to user.',
+              });
+            }
+          }
+        }
+        else {
+          return res.status(404).send({
+            message: 'User not found.',
+          });
+        }
+      }
+      else {
+        return res.status(403).send({
+          message: 'No permission unassigning the Badge to an user.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Badge not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
 module.exports = {
+  assigneCourseBadge,
+  unassigneCourseBadge,
+  assigneMultipleBadges,
   assigneBadge,
   unassigneBadge,
-  assigneMultipleBadges,
   grantPermissionAssignBadge,
   revokePermissionAssignBadge,
   requestPermissionAssignBadge

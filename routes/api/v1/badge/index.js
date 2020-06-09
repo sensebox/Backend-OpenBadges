@@ -33,9 +33,15 @@ BadgeRouter.route('/:badgeId/deactivation')
     .put(userAuthorization, require('./badge').putBadgeLocalHidden);
 
 BadgeRouter.route('/:badgeId/course/:courseId/assigne/user/:userId')
-    .put(userAuthorization, require('./user').assigneBadge);
+    .put(userAuthorization, require('./user').assigneCourseBadge);
 
 BadgeRouter.route('/:badgeId/course/:courseId/unassigne/user/:userId')
+    .put(userAuthorization, require('./user').unassigneCourseBadge);
+
+BadgeRouter.route('/:badgeId/assigne/user/:userId')
+    .put(userAuthorization, require('./user').assigneBadge);
+
+BadgeRouter.route('/:badgeId/unassigne/user/:userId')
     .put(userAuthorization, require('./user').unassigneBadge);
 
 BadgeRouter.route('/course/:courseId/assigne')

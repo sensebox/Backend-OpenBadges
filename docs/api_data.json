@@ -1,108 +1,10 @@
 [
   {
     "type": "put",
-    "url": "/api/v1/admin/badge/:badgeId/assigne/user/:userId",
-    "title": "Assigne a Badge",
-    "name": "adminAssigneBadge",
-    "description": "<p>Assigne a Badge to an user.</p>",
-    "group": "Admin",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
-          "type": "String"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "badgeId",
-            "description": "<p>the ID of the Badge you are referring to</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>the ID of the user you are referring to</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>Local Badge is assigned successfully to user.</code> or </br> <code>GLobal Badge is assigned successfully to user.</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission assigning the Badge to an user.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during querying the database.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/admin/badge.js",
-    "groupTitle": "Admin"
-  },
-  {
-    "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId",
     "title": "Assigne a course-related Badge",
     "name": "adminAssigneCourseBadge",
-    "description": "<p>Assigne a course-related Badge to an user.</p>",
+    "description": "<p>Assigne a course-related Badge to a specified user of given course.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -172,7 +74,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -528,108 +430,10 @@
   },
   {
     "type": "put",
-    "url": "/api/v1/admin/badge/:badgeId/unassigne/user/:userId",
-    "title": "Unassigne a Badge",
-    "name": "adminUnassigneBadge",
-    "description": "<p>Unassigne a Badge to an user.</p>",
-    "group": "Admin",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
-          "type": "String"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "badgeId",
-            "description": "<p>the ID of the Badge you are referring to</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>the ID of the user you are referring to</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or </br> <code>Global Badge is unassigned successfully to user.</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission unassigning the Badge to an user.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during querying the database.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/admin/badge.js",
-    "groupTitle": "Admin"
-  },
-  {
-    "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId",
     "title": "Unassigne a course-related Badge",
     "name": "adminUnassigneCourseBadge",
-    "description": "<p>Unassigne a course-related Badge to an user.</p>",
+    "description": "<p>Unassigne a course-related Badge to a specified user of given course.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -699,7 +503,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1222,10 +1026,108 @@
   },
   {
     "type": "put",
+    "url": "/api/v1/badge/:badgeId/assigne/user/:userId",
+    "title": "Assigne a Badge",
+    "name": "assigneBadge",
+    "description": "<p>Assigne a Badge to an user.</p>",
+    "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is assigned successfully to user.</code> or </br> <code>GLobal Badge is assigned successfully to user.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission assigning the Badge to an user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
     "url": "/api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId",
     "title": "Assigne a course-related Badge",
-    "name": "assigneLocalBadge",
-    "description": "<p>Assigne a course-related Badge to a specified user.</p>",
+    "name": "assigneCourseBadge",
+    "description": "<p>Assigne a course-related Badge to a specified user of given course.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1295,7 +1197,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1328,9 +1230,9 @@
   {
     "type": "put",
     "url": "/api/v1/badge/course/:courseId/assigne",
-    "title": "Assigne multiple Badges",
-    "name": "assigneMultipleLocalBadges",
-    "description": "<p>Assigne mutliple badges of a course to users from the course.</p>",
+    "title": "Assigne multiple course-related Badges",
+    "name": "assigneMultipleCourseBadges",
+    "description": "<p>Assigne mutliple badges of a course to users of the given course.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1387,7 +1289,7 @@
             "type": "Object",
             "optional": false,
             "field": "info",
-            "description": "<p><code>{&quot;alreadyAssigned&quot;: &lt;Number&gt;, &quot;userNotFound&quot;: &lt;Number&gt;, &quot;badgeNotFound&quot;: &lt;Number&gt;}</code></p>"
+            "description": "<p><code>{&quot;alreadyAssigned&quot;: &lt;Number&gt;, &quot;userNotFound&quot;: &lt;Number&gt;, &quot;badgeNotFound&quot;: &lt;Number&gt;, &quot;userNotRelatedToCourse&quot;: &lt;Number&gt;}</code></p>"
           }
         ]
       }
@@ -2253,10 +2155,108 @@
   },
   {
     "type": "put",
+    "url": "/api/v1/admin/badge/:badgeId/unassigne/user/:userId",
+    "title": "Unassigne a Badge",
+    "name": "unassigneBadge",
+    "description": "<p>Unassigne a Badge to an user.</p>",
+    "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or </br> <code>Global Badge is unassigned successfully to user.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission unassigning the Badge to an user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
     "url": "/api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId",
     "title": "Unassigne a course-related Badge",
-    "name": "unassigneLocalBadge",
-    "description": "<p>Unassigne a course-related Badge to a specified user.</p>",
+    "name": "unassigneCourseBadge",
+    "description": "<p>Unassigne a course-related Badge to a specified user of given course.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -2326,7 +2326,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",

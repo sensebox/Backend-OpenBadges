@@ -26,9 +26,11 @@
     "requestPermissionAssignBadge",
     "grantPermissionAssignBadge",
     "revokePermissionAssignBadge",
-    "assigneLocalBadge",
-    "unassigneLocalBadge",
-    "assigneMultipleLocalBadges",
+    "assigneCourseBadge",
+    "unassigneCourseBadge",
+    "assigneMultipleCourseBadges",
+    "assigneBadge",
+    "unassigneBadge",
 
     "Course",
     "createCourse",
@@ -52,8 +54,6 @@
     "adminFindBadge",
     "adminAssigneCourseBadge",
     "adminUnassigneCourseBadge",
-    "adminAssigneBadge",
-    "adminUnassigneBadge",
     "adminGetParticipants"
   ],
   "template": {

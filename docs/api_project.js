@@ -27,9 +27,11 @@ define({
     "requestPermissionAssignBadge",
     "grantPermissionAssignBadge",
     "revokePermissionAssignBadge",
-    "assigneLocalBadge",
-    "unassigneLocalBadge",
-    "assigneMultipleLocalBadges",
+    "assigneCourseBadge",
+    "unassigneCourseBadge",
+    "assigneMultipleCourseBadges",
+    "assigneBadge",
+    "unassigneBadge",
     "Course",
     "createCourse",
     "putCourse",
@@ -51,8 +53,6 @@ define({
     "adminFindBadge",
     "adminAssigneCourseBadge",
     "adminUnassigneCourseBadge",
-    "adminAssigneBadge",
-    "adminUnassigneBadge",
     "adminGetParticipants"
   ],
   "template": {
@@ -68,7 +68,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-06-09T14:13:15.877Z",
+    "time": "2020-06-09T15:16:11.778Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }
