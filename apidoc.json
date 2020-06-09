@@ -15,6 +15,7 @@
     "signOut",
     "deleteMe",
     "contact",
+    "getSomeUsers",
 
     "Badge",
     "createLocalBadge",

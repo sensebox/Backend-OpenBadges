@@ -17,6 +17,7 @@ define({
     "signOut",
     "deleteMe",
     "contact",
+    "getSomeUsers",
     "Badge",
     "createLocalBadge",
     "putLocalBadge",
@@ -68,7 +69,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-06-09T15:16:11.778Z",
+    "time": "2020-06-09T16:12:14.487Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }

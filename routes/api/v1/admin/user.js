@@ -44,7 +44,7 @@ const getOneUser = async function(req, res){
 
 
 /**
- * @api {post} /api/v1/admin/user Get all users
+ * @api {get} /api/v1/admin/user Get all users
  * @apiName getAllUser
  * @apiDescription Get details about all registered users.
  * @apiGroup Admin

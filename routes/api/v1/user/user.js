@@ -180,10 +180,47 @@ const deleteMe = async function(req, res){
 };
 
 
+/**
+ * @api {get} /api/v1/user Get user names
+ * @apiName getSomeUsers
+ * @apiDescription Get names about part of registered users.
+ * @apiGroup User
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {String} lastname
+ * @apiParam {Number} [limit] limits the result, maximum are 10 returned items
+ *
+ * @apiSuccess (Success 200) {String} message `Users found successfully.`
+ * @apiSuccess (Success 200) {Object} users `[{"firstname":"full firstname", "lastname":"full lastname", "_id": <ObjectId>}]`
+ *
+ * @apiError (On error) {Object} 500 Complications during querying the database.
+ */
+const getSomeUsers = async function (req, res){
+  try{
+    console.log(req.query);
+    var limit = 10;
+    if(req.query.limit && Number(req.query.limit) < 10) limit = Number(req.query.limit);
+    const user = await User.find({lastname: {$regex: req.query.lastname, $options: 'i'}}, {__v:0, username:0, image:0, role:0, emailIsConfirmed:0, date:0, badge:0, localbadge:0, email:0, birthday:0, postalcode:0, city:0, password:0, emailConfirmationToken:0, resetPasswordToken:0, resetPasswordExpiresIn:0, refreshToken:0, refreshTokenExpiresIn:0})
+                           .limit(limit);
+    return res.status(200).send({
+      message: 'Users found successfully.',
+      users: user
+    });
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
 
 
 module.exports = {
   getMe,
   putMe,
-  deleteMe
+  deleteMe,
+  getSomeUsers
 };

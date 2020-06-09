@@ -45,6 +45,9 @@ UserRouter.route('/me')
 UserRouter.route('/me')
     .delete(userAuthorization, user.deleteMe);
 
+UserRouter.route('/')
+    .get(userAuthorization, user.getSomeUsers);
+
 UserRouter.route('/email/:emailToken')
     .post(login.confirmEmail);
 
