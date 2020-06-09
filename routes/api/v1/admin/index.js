@@ -43,16 +43,16 @@ AdminRouter.route('/badge')
     .put(adminAuthorization, upload.single('image'), badge.putBadge);
 
 AdminRouter.route('/badge/:badgeId/course/:courseId/assigne/user/:userId')
-    .put(adminAuthorization, badge.assigneBadge);
+    .put(adminAuthorization, badge.assigneCourseBadge);
 
 AdminRouter.route('/badge/:badgeId/course/:courseId/unassigne/user/:userId')
-    .put(adminAuthorization, badge.unassigneBadge);
+    .put(adminAuthorization, badge.unassigneCourseBadge);
 
 AdminRouter.route('/badge/:badgeId/assigne/user/:userId')
-    .put(adminAuthorization, badge.assigneIndependentBadge);
+    .put(adminAuthorization, badge.assigneBadge);
 
 AdminRouter.route('/badge/:badgeId/unassigne/user/:userId')
-    .put(adminAuthorization, badge.unassigneIndependentBadge);
+    .put(adminAuthorization, badge.unassigneBadge);
 
 AdminRouter.route('/course/:courseId/participants')
     .get(adminAuthorization, course.getParticipants);

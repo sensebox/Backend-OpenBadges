@@ -10,9 +10,9 @@ const Course = require('../../../../models/course');
 
 
 /**
- * @api {put} /api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId Unassigne a Badge
+ * @api {put} /api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId Unassigne a course-related Badge
  * @apiName unassigneLocalBadge
- * @apiDescription Unassigne a Badge to a specified user.
+ * @apiDescription Unassigne a course-related Badge to a specified user.
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -109,9 +109,9 @@ const unassigneBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId Assigne a Badge
+ * @api {put} /api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId Assigne a course-related Badge
  * @apiName assigneLocalBadge
- * @apiDescription Assigne a Badge to a specified user.
+ * @apiDescription Assigne a course-related Badge to a specified user.
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.

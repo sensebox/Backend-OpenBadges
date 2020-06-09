@@ -46,13 +46,13 @@ define({
     "signInAdmin",
     "getAllUser",
     "getOneUser",
-    "createIndependentGlobalBadge",
+    "createGlobalBadge",
     "adminPutBadge",
     "adminFindBadge",
-    "adminAssigneLocalBadge",
-    "adminUnassigneLocalBadge",
-    "adminAssigneIndependentBadge",
-    "adminUnassigneIndependentBadge",
+    "adminAssigneCourseBadge",
+    "adminUnassigneCourseBadge",
+    "adminAssigneBadge",
+    "adminUnassigneBadge",
     "adminGetParticipants"
   ],
   "template": {
@@ -68,7 +68,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-06-02T20:16:14.227Z",
+    "time": "2020-06-09T14:13:15.877Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }

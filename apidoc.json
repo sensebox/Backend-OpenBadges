@@ -47,13 +47,13 @@
     "signInAdmin",
     "getAllUser",
     "getOneUser",
-    "createIndependentGlobalBadge",
+    "createGlobalBadge",
     "adminPutBadge",
     "adminFindBadge",
-    "adminAssigneLocalBadge",
-    "adminUnassigneLocalBadge",
-    "adminAssigneIndependentBadge",
-    "adminUnassigneIndependentBadge",
+    "adminAssigneCourseBadge",
+    "adminUnassigneCourseBadge",
+    "adminAssigneBadge",
+    "adminUnassigneBadge",
     "adminGetParticipants"
   ],
   "template": {

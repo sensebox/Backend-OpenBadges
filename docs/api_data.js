@@ -2,9 +2,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/assigne/user/:userId",
-    "title": "Assigne an independent Badge",
-    "name": "adminAssigneIndependentBadge",
-    "description": "<p>Assigne an independent Badge to an user.</p>",
+    "title": "Assigne a Badge",
+    "name": "adminAssigneBadge",
+    "description": "<p>Assigne a Badge to an user.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -81,7 +81,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge is not independent.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -100,9 +100,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId",
-    "title": "Assigne a Badge",
-    "name": "adminAssigneLocalBadge",
-    "description": "<p>Assigne a Badge to an user.</p>",
+    "title": "Assigne a course-related Badge",
+    "name": "adminAssigneCourseBadge",
+    "description": "<p>Assigne a course-related Badge to an user.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -266,13 +266,6 @@ define({ "api": [
             "optional": true,
             "field": "global",
             "description": "<p>if true, get global Badges; if false, get local Badges</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "independent",
-            "description": "<p>if true, get independent Badges; if false, get course-related Badges</p>"
           }
         ]
       }
@@ -412,7 +405,7 @@ define({ "api": [
     "url": "/api/v1/admin/badge/:badgeId",
     "title": "Change Badge",
     "name": "adminPutBadge",
-    "description": "<p>Change information of a Badge (global | local | independent).</p>",
+    "description": "<p>Change information of a Badge (global | local ).</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -481,13 +474,6 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "independent",
-            "description": "<p>if false, badge is course-related</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "File",
             "optional": true,
             "field": "image",
@@ -543,9 +529,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/unassigne/user/:userId",
-    "title": "Unassigne an independent Badge",
-    "name": "adminUnassigneIndependentBadge",
-    "description": "<p>Unassigne an independent Badge to an user.</p>",
+    "title": "Unassigne a Badge",
+    "name": "adminUnassigneBadge",
+    "description": "<p>Unassigne a Badge to an user.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -622,7 +608,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge is not independent.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -641,9 +627,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId",
-    "title": "Unassigne a Badge",
-    "name": "adminUnassigneLocalBadge",
-    "description": "<p>Unassigne a Badge to an user.</p>",
+    "title": "Unassigne a course-related Badge",
+    "name": "adminUnassigneCourseBadge",
+    "description": "<p>Unassigne a course-related Badge to an user.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -740,8 +726,8 @@ define({ "api": [
     "type": "post",
     "url": "/api/v1/admin/badge",
     "title": "Create Badge",
-    "name": "createIndependentGlobalBadge",
-    "description": "<p>Create a new (independent) global | local Badge.</p>",
+    "name": "createGlobalBadge",
+    "description": "<p>Create a new global | local Badge.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -800,13 +786,6 @@ define({ "api": [
             "optional": false,
             "field": "global",
             "description": "<p>is Badge global or local</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": false,
-            "field": "independent",
-            "description": "<p>if true, create independent Badge; if false, create course-related Badge</p>"
           }
         ]
       }
@@ -826,7 +805,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;independent&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1244,9 +1223,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId",
-    "title": "Assigne a Badge",
+    "title": "Assigne a course-related Badge",
     "name": "assigneLocalBadge",
-    "description": "<p>Assigne a Badge to a specified user.</p>",
+    "description": "<p>Assigne a course-related Badge to a specified user.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1643,13 +1622,6 @@ define({ "api": [
             "optional": true,
             "field": "global",
             "description": "<p>if true, get global Badges; if false, get local Badges</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "independent",
-            "description": "<p>if true, get independent Badges; if false, get course-related Badges</p>"
           }
         ]
       }
@@ -1748,13 +1720,6 @@ define({ "api": [
             "optional": true,
             "field": "global",
             "description": "<p>if true, get global Badges; if false, get local Badges</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "independent",
-            "description": "<p>if true, get independent Badges; if false, get course-related Badges</p>"
           }
         ]
       }
@@ -2289,9 +2254,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId",
-    "title": "Unassigne a Badge",
+    "title": "Unassigne a course-related Badge",
     "name": "unassigneLocalBadge",
-    "description": "<p>Unassigne a Badge to a specified user.</p>",
+    "description": "<p>Unassigne a course-related Badge to a specified user.</p>",
     "group": "Badge",
     "header": {
       "fields": {
