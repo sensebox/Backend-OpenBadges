@@ -224,7 +224,7 @@ const putBadge = async function(req, res){
 /**
  * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId Unassigne a course-related Badge
  * @apiName adminUnassigneCourseBadge
- * @apiDescription Unassigne a course-related Badge to an user.
+ * @apiDescription Unassigne a course-related Badge to a specified user of given course.
  * @apiGroup Admin
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -237,7 +237,7 @@ const putBadge = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or </br> `Global Badge is unassigned successfully to user.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or </br> `{"message": "Global Badge is already unassigned to user."}`
+ * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or </br> `{"message": "Global Badge is already unassigned to user."}` or </br> `{"message": "User is not related to given course."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -253,37 +253,44 @@ const unassigneCourseBadge = async function(req, res){
       if(course){
         var user = await User.findById(userId);
         if(user){
-          if(course.localbadge.indexOf(badgeId) > -1){
-            // badge is a local badge
-            if(user.localbadge.indexOf(badgeId) > -1){
-              // badge is not unassigned to user
-              user.localbadge.splice(user.localbadge.indexOf(badgeId), 1);
-              const updatedUser = await user.save();
-              return res.status(200).send({
-                message: 'Local Badge is unassigned successfully to user.',
-              });
+          if(course.participants.indexOf(userId) > -1){
+            if(course.localbadge.indexOf(badgeId) > -1){
+              // badge is a local badge
+              if(user.localbadge.indexOf(badgeId) > -1){
+                // badge is not unassigned to user
+                user.localbadge.splice(user.localbadge.indexOf(badgeId), 1);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Local Badge is unassigned successfully to user.',
+                });
+              }
+              else{
+                return res.status(400).send({
+                  message: 'Local Badge is already unassigned to user.',
+                });
+              }
             }
-            else{
-              return res.status(400).send({
-                message: 'Local Badge is already unassigned to user.',
-              });
+            else {
+              // badge is a global badge
+              if(user.badge.indexOf(badgeId) > -1){
+                // badge is not unassigned to user
+                user.badge.splice(user.badge.indexOf(badgeId), 1);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Global Badge is unassigned successfully to user.',
+                });
+              }
+              else{
+                return res.status(400).send({
+                  message: 'Global Badge is already unassigned to user.',
+                });
+              }
             }
           }
           else {
-            // badge is a global badge
-            if(user.badge.indexOf(badgeId) > -1){
-              // badge is not unassigned to user
-              user.badge.splice(user.badge.indexOf(badgeId), 1);
-              const updatedUser = await user.save();
-              return res.status(200).send({
-                message: 'Global Badge is unassigned successfully to user.',
-              });
-            }
-            else{
-              return res.status(400).send({
-                message: 'Global Badge is already unassigned to user.',
-              });
-            }
+            return res.status(400).send({
+              message: 'User is not related to given course.',
+            });
           }
         }
         else {
@@ -314,7 +321,7 @@ const unassigneCourseBadge = async function(req, res){
 /**
  * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId Assigne a course-related Badge
  * @apiName adminAssigneCourseBadge
- * @apiDescription Assigne a course-related Badge to an user.
+ * @apiDescription Assigne a course-related Badge to a specified user of given course.
  * @apiGroup Admin
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -327,7 +334,7 @@ const unassigneCourseBadge = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or </br> `GLobal Badge is assigned successfully to user.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or </br> `{"message": "Global Badge is already assigned to user."}`
+ * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or </br> `{"message": "Global Badge is already assigned to user."}` or </br> `{"message": "User is not related to given course."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -343,38 +350,45 @@ const assigneCourseBadge = async function(req, res){
       if(course){
         var user = await User.findById(userId);
         if(user){
-          if(course.localbadge.indexOf(badgeId) > -1){
-            // badge is a local badge
-            if(user.localbadge.indexOf(badgeId) < 0){
-              // badge is not assigned to user
-              user.localbadge.push(badgeId);
-              const updatedUser = await user.save();
-              return res.status(200).send({
-                message: 'Local Badge is assigned successfully to user.',
-              });
+          if(course.participants.indexOf(userId) > -1){
+            if(course.localbadge.indexOf(badgeId) > -1){
+              // badge is a local badge
+              if(user.localbadge.indexOf(badgeId) < 0){
+                // badge is not assigned to user
+                user.localbadge.push(badgeId);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Local Badge is assigned successfully to user.',
+                });
+              }
+              else {
+                return res.status(400).send({
+                  message: 'Local Badge is already assigned to user.',
+                });
+              }
             }
             else {
-              return res.status(400).send({
-                message: 'Local Badge is already assigned to user.',
-              });
+              // badge is a global badge
+              if(user.badge.indexOf(badgeId) < 0){
+                // badge is not assigned to user
+                user.badge.push(badgeId);
+                const updatedUser = await user.save();
+                return res.status(200).send({
+                  message: 'Global Badge is assigned successfully to user.',
+                });
+              }
+              else {
+                return res.status(400).send({
+                  message: 'Global Badge is already assigned to user.',
+                });
+              }
             }
           }
           else {
-            // badge is a global badge
-            if(user.badge.indexOf(badgeId) < 0){
-              // badge is not assigned to user
-              user.badge.push(badgeId);
-              const updatedUser = await user.save();
-              return res.status(200).send({
-                message: 'Global Badge is assigned successfully to user.',
-              });
-            }
-            else {
-              return res.status(400).send({
-                message: 'Global Badge is already assigned to user.',
-              });
-            }
-          }
+            return res.status(400).send({
+              message: 'User is not related to given course.',
+            });
+          }          
         }
         else {
           return res.status(404).send({
