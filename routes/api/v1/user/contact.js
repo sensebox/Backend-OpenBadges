@@ -33,8 +33,8 @@ const contact = function(req, res){
 
     let transporter = nodemailer.createTransport({
       host: host,
-      port: 587,
-      secure: false, // if false TLS
+      port: 465,
+      secure: true, // if false TLS
       auth: {
           user: email, // email of the sender
           pass: password // Passwort of the sender
