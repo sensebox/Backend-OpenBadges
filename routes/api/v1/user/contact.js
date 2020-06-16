@@ -28,10 +28,11 @@ const contact = function(req, res){
 
     // send an email to confirm the email
     const email = process.env.EMAIL;
-    const password = process.env.PASSWORD_Email;
+    const password = process.env.EMAIL_PASSWORD;
+    const host = process.env.EMAIL_HOST;
 
     let transporter = nodemailer.createTransport({
-      host: 'mail.gmx.net',
+      host: host,
       port: 587,
       secure: false, // if false TLS
       auth: {

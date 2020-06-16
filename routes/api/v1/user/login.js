@@ -81,10 +81,11 @@ const postRegister = async function(req, res){
 
     // send an email to confirm the email
     const email = process.env.EMAIL;
-    const password = process.env.PASSWORD_Email;
+    const password = process.env.EMAIL_PASSWORD;
+    const host = process.env.EMAIL_HOST;
 
     let transporter = nodemailer.createTransport({
-      host: 'mail.gmx.net',
+      host: host,
       port: 587,
       secure: false, // if false TLS
       auth: {
@@ -103,10 +104,10 @@ const postRegister = async function(req, res){
       : `http://${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.EMAIL_TOKEN_URL}?token=${savedUser.emailConfirmationToken}`      
 
     var mailOptions = {
-        from: '"OpenBadges"'+email, // sender address
+        from: '"MyBadges"'+email, // sender address
         to: savedUser.email, // list of receiver
         subject: 'Email verifizieren', // Subject line
-        html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="' + link + '">Link</a> ermöglicht das Verifizieren Ihrer Email-Adresse.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+        html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="' + link + '">Link</a> ermöglicht das Verifizieren Ihrer Email-Adresse.<p>Liebe Grüße<br>Ihr MyBadges-Team</p>' // html body
     };
 
     // send mail with defined transport object
@@ -235,10 +236,11 @@ const requestResetPassword = async function (req, res){
 
     if(user){
       const email = process.env.EMAIL;
-      const password = process.env.PASSWORD_Email;
+      const password = process.env.EMAIL_PASSWORD;
+      const host = process.env.EMAIL_HOST;
 
       let transporter = nodemailer.createTransport({
-        host: 'mail.gmx.net',
+        host: host,
         port: 587,
         secure: false, // if false TLS
         auth: {
@@ -257,10 +259,10 @@ const requestResetPassword = async function (req, res){
         : `http://${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.PASSWORD_TOKEN_URL}?token=${token}`      
 
       var mailOptions = {
-          from: '"OpenBadges"'+email, // sender address
+          from: '"MyBadges"'+email, // sender address
           to: user.email, // list of receiver
           subject: 'Passwort zurücksetzen', // Subject line
-          html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="' + link + '">Link</a> ermöglicht das Zurücksetzen des Passwortes.<br>Bitte beachten Sie, dass die Gültigkeit des Links auf 12 Stunden begrenzt ist.<p>Liebe Grüße<br>Ihr OpenBadges-Team</p>' // html body
+          html: '<b>Hallo '+user.firstname+' '+user.lastname+'</b><br><p>Dieser <a href="' + link + '">Link</a> ermöglicht das Zurücksetzen des Passwortes.<br>Bitte beachten Sie, dass die Gültigkeit des Links auf 12 Stunden begrenzt ist.<p>Liebe Grüße<br>Ihr MyBadges-Team</p>' // html body
       };
 
       // send mail with defined transport object
