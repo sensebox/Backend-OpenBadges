@@ -37,9 +37,6 @@ AdminRouter.route('/badge')
     .get(adminAuthorization, badge.getBadges);
 
 AdminRouter.route('/badge')
-    .post(adminAuthorization, upload.single('image'), badge.postGlobalBadge);
-
-AdminRouter.route('/badge')
     .put(adminAuthorization, upload.single('image'), badge.putBadge);
 
 AdminRouter.route('/badge/:badgeId/course/:courseId/assigne/user/:userId')

@@ -42,9 +42,10 @@ const BadgeSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   }],
-  global: {
-    type: Boolean,
-    default: false
+  category: {
+    type: String,
+    required: true,
+    enum: ['achievement', 'professional skill', 'meta skill']
   },
   exists: {
     type: Boolean,

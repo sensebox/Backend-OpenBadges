@@ -203,7 +203,7 @@ const getSomeUsers = async function (req, res){
     console.log(req.query);
     var limit = 10;
     if(req.query.limit && Number(req.query.limit) < 10) limit = Number(req.query.limit);
-    const user = await User.find({lastname: {$regex: req.query.lastname, $options: 'i'}}, {__v:0, username:0, image:0, role:0, emailIsConfirmed:0, date:0, badge:0, localbadge:0, email:0, birthday:0, postalcode:0, city:0, password:0, emailConfirmationToken:0, resetPasswordToken:0, resetPasswordExpiresIn:0, refreshToken:0, refreshTokenExpiresIn:0})
+    const user = await User.find({lastname: {$regex: req.query.lastname, $options: 'i'}}, {__v:0, username:0, image:0, role:0, emailIsConfirmed:0, date:0, badge:0, email:0, birthday:0, postalcode:0, city:0, password:0, emailConfirmationToken:0, resetPasswordToken:0, resetPasswordExpiresIn:0, refreshToken:0, refreshTokenExpiresIn:0})
                            .limit(limit);
     return res.status(200).send({
       message: 'Users found successfully.',

@@ -19,9 +19,9 @@ define({
     "contact",
     "getSomeUsers",
     "Badge",
-    "createLocalBadge",
-    "putLocalBadge",
-    "putLocalBadgeHidden",
+    "createBadge",
+    "putBadge",
+    "putBadgeHidden",
     "getBadges",
     "getBadgesMe",
     "getBadge",
@@ -49,7 +49,6 @@ define({
     "signInAdmin",
     "getAllUser",
     "getOneUser",
-    "createGlobalBadge",
     "adminPutBadge",
     "adminFindBadge",
     "adminAssigneCourseBadge",
@@ -69,7 +68,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-06-09T16:12:14.487Z",
+    "time": "2020-06-23T14:57:36.984Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }

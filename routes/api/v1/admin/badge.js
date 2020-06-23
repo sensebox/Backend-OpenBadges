@@ -26,7 +26,7 @@ const Course = require('../../../../models/course');
  * @apiParam {ObejctId} [issuer] the ID of the issuer you are referring to
  * @apiParam {ObejctId} [badgeId] the ID of the Badge you are referring to
  * @apiParam {ObejctId} [userId] the ID of the user you are referring to
- * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
+ * @apiParam {String} [category] 'achievement', 'professional skill' or 'meta skill'
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
  * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
@@ -39,7 +39,7 @@ const getBadges = async function(req, res){
   var qdescription = req.query.description;
   var qissuer = req.query.issuer;
   var qid = req.query.badgeId;
-  var qglobal = req.query.global;
+  var qcategory = req.query.category;
   var quserId = req.query.userId;
 
   try{
@@ -56,13 +56,13 @@ const getBadges = async function(req, res){
     if(qid){
       query.id=qid;
     }
-    if(qglobal){
-      query.global = qglobal;
+    if(qcategory){
+      query.category = qcategory;
     }
     if(quserId){
-      var user = await User.findById(quserId, {badge: 1, localbadge: 1, _id:0});
+      var user = await User.findById(quserId, {badge: 1, _id:0});
       if(user){
-        query.$or = [{_id: {$in: user.badge}}, {_id: {$in: user.localbadge}}];
+        query._id = {$in: user.badge};
       }
       else {
         return res.status(404).send({
@@ -85,67 +85,10 @@ const getBadges = async function(req, res){
 };
 
 
-
-/**
- * @api {post} /api/v1/admin/badge Create Badge
- * @apiName createGlobalBadge
- * @apiDescription Create a new global | local Badge.
- * @apiGroup Admin
- *
- * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
- * @apiHeaderExample {String} Authorization Header Example
- *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
- *
- * @apiParam {String} name title of Badge
- * @apiParam {String} description a brief summary of the Badge
- * @apiParam {String} critera criterias getting this Badge
- * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
- * @apiParam {Boolean} global is Badge global or local
- *
- * @apiSuccess (Created 201) {String} message `Badge is succesfully created.`
- * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
- *
- * @apiError (On error) {Object} 500 Complications during storage.
- */
-const postGlobalBadge = async function(req, res){
-  try{
-    if(req.fileValidationError){
-      return res.status(422).send({message: req.fileValidationError});
-    }
-    var body = {
-      _id: new mongoose.Types.ObjectId(),
-      name: req.body.name,
-      description: req.body.description,
-      criteria: req.body.criteria,
-      issuer: [req.user.id],
-      global: req.body.global,
-    };
-    if(req.file){
-      const image = {
-        path: req.file.filename,
-        size: req.file.size,
-        contentType: req.file.mimetype,
-        originalName: req.file.originalname,
-      };
-      body.image = image;
-    }
-    const badge = new Badge(body);
-    const savedBadge = await badge.save();
-    return res.status(201).send({
-      message: 'Badge is succesfully created.',
-      badge: savedBadge
-    });
-  }
-  catch(err){
-    return res.status(500).send(err);
-  }
-};
-
-
 /**
  * @api {put} /api/v1/admin/badge/:badgeId Change Badge
  * @apiName adminPutBadge
- * @apiDescription Change information of a Badge (global | local ).
+ * @apiDescription Change information of Badge.
  * @apiGroup Admin
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -157,13 +100,13 @@ const postGlobalBadge = async function(req, res){
  * @apiParam {String} [description] a brief summary of the Badge
  * @apiParam {String} [critera] criterias getting this Badge
  * @apiParam {Boolean} [exists] if false, badge is deactivated
- * @apiParam {Boolean} [global] if false, badge is local
+ * @apiParam {String} [category] 'achievement', 'professional skill' or 'meta skill'
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Success 200) {String} message `Badge updated successfully.` or </br> `Badge not changed.`
- * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "request":[], "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
- * @apiError (On error) {Object} 404 `{"message": "Local Badge not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const putBadge = async function(req, res){
@@ -178,7 +121,7 @@ const putBadge = async function(req, res){
       if(req.body.description) updatedBadge.description = req.body.description;
       if(req.body.criteria) updatedBadge.criteria = req.body.criteria;
       if(req.body.exists) updatedBadge.exists = req.body.exists;
-      if(req.body.global) updatedBadge.global = req.body.global;
+      if(req.body.category) updatedBadge.category = req.body.category;
       if(req.file){
         const image = {
           path: req.file.filename,
@@ -235,9 +178,9 @@ const putBadge = async function(req, res){
  * @apiParam {ObjectId} courseId the ID of the course you are referring to
  * @apiParam {ObjectId} userId the ID of the user you are referring to
  *
- * @apiSuccess (Success 200) {String} message `Local Badge is unassigned successfully to user.` or </br> `Global Badge is unassigned successfully to user.`
+ * @apiSuccess (Success 200) {String} message `Badge is unassigned successfully to user.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Local Badge is already unassigned to user."}` or </br> `{"message": "Global Badge is already unassigned to user."}` or </br> `{"message": "User is not related to given course."}`
+ * @apiError (On error) {Object} 400 `{"message": "Badge is already unassigned to user."}` or </br> `{"message": "User is not related to given course."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -254,37 +197,18 @@ const unassigneCourseBadge = async function(req, res){
         var user = await User.findById(userId);
         if(user){
           if(course.participants.indexOf(userId) > -1){
-            if(course.localbadge.indexOf(badgeId) > -1){
-              // badge is a local badge
-              if(user.localbadge.indexOf(badgeId) > -1){
-                // badge is not unassigned to user
-                user.localbadge.splice(user.localbadge.indexOf(badgeId), 1);
-                const updatedUser = await user.save();
-                return res.status(200).send({
-                  message: 'Local Badge is unassigned successfully to user.',
-                });
-              }
-              else{
-                return res.status(400).send({
-                  message: 'Local Badge is already unassigned to user.',
-                });
-              }
+            if(user.badge.indexOf(badgeId) > -1){
+              // badge is not unassigned to user
+              user.badge.splice(user.badge.indexOf(badgeId), 1);
+              const updatedUser = await user.save();
+              return res.status(200).send({
+                message: 'Badge is unassigned successfully to user.',
+              });
             }
-            else {
-              // badge is a global badge
-              if(user.badge.indexOf(badgeId) > -1){
-                // badge is not unassigned to user
-                user.badge.splice(user.badge.indexOf(badgeId), 1);
-                const updatedUser = await user.save();
-                return res.status(200).send({
-                  message: 'Global Badge is unassigned successfully to user.',
-                });
-              }
-              else{
-                return res.status(400).send({
-                  message: 'Global Badge is already unassigned to user.',
-                });
-              }
+            else{
+              return res.status(400).send({
+                message: 'Badge is already unassigned to user.',
+              });
             }
           }
           else {
@@ -332,9 +256,9 @@ const unassigneCourseBadge = async function(req, res){
  * @apiParam {ObjectId} courseId the ID of the course you are referring to
  * @apiParam {ObjectId} userId the ID of the user you are referring to
  *
- * @apiSuccess (Success 200) {String} message `Local Badge is assigned successfully to user.` or </br> `GLobal Badge is assigned successfully to user.`
+ * @apiSuccess (Success 200) {String} message `Badge is assigned successfully to user.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Local Badge is already assigned to user."}` or </br> `{"message": "Global Badge is already assigned to user."}` or </br> `{"message": "User is not related to given course."}`
+ * @apiError (On error) {Object} 400 `{"message": "Badge is already assigned to user."}` or </br> `{"message": "User is not related to given course."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -351,37 +275,18 @@ const assigneCourseBadge = async function(req, res){
         var user = await User.findById(userId);
         if(user){
           if(course.participants.indexOf(userId) > -1){
-            if(course.localbadge.indexOf(badgeId) > -1){
-              // badge is a local badge
-              if(user.localbadge.indexOf(badgeId) < 0){
-                // badge is not assigned to user
-                user.localbadge.push(badgeId);
-                const updatedUser = await user.save();
-                return res.status(200).send({
-                  message: 'Local Badge is assigned successfully to user.',
-                });
-              }
-              else {
-                return res.status(400).send({
-                  message: 'Local Badge is already assigned to user.',
-                });
-              }
+            if(user.badge.indexOf(badgeId) < 0){
+              // badge is not assigned to user
+              user.badge.push(badgeId);
+              const updatedUser = await user.save();
+              return res.status(200).send({
+                message: 'Global Badge is assigned successfully to user.',
+              });
             }
             else {
-              // badge is a global badge
-              if(user.badge.indexOf(badgeId) < 0){
-                // badge is not assigned to user
-                user.badge.push(badgeId);
-                const updatedUser = await user.save();
-                return res.status(200).send({
-                  message: 'Global Badge is assigned successfully to user.',
-                });
-              }
-              else {
-                return res.status(400).send({
-                  message: 'Global Badge is already assigned to user.',
-                });
-              }
+              return res.status(400).send({
+                message: 'Global Badge is already assigned to user.',
+              });
             }
           }
           else {
@@ -416,7 +321,6 @@ const assigneCourseBadge = async function(req, res){
 
 module.exports = {
  getBadges,
- postGlobalBadge,
  putBadge,
  assigneCourseBadge,
  unassigneCourseBadge
