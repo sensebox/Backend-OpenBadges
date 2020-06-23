@@ -16,11 +16,6 @@ const CourseSchema = new mongoose.Schema({
     ref: 'Badge',
     required: true
   }],
-  localbadge: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Badge',
-    required: true
-  }],
   // Nutzername der den Kurs erstellt
   creator: {
     type: mongoose.Schema.Types.ObjectId,

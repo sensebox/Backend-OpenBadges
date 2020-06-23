@@ -61,7 +61,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is assigned successfully to user.</code> or </br> <code>GLobal Badge is assigned successfully to user.</code></p>"
+            "description": "<p><code>Badge is assigned successfully to user.</code></p>"
           }
         ]
       }
@@ -74,7 +74,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -164,10 +164,10 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Boolean",
+            "type": "String",
             "optional": true,
-            "field": "global",
-            "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+            "field": "category",
+            "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
           }
         ]
       }
@@ -307,7 +307,7 @@ define({ "api": [
     "url": "/api/v1/admin/badge/:badgeId",
     "title": "Change Badge",
     "name": "adminPutBadge",
-    "description": "<p>Change information of a Badge (global | local ).</p>",
+    "description": "<p>Change information of Badge.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -369,10 +369,10 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Boolean",
+            "type": "String",
             "optional": true,
-            "field": "global",
-            "description": "<p>if false, badge is local</p>"
+            "field": "category",
+            "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
           },
           {
             "group": "Parameter",
@@ -399,7 +399,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;:[], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -412,7 +412,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -490,7 +490,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or </br> <code>Global Badge is unassigned successfully to user.</code></p>"
+            "description": "<p><code>Badge is unassigned successfully to user.</code></p>"
           }
         ]
       }
@@ -503,7 +503,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -518,111 +518,6 @@ define({ "api": [
             "optional": false,
             "field": "500",
             "description": "<p>Complications during querying the database.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/admin/badge.js",
-    "groupTitle": "Admin"
-  },
-  {
-    "type": "post",
-    "url": "/api/v1/admin/badge",
-    "title": "Create Badge",
-    "name": "createGlobalBadge",
-    "description": "<p>Create a new global | local Badge.</p>",
-    "group": "Admin",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
-          "type": "String"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>title of Badge</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "description",
-            "description": "<p>a brief summary of the Badge</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "critera",
-            "description": "<p>criterias getting this Badge</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "File",
-            "optional": true,
-            "field": "image",
-            "description": "<p>image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": false,
-            "field": "global",
-            "description": "<p>is Badge global or local</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Created 201": [
-          {
-            "group": "Created 201",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>Badge is succesfully created.</code></p>"
-          },
-          {
-            "group": "Created 201",
-            "type": "Object",
-            "optional": false,
-            "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during storage.</p>"
           }
         ]
       }
@@ -1079,7 +974,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is assigned successfully to user.</code> or </br> <code>GLobal Badge is assigned successfully to user.</code></p>"
+            "description": "<p><code>Badge is assigned successfully to user.</code></p>"
           }
         ]
       }
@@ -1092,7 +987,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1184,7 +1079,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is assigned successfully to user.</code> or <code>GLobal Badge is assigned successfully to user.</code></p>"
+            "description": "<p><code>Badge is assigned successfully to user.</code></p>"
           }
         ]
       }
@@ -1197,7 +1092,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1328,9 +1223,9 @@ define({ "api": [
   {
     "type": "post",
     "url": "/api/v1/badge",
-    "title": "Create local Badge",
-    "name": "createLocalBadge",
-    "description": "<p>Create a new local Badge.</p>",
+    "title": "Create Badge",
+    "name": "createBadge",
+    "description": "<p>Create a new Badge.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1378,6 +1273,13 @@ define({ "api": [
           },
           {
             "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "category",
+            "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "File",
             "optional": true,
             "field": "image",
@@ -1394,14 +1296,14 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is succesfully created.</code></p>"
+            "description": "<p><code>Badge is succesfully created.</code></p>"
           },
           {
             "group": "Created 201",
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;:[], description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1458,7 +1360,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;: [], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1520,10 +1422,10 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Boolean",
+            "type": "String",
             "optional": true,
-            "field": "global",
-            "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+            "field": "category",
+            "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
           }
         ]
       }
@@ -1543,7 +1445,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -1618,10 +1520,10 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "global",
-            "description": "<p>if true, get global Badges; if false, get local Badges</p>"
+            "type": "String",
+            "optional": false,
+            "field": "category",
+            "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
           }
         ]
       }
@@ -1641,7 +1543,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -1764,9 +1666,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/badge/:badgeId",
-    "title": "Change local Badge",
-    "name": "putLocalBadge",
-    "description": "<p>Change information of a local Badge.</p>",
+    "title": "Change Badge",
+    "name": "putBadge",
+    "description": "<p>Change information of Badge.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1821,6 +1723,13 @@ define({ "api": [
           },
           {
             "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "category",
+            "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "File",
             "optional": true,
             "field": "image",
@@ -1837,14 +1746,14 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge updated successfully.</code> or </br> <code>Local Badge not changed.</code></p>"
+            "description": "<p><code>Badge updated successfully.</code> or </br> <code>Badge not changed.</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;:[], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1857,14 +1766,14 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission putting the local Badge.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission putting the Badge.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1883,9 +1792,9 @@ define({ "api": [
   {
     "type": "put",
     "url": "/api/v1/badge/:badgeId/deactivation",
-    "title": "Deactivate local Badge",
-    "name": "putLocalBadgeHidden",
-    "description": "<p>Deactivate a local Badge.</p>",
+    "title": "Deactivate Badge",
+    "name": "putBadgeHidden",
+    "description": "<p>Deactivate Badge.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1928,7 +1837,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is successfully deactivated.</code></p>"
+            "description": "<p><code>Badge is successfully deactivated.</code></p>"
           }
         ]
       }
@@ -1941,21 +1850,21 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission deactivating the local Badge.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission deactivating Badge.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "409",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already deactivated.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already deactivated.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2208,7 +2117,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or </br> <code>Global Badge is unassigned successfully to user.</code></p>"
+            "description": "<p><code>Badge is unassigned successfully to user.</code></p>"
           }
         ]
       }
@@ -2221,7 +2130,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already unassigned to user.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2313,7 +2222,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Local Badge is unassigned successfully to user.</code> or </br> <code>Global Badge is unassigned successfully to user.</code></p>"
+            "description": "<p><code>Badge is unassigned successfully to user.</code></p>"
           }
         ]
       }
@@ -2326,7 +2235,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Local Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Global Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2598,13 +2507,6 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "ObjectId-Array",
-            "optional": false,
-            "field": "localbadge",
-            "description": "<p>the ObjectId of local badges for the Course (min: 1) </br> example: <code>[&quot;5e1b0bafeafe4a84c4ac31a9&quot;]</code></p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "courseprovider",
@@ -2698,7 +2600,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "course",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -2762,7 +2664,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "course",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -2868,7 +2770,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "courses",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -2994,7 +2896,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "courses",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -3120,7 +3022,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "courses",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -3293,13 +3195,6 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "ObjectId-Array",
-            "optional": true,
-            "field": "localbadge",
-            "description": "<p>the ObjectId of local badges for the course (min: 1) </br> example: <code>[&quot;5e1b0bafeafe4a84c4ac31a9&quot;]</code></p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "courseprovider",
@@ -3393,7 +3288,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "course",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;localbadge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }

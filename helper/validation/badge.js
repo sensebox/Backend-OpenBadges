@@ -13,7 +13,7 @@ const badgeValidation = data => {
     image: Joi.string().min(1),
     criteria: Joi.string().min(4).required(),
     issuer: Joi.string().min(4),
-    global: Joi.boolean(),
+    category: Joi.string().valid("achievement","professional skill","meta skill"),
     exists: Joi.boolean()
   });
 

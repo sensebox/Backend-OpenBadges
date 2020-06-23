@@ -19,10 +19,10 @@ const {badgeValidation} = require('../../../../helper/validation/badge');
  * @apiParam {String} [name] find Badges by its name
  * @apiParam {String} [description] find Badges by its description
  * @apiParam {ObejctId} [issuer] the ID of the issuer you are referring to
- * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
+ * @apiParam {String} [category] 'achievement', 'professional skill' or 'meta skill'
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
- * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -30,7 +30,7 @@ const getBadges = async function(req, res){
   var qname  = req.query.name;
   var qdescription = req.query.description;
   var qissuer = req.query.issuer;
-  var qglobal = req.query.global;
+  var qcategory = req.query.category;
 
   try{
     var query = {
@@ -45,8 +45,8 @@ const getBadges = async function(req, res){
     if(qissuer){
       query.issuer={$in: qissuer};
     }
-    if(qglobal){
-      query.global = qglobal;
+    if(qcategory){
+      query.category = qcategory;
     }
 
     var result = await Badge.find(query)
@@ -77,10 +77,10 @@ const getBadges = async function(req, res){
  * @apiParam {String} [name] find Badges by its name
  * @apiParam {String} [description] find Badges by its description
  * @apiParam {ObejctId} [issuer] find Badges by its issuer
- * @apiParam {Boolean} [global] if true, get global Badges; if false, get local Badges
+ * @apiParam {String} category 'achievement', 'professional skill' or 'meta skill'
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
- * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -88,14 +88,12 @@ const getBadgesMe = async function(req, res){
   var qname  = req.query.name;
   var qdescription = req.query.description;
   var qissuer = req.query.issuer;
-  var qglobal = req.query.global;
+  var qcategory = req.query.category;
 
   try{
     // find all badges from current user
-    var user = await User.findById(req.user.id, {badge: 1, localbadge: 1, _id: 0});
-    var query = {
-      $or: [{_id: {$in: user.badge}}, {_id: {$in: user.localbadge}}]
-    };
+    var user = await User.findById(req.user.id, {badge: 1, _id: 0});
+    var query = {_id: {$in: user.badge}};
     if(qname){
       query.name = qname;
     }
@@ -105,10 +103,10 @@ const getBadgesMe = async function(req, res){
     if(qissuer){
       query.issuer={$in: qissuer};
     }
-    if(qglobal){
-      query.global = qglobal;
+    if(qcategory){
+      query.category = qcategory;
     }
-    
+
     var result = await Badge.find(query)
                             .populate('issuer', {firstname:1, lastname: 1})
                             .populate('request', {firstname:1, lastname: 1});
@@ -132,7 +130,7 @@ const getBadgesMe = async function(req, res){
  * @apiParam {ObejctId} badgeId the ID of the Badge you are referring to
  *
  * @apiSuccess (Success 200) {String} message `Badge found successfully.`
- * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": true, "exists": true}`
+ * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "request": [], "description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
@@ -161,9 +159,9 @@ const getBadge = async function(req, res){
 
 
 /**
- * @api {post} /api/v1/badge Create local Badge
- * @apiName createLocalBadge
- * @apiDescription Create a new local Badge.
+ * @api {post} /api/v1/badge Create Badge
+ * @apiName createBadge
+ * @apiDescription Create a new Badge.
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -173,14 +171,15 @@ const getBadge = async function(req, res){
  * @apiParam {String} name title of Badge
  * @apiParam {String} description a brief summary of the Badge
  * @apiParam {String} critera criterias getting this Badge
+ * @apiParam {String} category 'achievement', 'professional skill' or 'meta skill'
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
- * @apiSuccess (Created 201) {String} message `Local Badge is succesfully created.`
- * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Created 201) {String} message `Badge is succesfully created.`
+ * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "request":[], description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const postLocalBadge = async function(req, res){
+const postBadge = async function(req, res){
   if(req.fileValidationError){
     return res.status(422).send({message: req.fileValidationError});
   }
@@ -193,7 +192,8 @@ const postLocalBadge = async function(req, res){
       name: req.body.name,
       description: req.body.description,
       criteria: req.body.criteria,
-      issuer: [req.user.id]
+      issuer: [req.user.id],
+      category: req.body.category
     };
     if(req.file){
       const image = {
@@ -208,7 +208,7 @@ const postLocalBadge = async function(req, res){
     const badge = new Badge(body);
     const savedBadge = await badge.save();
     return res.status(201).send({
-      message: 'Local Badge is succesfully created.',
+      message: 'Badge is succesfully created.',
       badge: savedBadge
     });
   }
@@ -220,9 +220,9 @@ const postLocalBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/badge/:badgeId Change local Badge
- * @apiName putLocalBadge
- * @apiDescription Change information of a local Badge.
+ * @api {put} /api/v1/badge/:badgeId Change Badge
+ * @apiName putBadge
+ * @apiDescription Change information of Badge.
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -233,16 +233,17 @@ const postLocalBadge = async function(req, res){
  * @apiParam {String} [name] title of Badge
  * @apiParam {String} [description] a brief summary of the Badge
  * @apiParam {String} [critera] criterias getting this Badge
+ * @apiParam {String} category 'achievement', 'professional skill' or 'meta skill'
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
- * @apiSuccess (Success 200) {String} message `Local Badge updated successfully.` or </br> `Local Badge not changed.`
- * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {String} message `Badge updated successfully.` or </br> `Badge not changed.`
+ * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "request":[], "description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
- * @apiError (On error) {Object} 403 `{"message": "No permission putting the local Badge."}`
- * @apiError (On error) {Object} 404 `{"message": "Local Badge not found."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission putting the Badge."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const putBadgeLocal = async function(req, res){
+const putBadge = async function(req, res){
   try {
     if(req.fileValidationError){
       return res.status(422).send({message: req.fileValidationError});
@@ -254,6 +255,7 @@ const putBadgeLocal = async function(req, res){
         if(req.body.name) updatedBadge.name = req.body.name;
         if(req.body.description) updatedBadge.description = req.body.description;
         if(req.body.criteria) updatedBadge.criteria = req.body.criteria;
+        if(req.body.category) updatedBadge.category = req.body.category;
         if(req.file){
           const image = {
             path: req.file.filename,
@@ -280,26 +282,26 @@ const putBadgeLocal = async function(req, res){
         if(Object.keys(updatedBadge).length > 0){
           var newBadge = await Badge.findOneAndUpdate({_id: req.params.badgeId}, updatedBadge, {new: true});
           return res.status(200).send({
-            message: 'Local Badge updated successfully.',
+            message: 'Badge updated successfully.',
             badge: newBadge
           });
         }
         else {
           return res.status(200).send({
-            message: 'Local Badge not changed.',
+            message: 'Badge not changed.',
             badge: badge
           });
         }
       }
       else {
         return res.status(403).send({
-          message: 'No permission putting the local Badge.',
+          message: 'No permission putting the Badge.',
         });
       }
     }
     else {
       return res.status(404).send({
-        message: 'Local Badge not found.',
+        message: 'Badge not found.',
       });
     }
   }
@@ -310,9 +312,9 @@ const putBadgeLocal = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/badge/:badgeId/deactivation Deactivate local Badge
- * @apiName putLocalBadgeHidden
- * @apiDescription Deactivate a local Badge.
+ * @api {put} /api/v1/badge/:badgeId/deactivation Deactivate Badge
+ * @apiName putBadgeHidden
+ * @apiDescription Deactivate Badge.
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -321,14 +323,14 @@ const putBadgeLocal = async function(req, res){
  *
  * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
  *
- * @apiSuccess (Success 200) {String} message `Local Badge is successfully deactivated.`
+ * @apiSuccess (Success 200) {String} message `Badge is successfully deactivated.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Local Badge not found."}`
- * @apiError (On error) {Object} 403 `{"message": "No permission deactivating the local Badge."}`
- * @apiError (On error) {Object} 409 `{"message": "Local Badge is already deactivated."}`
+ * @apiError (On error) {Object} 400 `{"message": "Badge not found."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission deactivating Badge."}`
+ * @apiError (On error) {Object} 409 `{"message": "Badge is already deactivated."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const putBadgeLocalHidden = async function(req, res){
+const putBadgeHidden = async function(req, res){
   try{
     var badge = await Badge.findOne({_id: req.params.badgeId});
     if(badge){
@@ -336,24 +338,24 @@ const putBadgeLocalHidden = async function(req, res){
         if(badge.exists !== false){
           await Badge.updateOne({_id: req.params.badgeId}, {exists: false});
           return res.status(200).send({
-            message: 'Local Badge is successfully deactivated.'
+            message: 'Badge is successfully deactivated.'
           });
         }
         else {
           return res.status(409).send({
-            message: 'Local Badge is already deactivated.'
+            message: 'Badge is already deactivated.'
           });
         }
       }
       else {
         return res.status(403).send({
-          message: 'No permission deactivating the local Badge.',
+          message: 'No permission deactivating Badge.',
         });
       }
     }
     else {
       return res.status(400).send({
-        message: 'Local Badge not found.',
+        message: 'Badge not found.',
       });
     }
   }
@@ -366,7 +368,7 @@ module.exports = {
   getBadges,
   getBadgesMe,
   getBadge,
-  postLocalBadge,
-  putBadgeLocal,
-  putBadgeLocalHidden
+  postBadge,
+  putBadge,
+  putBadgeHidden
 };

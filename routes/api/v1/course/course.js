@@ -27,7 +27,6 @@ const {courseValidation} = require('../../../../helper/validation/course');
  *
  * @apiParam {String} name name of the course
  * @apiParam {ObjectId-Array} badge the ObjectId of global badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
- * @apiParam {ObjectId-Array} localbadge the ObjectId of local badges for the Course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
  * @apiParam {String} courseprovider the provider of the course might be specified by the creator
  * @apiParam {String} [postalcode] postalcode of the building where the course take place
  * @apiParam {String} [address] adress of the location from the Course
@@ -41,7 +40,7 @@ const {courseValidation} = require('../../../../helper/validation/course');
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Created 201) {String} message `Course is successfully created.`
- * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the course-creator."}`
  * @apiError (On error) {Object} 500 Complications during storage.
@@ -54,7 +53,7 @@ const postCourse = async function(req, res){
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try{
-    const promises = req.body.localbadge.concat(req.body.badge).map(async function(badgeId){return await Badge.findById(badgeId);});
+    const promises = req.body.badge.map(async function(badgeId){return await Badge.findById(badgeId);});
     const badges = await Promise.all(promises);
     var badgesError = badges.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
     if(badgesError.length > 0){
@@ -64,7 +63,6 @@ const postCourse = async function(req, res){
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
       badge: req.body.badge,
-      localbadge: req.body.localbadge,
       creator: req.user.id,
       courseprovider: req.body.courseprovider,
       topic: req.body.topic,
@@ -123,7 +121,7 @@ const postCourse = async function(req, res){
  * @apiParam {String} [type] course type (`online` or `presence`)
  *
  * @apiSuccess (Success 200) {String} message `Courses found successfully.`
- * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
@@ -196,7 +194,7 @@ const getCourses = async function(req, res){
  * @apiParam {ObjectId} courseId the ID of the course you are referring to
  *
  * @apiSuccess (Success 200) {String} message `Course found successfully.`
- * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
@@ -205,8 +203,7 @@ const getCourseID = async function(req, res){
   try{
     var course = await Course.findOne({_id: req.params.courseId})
                              .populate('creator', {firstname:1, lastname: 1})
-                             .populate('badge')
-                             .populate('localbadge');
+                             .populate('badge');
     if(course){
       return res.status(200).send({
         message: 'Course found successfully.',
@@ -244,7 +241,7 @@ const getCourseID = async function(req, res){
  * @apiParam {String} [type] course type (`online` or `presence`)
  *
  * @apiSuccess (Success 200) {String} message `Courses found successfully.`
- * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
@@ -328,7 +325,7 @@ const getMyCourses = async function(req, res){
  * @apiParam {String} [type] course type (`online` or `presence`)
  *
  * @apiSuccess (Success 200) {String} message `Courses found successfully.`
- * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
@@ -406,7 +403,6 @@ const getMyCreatedCourses = async function(req, res){
  * @apiParam {ObjectId} courseId the ID of the course you are referring to
  * @apiParam {String} [name] name of the course
  * @apiParam {ObjectId-Array} [badge] the ObjectId of global badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
- * @apiParam {ObjectId-Array} [localbadge] the ObjectId of local badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
  * @apiParam {String} [courseprovider] the provider of the course might be specified by the creator
  * @apiParam {String} [postalcode] postalcode of the building where the course take place
  * @apiParam {String} [address] adress of the location from the Course
@@ -420,7 +416,7 @@ const getMyCreatedCourses = async function(req, res){
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Success 200) {String} message `Course is updated successfully.`
- * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "localbadge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the course-creator."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission putting the course."}`
@@ -449,15 +445,6 @@ const putCourse = async function(req, res){
             return res.status(400).send({message: "All badges must be assignable by the course-creator."});
           }
           result.badge = req.body.badge;
-        }
-        if(req.body.localbadge){
-          const promises = req.body.localbadge.map(async function(badgeId){return await Badge.findById(badgeId);});
-          const badges = await Promise.all(promises);
-          var localbadgesError = badges.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
-          if(localbadgesError.length > 0){
-            return res.status(400).send({message: "All badges must be assignable by the course-creator."});
-          }
-          result.localbadge = req.body.localbadge;
         }
         if(req.body.coordinates){
           result.coordinates.coordinates = req.body.coordinates;
@@ -497,8 +484,7 @@ const putCourse = async function(req, res){
         await result.save();
         const updatedCourse = await Course.findById(result._id)
                                           .populate('creator', {firstname:1, lastname: 1})
-                                          .populate('badge')
-                                          .populate('localbadge');
+                                          .populate('badge');
         return res.status(200).send({
           message: 'Course is updated successfully.',
           course: updatedCourse
