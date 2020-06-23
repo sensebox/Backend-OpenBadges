@@ -13,7 +13,6 @@ const courseValidation = data => {
     //badges local and global
     //creator --> User
     badge: Joi.array().required(),
-    localbadge: Joi.array().required(),
     courseprovider: Joi.string().min(1).required(),
     postalcode: Joi.string().min(5).max(5),
     address: Joi.string().min(4),
