@@ -18,7 +18,7 @@ const {badgeValidation} = require('../../../../helper/validation/badge');
  *
  * @apiParam {String} [name] find Badges by its name
  * @apiParam {String} [description] find Badges by its description
- * @apiParam {ObejctId} [issuer] the ID of the issuer you are referring to
+ * @apiParam {ObejctId} [issuer] find Badges by its issuer/ mentor
  * @apiParam {String} [category] 'achievement', 'professional skill' or 'meta skill'
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
@@ -43,7 +43,7 @@ const getBadges = async function(req, res){
       query.description=qdescription;
     }
     if(qissuer){
-      query.issuer={$in: qissuer};
+      query.$or=[{issuer:{$in: qissuer}},{mentor:{$in: qissuer}}];
     }
     if(qcategory){
       query.category = qcategory;
@@ -76,7 +76,7 @@ const getBadges = async function(req, res){
  *
  * @apiParam {String} [name] find Badges by its name
  * @apiParam {String} [description] find Badges by its description
- * @apiParam {ObejctId} [issuer] find Badges by its issuer
+ * @apiParam {ObejctId} [issuer] find Badges by its issuer/ mentor
  * @apiParam {String} category 'achievement', 'professional skill' or 'meta skill'
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
@@ -102,7 +102,7 @@ const getBadgesMe = async function(req, res){
       query.description=qdescription;
     }
     if(qissuer){
-      query.issuer={$in: qissuer};
+      query.$or=[{issuer:{$in: qissuer}},{mentor:{$in: qissuer}}];
     }
     if(qcategory){
       query.category = qcategory;
