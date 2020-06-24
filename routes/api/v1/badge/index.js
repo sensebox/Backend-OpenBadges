@@ -56,4 +56,7 @@ BadgeRouter.route('/:badgeId/revoke/:userId')
 BadgeRouter.route('/:badgeId/request')
     .put(userAuthorization, require('./user').requestPermissionAssignBadge);
 
+BadgeRouter.route('/:badgeId/issuer/:userId')
+    .put(userAuthorization, require('./user').nominateIssuerBadge);
+
 module.exports = BadgeRouter;

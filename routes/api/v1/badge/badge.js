@@ -50,8 +50,8 @@ const getBadges = async function(req, res){
     }
 
     var result = await Badge.find(query)
-                            .populate('issuer', {firstname:1, lastname: 1})
-                            .populate('request', {firstname:1, lastname: 1});
+                            .populate('mentor', {firstname:1, lastname: 1})
+                            .populate('requestor', {firstname:1, lastname: 1});
 
     return res.status(200).send({
       message: 'Badges found succesfully.',
@@ -94,6 +94,7 @@ const getBadgesMe = async function(req, res){
     // find all badges from current user
     var user = await User.findById(req.user.id, {badge: 1, _id: 0});
     var query = {_id: {$in: user.badge}};
+
     if(qname){
       query.name = qname;
     }
@@ -108,8 +109,10 @@ const getBadgesMe = async function(req, res){
     }
 
     var result = await Badge.find(query)
-                            .populate('issuer', {firstname:1, lastname: 1})
-                            .populate('request', {firstname:1, lastname: 1});
+                            .populate('mentor', {firstname:1, lastname: 1})
+                            .populate('requestor', {firstname:1, lastname: 1});
+    console.log(query);
+    console.log(result);
     return res.status(200).send({
       message: 'Badges found succesfully.',
       badges: result
@@ -175,7 +178,7 @@ const getBadge = async function(req, res){
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Created 201) {String} message `Badge is succesfully created.`
- * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer": user, "request":[], description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Created 201) {Object} badge `{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 500 Complications during storage.
  */
@@ -233,11 +236,11 @@ const postBadge = async function(req, res){
  * @apiParam {String} [name] title of Badge
  * @apiParam {String} [description] a brief summary of the Badge
  * @apiParam {String} [critera] criterias getting this Badge
- * @apiParam {String} category 'achievement', 'professional skill' or 'meta skill'
+ * @apiParam {String} [category] 'achievement', 'professional skill' or 'meta skill'
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Success 200) {String} message `Badge updated successfully.` or </br> `Badge not changed.`
- * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "request":[], "description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "category": "achievement", "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 403 `{"message": "No permission putting the Badge."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
@@ -248,9 +251,11 @@ const putBadge = async function(req, res){
     if(req.fileValidationError){
       return res.status(422).send({message: req.fileValidationError});
     }
-    var badge = await Badge.findById(req.params.badgeId);
+    var badge = await Badge.findById(req.params.badgeId)
+                           .populate('mentor', {firstname:1, lastname: 1})
+                           .populate('requestor', {firstname:1, lastname: 1});
     if(badge){
-      if(badge.issuer == req.user.id){
+      if(badge.issuer.indexOf(req.user.id) > -1){
         var updatedBadge = {};
         if(req.body.name) updatedBadge.name = req.body.name;
         if(req.body.description) updatedBadge.description = req.body.description;
@@ -280,7 +285,9 @@ const putBadge = async function(req, res){
         }
 
         if(Object.keys(updatedBadge).length > 0){
-          var newBadge = await Badge.findOneAndUpdate({_id: req.params.badgeId}, updatedBadge, {new: true});
+          var newBadge = await Badge.findOneAndUpdate({_id: req.params.badgeId}, updatedBadge, {new: true})
+                                    .populate('mentor', {firstname:1, lastname: 1})
+                                    .populate('requestor', {firstname:1, lastname: 1});
           return res.status(200).send({
             message: 'Badge updated successfully.',
             badge: newBadge
@@ -334,7 +341,7 @@ const putBadgeHidden = async function(req, res){
   try{
     var badge = await Badge.findOne({_id: req.params.badgeId});
     if(badge){
-      if(badge.issuer == req.user.id){
+      if(badge.issuer.indexOf(req.user.id) > -1){
         if(badge.exists !== false){
           await Badge.updateOne({_id: req.params.badgeId}, {exists: false});
           return res.status(200).send({

@@ -55,7 +55,7 @@ const postCourse = async function(req, res){
   try{
     const promises = req.body.badge.map(async function(badgeId){return await Badge.findById(badgeId);});
     const badges = await Promise.all(promises);
-    var badgesError = badges.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
+    var badgesError = badges.filter(badge => badge.issuer.concat(badge.mentor).indexOf(req.user.id) < 0);
     if(badgesError.length > 0){
       return res.status(400).send({message: "All badges must be assignable by the course-creator."});
     }
@@ -440,7 +440,7 @@ const putCourse = async function(req, res){
           const promises = req.body.badge.map(async function(badgeId){return await Badge.findById(badgeId);});
           const badges = await Promise.all(promises);
           console.log(badges);
-          var badgesError = badges.filter(badge => badge.issuer.indexOf(req.user.id) < 0);
+          var badgesError = badges.filter(badge => badge.issuer.concat(badge.mentor).indexOf(req.user.id) < 0);
           if(badgesError.length > 0){
             return res.status(400).send({message: "All badges must be assignable by the course-creator."});
           }

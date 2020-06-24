@@ -37,7 +37,12 @@ const BadgeSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   }],
-  request: [{
+  mentor: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }],
+  requestor: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true

@@ -197,7 +197,7 @@ const assigneCourseBadge = async function(req, res){
  * @apiParam {Object} badges JSON-Object with userIds as Object-Key and the badgeIds in an array as value. </br> (e.g. `{<userId>: [<badgeId>, <badgeId>]}`)
  *
  * @apiSuccess (Success 200) {String} message `Badges are assigned successfully to users.`
- * @apiSuccess (Success 200) {Object} info `{"alreadyAssigned": <Number>, "userNotFound": <Number>, "badgeNotFound": <Number>, "userNotRelatedToCourse": <Number>}`
+ * @apiSuccess (Success 200) {Object} info `{"alreadyAssigned": <Number>, "userNotFound": <Number>, "badgeNotFound": <Number>, "badgeNotRelatedToCourse": <Number>, "userNotRelatedToCourse": <Number>}`
  *
  * @apiError (On error) {Object} 403 `{"message": "No permission assigning the Badges to the users."}`
  * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
@@ -211,26 +211,30 @@ const assigneMultipleBadges = async function(req, res){
     if(course){
       // only the course creator has the permission to assigne a Badge
       if(course.creator == req.user.id){
-        var info = {alreadyAssigned: 0, userNotFound: 0, badgeNotFound: 0, userNotRelatedToCourse: 0};
+        var info = {alreadyAssigned: 0, userNotFound: 0, badgeNotFound: 0, badgeNotRelatedToCourse: 0, userNotRelatedToCourse: 0};
         const promises = Object.keys(badges).map(async function(key){
           var user = await User.findById(key);
           if(user){
-            console.log(key);
             if(course.participants.indexOf(key) > -1){
               // user is related to given course
               const promises1 = badges[key].map(async function(badgeId) {
-                var badge = await Badge.findById(badgeId);
-                if(badge){
-                  if(user.badge.indexOf(badgeId) < 0){
-                    // badge is not assigned to user
-                    return user.badge.push(badgeId);
+                if(course.badge.indexOf(badgeId) > -1){
+                  var badge = await Badge.findById(badgeId);
+                  if(badge){
+                    if(user.badge.indexOf(badgeId) < 0){
+                      // badge is not assigned to user
+                      return user.badge.push(badgeId);
+                    }
+                    else {
+                      info.alreadyAssigned += 1;
+                    }
                   }
                   else {
-                    info.alreadyAssigned += 1;
+                    info.badgeNotFound += 1;
                   }
                 }
                 else {
-                  info.badgeNotFound += 1;
+                  info.badgeNotRelatedToCourse += 1;
                 }
               });
               await Promise.all(promises1);
@@ -272,7 +276,7 @@ const assigneMultipleBadges = async function(req, res){
 /**
  * @api {put} /api/v1/badge/badgeId/grant/userId Grant permission to (un)assign a badge
  * @apiName grantPermissionAssignBadge
- * @apiDescription Grant a user permission to (un)assign a badge. (Only "original issuer" has the permission.)
+ * @apiDescription Grant a user permission to (un)assign a badge. (Only "Badge-issuer" have the permission.)
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -284,7 +288,7 @@ const assigneMultipleBadges = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `User has successfully received permission to assign the badge.`
  *
- * @apiError (On error) {Object} 400 `{"message": "User has already permission to assigned the badge."}`
+ * @apiError (On error) {Object} 400 `{"message": "User has already permission to assign the badge."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission to grant permissions regarding the badge."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
@@ -296,15 +300,15 @@ const grantPermissionAssignBadge = async function(req, res){
     var badge = await Badge.findById(badgeId);
     if(badge){
       // only the original issuer has the permission to grant permission regarding the Badge
-      if(badge.issuer[0] == req.user.id){
+      if(badge.issuer.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
         if(user){
-          if(badge.issuer.indexOf(userId) < 0){
+          if(badge.mentor.indexOf(userId) < 0){
             // user has no permission to assign the badge
-            badge.issuer.push(userId);
-            if(badge.request.indexOf(userId) > -1){
+            badge.mentor.push(userId);
+            if(badge.requestor.indexOf(userId) > -1){
               // user requested permission to assign the badge
-              badge.request.splice(badge.request.indexOf(userId), 1);
+              badge.requestor.splice(badge.requestor.indexOf(userId), 1);
             }
             const updatedBadge = await badge.save();
             return res.status(200).send({
@@ -313,7 +317,7 @@ const grantPermissionAssignBadge = async function(req, res){
           }
           else {
             return res.status(400).send({
-              message: 'User has already permission to assigned the badge.',
+              message: 'User has already permission to assign the badge.',
             });
           }
         }
@@ -344,7 +348,7 @@ const grantPermissionAssignBadge = async function(req, res){
 /**
  * @api {put} /api/v1/badge/badgeId/revoke/userId Revoke permission to (un)assign a badge
  * @apiName revokePermissionAssignBadge
- * @apiDescription Revoke a user permission to (un)assign a badge. (Only "original issuer" has the permission.)
+ * @apiDescription Revoke a user permission to (un)assign a badge. (Only "Badge-issuer" have the permission.)
  * @apiGroup Badge
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -356,7 +360,7 @@ const grantPermissionAssignBadge = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `User has successfully received no permission to assign the badge.`
  *
- * @apiError (On error) {Object} 400 `{"message": "User has already no permission to assigned the badge."}`
+ * @apiError (On error) {Object} 400 `{"message": "User has already no permission to assign the badge."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission to revoke permissions regarding the badge."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
@@ -368,25 +372,25 @@ const revokePermissionAssignBadge = async function(req, res){
     var badge = await Badge.findById(badgeId);
     if(badge){
       // only the original issuer has the permission to grant permission regarding the Badge
-      if(badge.issuer[0] == req.user.id){
+      if(badge.issuer.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
         if(user){
-          if(badge.issuer.indexOf(userId) > -1){
+          if(badge.mentor.indexOf(userId) > -1){
             // user has permission to assign the badge
-            badge.issuer.splice(badge.issuer.indexOf(userId), 1);
+            badge.mentor.splice(badge.mentor.indexOf(userId), 1);
             const updatedBadge = await badge.save();
             return res.status(200).send({
               message: 'User has successfully received no permission to assign the badge.',
             });
           }
           else {
-            if(badge.request.indexOf(userId) > -1){
+            if(badge.requestor.indexOf(userId) > -1){
               // user requested permission to assign the badge
-              badge.request.splice(badge.request.indexOf(userId), 1);
+              badge.requestor.splice(badge.requestor.indexOf(userId), 1);
             }
             const updatedBadge = await badge.save();
             return res.status(400).send({
-              message: 'User has already no permission to assigned the badge.',
+              message: 'User has already no permission to assign the badge.',
             });
           }
         }
@@ -428,7 +432,7 @@ const revokePermissionAssignBadge = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `User has successfully submitted his request.`
  *
- * @apiError (On error) {Object} 400 `{"message": "User has already submitted his request."}` or </br> `{"message": "User has already permission to assigned the badge."}`
+ * @apiError (On error) {Object} 400 `{"message": "User has already submitted his request."}` or </br> `{"message": "User has already permission to assign the badge."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -437,10 +441,10 @@ const requestPermissionAssignBadge = async function(req, res){
   try{
     var badge = await Badge.findById(badgeId);
     if(badge){
-      if(badge.issuer.indexOf(req.user.id) < 0){
-        if(badge.request.indexOf(req.user.id) < 0){
+      if(badge.issuer.indexOf(req.user.id) < 0 && badge.mentor.indexOf(req.user.id) < 0){
+        if(badge.requestor.indexOf(req.user.id) < 0){
           // user has no permission to assign the badge
-          badge.request.push(req.user.id);
+          badge.requestor.push(req.user.id);
           const updatedBadge = await badge.save();
           return res.status(200).send({
             message: 'User has successfully submitted his request.',
@@ -454,7 +458,83 @@ const requestPermissionAssignBadge = async function(req, res){
       }
       else {
         return res.status(400).send({
-          message: 'User has already permission to assigned the badge.',
+          message: 'User has already permission to assign the badge.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Badge not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
+/**
+ * @api {put} /api/v1/badge/badgeId/issuer/userId Grant permission to manage a badge
+ * @apiName issuerBadge
+ * @apiDescription Grant a user permission to manage a badge. He becomes a issuer. (Only "Badge-issuer" have the permission.)
+ * @apiGroup Badge
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `User has successfully received permission to manage the badge.`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "User has already permission to manage the badge."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission to grant permissions regarding the badge."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
+ */
+const nominateIssuerBadge = async function(req, res){
+  var badgeId = req.params.badgeId;
+  var userId = req.params.userId;
+  try{
+    var badge = await Badge.findById(badgeId);
+    if(badge){
+      // only the original issuer has the permission to grant permission regarding the Badge
+      if(badge.issuer.indexOf(req.user.id) > -1){
+        var user = await User.findById(userId);
+        if(user){
+          if(badge.issuer.indexOf(userId) < 0){
+            // user has no permission to manage the badge
+            badge.issuer.push(userId);
+            if(badge.mentor.indexOf(userId) > -1){
+              // user has permission to assign the badge (not to manage)
+              badge.mentor.splice(badge.mentor.indexOf(userId), 1);
+            }
+            else if(badge.requestor.indexOf(userId) > -1){
+              // user requested permission to assign the badge
+              badge.requestor.splice(badge.requestor.indexOf(userId), 1);
+            }
+            const updatedBadge = await badge.save();
+            return res.status(200).send({
+              message: 'User has successfully received permission to manage the badge.',
+            });
+          }
+          else {
+            return res.status(400).send({
+              message: 'User has already permission to manage the badge.',
+            });
+          }
+        }
+        else {
+          return res.status(404).send({
+            message: 'User not found.',
+          });
+        }
+      }
+      else {
+        return res.status(403).send({
+          message: 'No permission to grant permissions regarding the badge.',
         });
       }
     }
@@ -497,8 +577,8 @@ const unassigneBadge = async function(req, res){
   try{
     var badge = await Badge.findById(badgeId);
     if(badge){
-      // only the badge issuer has the permission to assigne the Badge
-      if(badge.issuer.indexOf(req.user.id) > -1){
+      // only the badge issuers and mentors have the permission to assigne the Badge
+      if(badge.issuer.indexOf(req.user.id) > -1 || badge.mentor.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
         if(user){
           if(user.badge.indexOf(badgeId) > -1){
@@ -567,8 +647,8 @@ const assigneBadge = async function(req, res){
   try{
     var badge = await Badge.findById(badgeId);
     if(badge){
-      // only the badge issuer has the permission to assigne the Badge
-      if(badge.issuer.indexOf(req.user.id) > -1){
+      // only the badge issuers and mentors have the permission to assigne the Badge
+      if(badge.issuer.indexOf(req.user.id) > -1 || badge.mentor.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
         if(user){
           if(user.badge.indexOf(badgeId) < 0){
@@ -617,5 +697,6 @@ module.exports = {
   unassigneBadge,
   grantPermissionAssignBadge,
   revokePermissionAssignBadge,
-  requestPermissionAssignBadge
+  requestPermissionAssignBadge,
+  nominateIssuerBadge
 };
