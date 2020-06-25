@@ -1,10 +1,10 @@
 [
   {
     "type": "put",
-    "url": "/api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId",
-    "title": "Assigne a course-related Badge",
-    "name": "adminAssigneCourseBadge",
-    "description": "<p>Assigne a course-related Badge to a specified user of given course.</p>",
+    "url": "/api/v1/admin/badge/:badgeId/project/:projectId/assigne/user/:userId",
+    "title": "Assigne a project-related Badge",
+    "name": "adminAssigneProjectBadge",
+    "description": "<p>Assigne a project-related Badge to a specified user of given project.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -40,8 +40,8 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
           },
           {
             "group": "Parameter",
@@ -74,14 +74,14 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given project.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Course not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Project not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -220,10 +220,10 @@
   },
   {
     "type": "get",
-    "url": "/api/v1/course/:courseId/participants",
-    "title": "Get participants of one course",
+    "url": "/api/v1/project/:projectId/participants",
+    "title": "Get participants of one project",
     "name": "adminGetParticipants",
-    "description": "<p>Getting all participants of one course by ID</p>",
+    "description": "<p>Getting all participants of one project by ID</p>",
     "group": "Admin",
     "parameter": {
       "fields": {
@@ -232,8 +232,8 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
           }
         ]
       }
@@ -286,7 +286,7 @@
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -299,7 +299,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/admin/course.js",
+    "filename": "./routes/api/v1/admin/project.js",
     "groupTitle": "Admin"
   },
   {
@@ -430,10 +430,10 @@
   },
   {
     "type": "put",
-    "url": "/api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId",
-    "title": "Unassigne a course-related Badge",
-    "name": "adminUnassigneCourseBadge",
-    "description": "<p>Unassigne a course-related Badge to a specified user of given course.</p>",
+    "url": "/api/v1/admin/badge/:badgeId/project/:projectId/unassigne/user/:userId",
+    "title": "Unassigne a project-related Badge",
+    "name": "adminUnassigneProjectBadge",
+    "description": "<p>Unassigne a project-related Badge to a specified user of given project.</p>",
     "group": "Admin",
     "header": {
       "fields": {
@@ -469,8 +469,8 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
           },
           {
             "group": "Parameter",
@@ -503,14 +503,14 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given project.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Course not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Project not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1019,10 +1019,108 @@
   },
   {
     "type": "put",
-    "url": "/api/v1/badge/:badgeId/course/:courseId/assigne/user/:userId",
-    "title": "Assigne a course-related Badge",
-    "name": "assigneCourseBadge",
-    "description": "<p>Assigne a course-related Badge to a specified user of given course.</p>",
+    "url": "/api/v1/badge/project/:projectId/assigne",
+    "title": "Assigne multiple project-related Badges",
+    "name": "assigneMultipleProjectBadges",
+    "description": "<p>Assigne mutliple badges of a project to users of the given project.</p>",
+    "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "badges",
+            "description": "<p>JSON-Object with userIds as Object-Key and the badgeIds in an array as value. </br> (e.g. <code>{&lt;userId&gt;: [&lt;badgeId&gt;, &lt;badgeId&gt;]}</code>)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badges are assigned successfully to users.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "info",
+            "description": "<p><code>{&quot;alreadyAssigned&quot;: &lt;Number&gt;, &quot;userNotFound&quot;: &lt;Number&gt;, &quot;badgeNotFound&quot;: &lt;Number&gt;, &quot;badgeNotRelatedToProject&quot;: &lt;Number&gt;, &quot;userNotRelatedToProject&quot;: &lt;Number&gt;}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission assigning the Badges to the users.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/badge/:badgeId/project/:projectId/assigne/user/:userId",
+    "title": "Assigne a project-related Badge",
+    "name": "assigneProjectBadge",
+    "description": "<p>Assigne a project-related Badge to a specified user of given project.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1058,8 +1156,8 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the Course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the Project you are referring to</p>"
           },
           {
             "group": "Parameter",
@@ -1092,7 +1190,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given project.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1106,105 +1204,7 @@
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Course not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during querying the database.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/badge/user.js",
-    "groupTitle": "Badge"
-  },
-  {
-    "type": "put",
-    "url": "/api/v1/badge/course/:courseId/assigne",
-    "title": "Assigne multiple course-related Badges",
-    "name": "assigneMultipleCourseBadges",
-    "description": "<p>Assigne mutliple badges of a course to users of the given course.</p>",
-    "group": "Badge",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
-          "type": "String"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the Course you are referring to</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "badges",
-            "description": "<p>JSON-Object with userIds as Object-Key and the badgeIds in an array as value. </br> (e.g. <code>{&lt;userId&gt;: [&lt;badgeId&gt;, &lt;badgeId&gt;]}</code>)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>Badges are assigned successfully to users.</code></p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "info",
-            "description": "<p><code>{&quot;alreadyAssigned&quot;: &lt;Number&gt;, &quot;userNotFound&quot;: &lt;Number&gt;, &quot;badgeNotFound&quot;: &lt;Number&gt;, &quot;userNotRelatedToCourse&quot;: &lt;Number&gt;}</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission assigning the Badges to the users.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Project not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1303,7 +1303,7 @@
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;:[], description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1418,7 +1418,7 @@
             "type": "ObejctId",
             "optional": true,
             "field": "issuer",
-            "description": "<p>the ID of the issuer you are referring to</p>"
+            "description": "<p>find Badges by its issuer/ mentor</p>"
           },
           {
             "group": "Parameter",
@@ -1516,7 +1516,7 @@
             "type": "ObejctId",
             "optional": true,
             "field": "issuer",
-            "description": "<p>find Badges by its issuer</p>"
+            "description": "<p>find Badges by its issuer/ mentor</p>"
           },
           {
             "group": "Parameter",
@@ -1570,7 +1570,7 @@
     "url": "/api/v1/badge/badgeId/grant/userId",
     "title": "Grant permission to (un)assign a badge",
     "name": "grantPermissionAssignBadge",
-    "description": "<p>Grant a user permission to (un)assign a badge. (Only &quot;original issuer&quot; has the permission.)</p>",
+    "description": "<p>Grant a user permission to (un)assign a badge. (Only &quot;Badge-issuer&quot; have the permission.)</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -1633,7 +1633,105 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;User has already permission to assigned the badge.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;User has already permission to assign the badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission to grant permissions regarding the badge.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/badge/user.js",
+    "groupTitle": "Badge"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/badge/badgeId/issuer/userId",
+    "title": "Grant permission to manage a badge",
+    "name": "issuerBadge",
+    "description": "<p>Grant a user permission to manage a badge. He becomes a issuer. (Only &quot;Badge-issuer&quot; have the permission.)</p>",
+    "group": "Badge",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User has successfully received permission to manage the badge.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;User has already permission to manage the badge.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1724,7 +1822,7 @@
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "category",
             "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
           },
@@ -1753,7 +1851,7 @@
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;:[], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1941,7 +2039,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;User has already submitted his request.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User has already permission to assigned the badge.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;User has already submitted his request.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User has already permission to assign the badge.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -1969,7 +2067,7 @@
     "url": "/api/v1/badge/badgeId/revoke/userId",
     "title": "Revoke permission to (un)assign a badge",
     "name": "revokePermissionAssignBadge",
-    "description": "<p>Revoke a user permission to (un)assign a badge. (Only &quot;original issuer&quot; has the permission.)</p>",
+    "description": "<p>Revoke a user permission to (un)assign a badge. (Only &quot;Badge-issuer&quot; have the permission.)</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -2032,7 +2130,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;User has already no permission to assigned the badge.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;User has already no permission to assign the badge.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2162,10 +2260,10 @@
   },
   {
     "type": "put",
-    "url": "/api/v1/badge/:badgeId/course/:courseId/unassigne/user/:userId",
-    "title": "Unassigne a course-related Badge",
-    "name": "unassigneCourseBadge",
-    "description": "<p>Unassigne a course-related Badge to a specified user of given course.</p>",
+    "url": "/api/v1/badge/:badgeId/project/:projectId/unassigne/user/:userId",
+    "title": "Unassigne a project-related Badge",
+    "name": "unassigneProjectBadge",
+    "description": "<p>Unassigne a project-related Badge to a specified user of given project.</p>",
     "group": "Badge",
     "header": {
       "fields": {
@@ -2201,8 +2299,8 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the Course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
           },
           {
             "group": "Parameter",
@@ -2235,7 +2333,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already unassigned to user.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is not related to given project.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2249,7 +2347,7 @@
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Course not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;Project not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2294,180 +2392,12 @@
     "name": ""
   },
   {
-    "type": "put",
-    "url": "/api/v1/course/:courseId/user/registration",
-    "title": "Register me",
-    "name": "courseSignIn",
-    "description": "<p>Register currently logged in user in a course, if the size is not reached.</p>",
-    "group": "Course",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
-          "type": "String"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>User registered successfully in course.</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course size is already reached.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is already registered in course.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during querying the database.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/course/user.js",
-    "groupTitle": "Course"
-  },
-  {
-    "type": "put",
-    "url": "/api/v1/course/:courseId/user/deregistration",
-    "title": "Deregister me",
-    "name": "courseSignOut",
-    "description": "<p>Deregister a user in a course, if the user was registered.</p>",
-    "group": "Course",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Authorization Header Example",
-          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
-          "type": "String"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>User deregistered successfully from course.</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;User is not registered in course.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during querying the database</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/course/user.js",
-    "groupTitle": "Course"
-  },
-  {
     "type": "post",
-    "url": "/api/v1/course",
-    "title": "Create course",
-    "name": "createCourse",
-    "description": "<p>Create a new Course.</p>",
-    "group": "Course",
+    "url": "/api/v1/project",
+    "title": "Create project",
+    "name": "createProject",
+    "description": "<p>Create a new project.</p>",
+    "group": "Project",
     "header": {
       "fields": {
         "Header": [
@@ -2496,84 +2426,84 @@
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>name of the course</p>"
+            "description": "<p>name of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "ObjectId-Array",
             "optional": false,
             "field": "badge",
-            "description": "<p>the ObjectId of global badges for the course (min: 1) </br> example: <code>[&quot;5e1b0bafeafe4a84c4ac31a9&quot;]</code></p>"
+            "description": "<p>the ObjectId of global badges for the project (min: 1) </br> example: <code>[&quot;5e1b0bafeafe4a84c4ac31a9&quot;]</code></p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "courseprovider",
-            "description": "<p>the provider of the course might be specified by the creator</p>"
+            "field": "provider",
+            "description": "<p>the provider of the project might be specified by the creator</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "postalcode",
-            "description": "<p>postalcode of the building where the course take place</p>"
+            "description": "<p>postalcode of the building where the project take place</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "address",
-            "description": "<p>adress of the location from the Course</p>"
+            "description": "<p>adress of the location from the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Coordinates-Array",
             "optional": true,
             "field": "coordinates",
-            "description": "<p>coordinates of the location from the Course </br> example: <code>[longitude, latitude]</code></p>"
+            "description": "<p>coordinates of the location from the project </br> example: <code>[longitude, latitude]</code></p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "topic",
-            "description": "<p>topic of the Course</p>"
+            "description": "<p>topic of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "description",
-            "description": "<p>a brief summary about the course contents</p>"
+            "description": "<p>a brief summary about the project contents</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "requirements",
-            "description": "<p>a brief summary about the course requirements</p>"
+            "description": "<p>a brief summary about the project requirements</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
             "optional": false,
             "field": "startdate",
-            "description": "<p>Date of the start of the course</p>"
+            "description": "<p>Date of the start of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
             "optional": false,
             "field": "enddate",
-            "description": "<p>Date of the end of the course</p>"
+            "description": "<p>Date of the end of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
             "field": "size",
-            "description": "<p>maximal amount of the course participants</p>"
+            "description": "<p>maximal amount of the project participants</p>"
           },
           {
             "group": "Parameter",
@@ -2593,14 +2523,14 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Course is successfully created.</code></p>"
+            "description": "<p><code>Project is successfully created.</code></p>"
           },
           {
             "group": "Created 201",
             "type": "Object",
             "optional": false,
-            "field": "course",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "field": "project",
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;provider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -2613,7 +2543,7 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;All badges must be assignable by the course-creator.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;All badges must be assignable by the project-creator.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2626,186 +2556,16 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
   },
   {
     "type": "get",
-    "url": "/api/v1/course/:courseId",
-    "title": "Get course",
-    "name": "getCourse",
-    "description": "<p>Get one course by course-id.</p>",
-    "group": "Course",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>Course found successfully.</code></p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "course",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during storage.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
-  },
-  {
-    "type": "get",
-    "url": "/api/v1/course",
-    "title": "Get courses",
-    "name": "getCourses",
-    "description": "<p>Get all courses respectivly get courses by different parameters which exist.</p>",
-    "group": "Course",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "name",
-            "description": "<p>course name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Coordinates-Array",
-            "optional": true,
-            "field": "coordinates",
-            "description": "<p>coordinates in which radius might be an course </br> example: <code>[longitude, latitude]</code></p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "radius",
-            "description": "<p>radius [in km] about a pair of coordinates</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "startdate",
-            "description": "<p>greater (or equal) than the startdate of the course</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": true,
-            "field": "enddate",
-            "description": "<p>lower (or equal) than the enddate of the course</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "topic",
-            "description": "<p>course topic</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "type",
-            "description": "<p>course type (<code>online</code> or <code>presence</code>)</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p><code>Courses found successfully.</code></p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "courses",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
-          }
-        ]
-      }
-    },
-    "error": {
-      "fields": {
-        "On error": [
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;To filter courses in a certain radius, the parameters &quot;coordinates&quot; and &quot;radius&quot; are required.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
-            "field": "500",
-            "description": "<p>Complications during storage.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
-  },
-  {
-    "type": "get",
-    "url": "/api/v1/course/me",
-    "title": "Get my courses",
-    "name": "getMyCourses",
-    "description": "<p>Get (all) courses of currently signed in User by different queries.</p>",
-    "group": "Course",
+    "url": "/api/v1/project/creator/me/",
+    "title": "Get my created projects",
+    "name": "getMyCreatedProjects",
+    "description": "<p>Get (all) created projects of currently signed in User by different queries.</p>",
+    "group": "Project",
     "header": {
       "fields": {
         "Header": [
@@ -2834,14 +2594,14 @@
             "type": "String",
             "optional": true,
             "field": "name",
-            "description": "<p>course name</p>"
+            "description": "<p>project name</p>"
           },
           {
             "group": "Parameter",
             "type": "Coordinates-Array",
             "optional": true,
             "field": "coordinates",
-            "description": "<p>coordinates in which radius might be an course </br> example: <code>[longitude, latitude]</code></p>"
+            "description": "<p>coordinates in which radius might be an project </br> example: <code>[longitude, latitude]</code></p>"
           },
           {
             "group": "Parameter",
@@ -2855,28 +2615,28 @@
             "type": "Date",
             "optional": true,
             "field": "startdate",
-            "description": "<p>greater (or equal) than the startdate of the course</p>"
+            "description": "<p>greater (or equal) than the startdate of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
             "optional": true,
             "field": "enddate",
-            "description": "<p>lower (or equal) than the enddate of the course</p>"
+            "description": "<p>lower (or equal) than the enddate of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "topic",
-            "description": "<p>course topic</p>"
+            "description": "<p>project topic</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "type",
-            "description": "<p>course type (<code>online</code> or <code>presence</code>)</p>"
+            "description": "<p>project type (<code>online</code> or <code>presence</code>)</p>"
           }
         ]
       }
@@ -2889,14 +2649,14 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Courses found successfully.</code></p>"
+            "description": "<p><code>Projects found successfully.</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "courses",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "field": "projects",
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;provider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -2909,7 +2669,7 @@
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;To filter courses in a certain radius, the parameters &quot;coordinates&quot; and &quot;radius&quot; are required.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;To filter projects in a certain radius, the parameters &quot;coordinates&quot; and &quot;radius&quot; are required.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -2922,16 +2682,16 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
   },
   {
     "type": "get",
-    "url": "/api/v1/course/creator/me/",
-    "title": "Get my created courses",
-    "name": "getMyCreatedCourses",
-    "description": "<p>Get (all) created courses of currently signed in User by different queries.</p>",
-    "group": "Course",
+    "url": "/api/v1/project/me",
+    "title": "Get my projects",
+    "name": "getMyProjects",
+    "description": "<p>Get (all) projects of currently signed in User by different queries.</p>",
+    "group": "Project",
     "header": {
       "fields": {
         "Header": [
@@ -2960,14 +2720,14 @@
             "type": "String",
             "optional": true,
             "field": "name",
-            "description": "<p>course name</p>"
+            "description": "<p>project name</p>"
           },
           {
             "group": "Parameter",
             "type": "Coordinates-Array",
             "optional": true,
             "field": "coordinates",
-            "description": "<p>coordinates in which radius might be an course </br> example: <code>[longitude, latitude]</code></p>"
+            "description": "<p>coordinates in which radius might be an project </br> example: <code>[longitude, latitude]</code></p>"
           },
           {
             "group": "Parameter",
@@ -2981,28 +2741,28 @@
             "type": "Date",
             "optional": true,
             "field": "startdate",
-            "description": "<p>greater (or equal) than the startdate of the course</p>"
+            "description": "<p>greater (or equal) than the startdate of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
             "optional": true,
             "field": "enddate",
-            "description": "<p>lower (or equal) than the enddate of the course</p>"
+            "description": "<p>lower (or equal) than the enddate of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "topic",
-            "description": "<p>course topic</p>"
+            "description": "<p>project topic</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "type",
-            "description": "<p>course type (<code>online</code> or <code>presence</code>)</p>"
+            "description": "<p>project type (<code>online</code> or <code>presence</code>)</p>"
           }
         ]
       }
@@ -3015,14 +2775,14 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Courses found successfully.</code></p>"
+            "description": "<p><code>Projects found successfully.</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "courses",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "field": "projects",
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;provider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -3035,7 +2795,7 @@
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;To filter courses in a certain radius, the parameters &quot;coordinates&quot; and &quot;radius&quot; are required.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;To filter projects in a certain radius, the parameters &quot;coordinates&quot; and &quot;radius&quot; are required.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -3048,16 +2808,16 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
   },
   {
     "type": "get",
-    "url": "/api/v1/course/:courseId/participants",
-    "title": "Get participants of one course",
+    "url": "/api/v1/project/:projectId/participants",
+    "title": "Get participants of one project",
     "name": "getParticipants",
-    "description": "<p>Getting all participants of one course by ID.</p>",
-    "group": "Course",
+    "description": "<p>Getting all participants of one project by ID.</p>",
+    "group": "Project",
     "header": {
       "fields": {
         "Header": [
@@ -3085,8 +2845,8 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
           }
         ]
       }
@@ -3119,14 +2879,14 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission getting the participants of the course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission getting the participants of the project.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -3139,16 +2899,186 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/project/:projectId",
+    "title": "Get project",
+    "name": "getProject",
+    "description": "<p>Get one project by project-id.</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Project found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "project",
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;provider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during storage.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/project",
+    "title": "Get projects",
+    "name": "getProjects",
+    "description": "<p>Get all projects respectivly get projects by different parameters which exist.</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>project name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Coordinates-Array",
+            "optional": true,
+            "field": "coordinates",
+            "description": "<p>coordinates in which radius might be an project </br> example: <code>[longitude, latitude]</code></p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "radius",
+            "description": "<p>radius [in km] about a pair of coordinates</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "startdate",
+            "description": "<p>greater (or equal) than the startdate of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "enddate",
+            "description": "<p>lower (or equal) than the enddate of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "topic",
+            "description": "<p>project topic</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "description": "<p>project type (<code>online</code> or <code>presence</code>)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Project found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "projects",
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;provider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;To filter projects in a certain radius, the parameters &quot;coordinates&quot; and &quot;radius&quot; are required.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during storage.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
   },
   {
     "type": "put",
-    "url": "/api/v1/course/:courseId",
-    "title": "Change course",
-    "name": "putCourse",
-    "description": "<p>Change information of a course.</p>",
-    "group": "Course",
+    "url": "/api/v1/project/:projectId/user/registration",
+    "title": "Register me",
+    "name": "projectSignIn",
+    "description": "<p>Register currently logged in user in a project, if the size is not reached.</p>",
+    "group": "Project",
     "header": {
       "fields": {
         "Header": [
@@ -3176,92 +3106,260 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User registered successfully in project.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project size is already reached.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is already registered in project.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/project/user.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/project/:projectId/user/deregistration",
+    "title": "Deregister me",
+    "name": "projectSignOut",
+    "description": "<p>Deregister a user in a project, if the user was registered.</p>",
+    "group": "Project",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User deregistered successfully from project.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;User is not registered in project.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/project/user.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/project/:projectId",
+    "title": "Change project",
+    "name": "putProject",
+    "description": "<p>Change information of a project.</p>",
+    "group": "Project",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "name",
-            "description": "<p>name of the course</p>"
+            "description": "<p>name of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "ObjectId-Array",
             "optional": true,
             "field": "badge",
-            "description": "<p>the ObjectId of global badges for the course (min: 1) </br> example: <code>[&quot;5e1b0bafeafe4a84c4ac31a9&quot;]</code></p>"
+            "description": "<p>the ObjectId of global badges for the project (min: 1) </br> example: <code>[&quot;5e1b0bafeafe4a84c4ac31a9&quot;]</code></p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "courseprovider",
-            "description": "<p>the provider of the course might be specified by the creator</p>"
+            "field": "provider",
+            "description": "<p>the provider of the project might be specified by the creator</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "postalcode",
-            "description": "<p>postalcode of the building where the course take place</p>"
+            "description": "<p>postalcode of the building where the project take place</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "address",
-            "description": "<p>adress of the location from the Course</p>"
+            "description": "<p>adress of the location from the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Coordinates-Array",
             "optional": true,
             "field": "coordinates",
-            "description": "<p>coordinates of the location from the Course </br> example: <code>[longitude, latitude]</code></p>"
+            "description": "<p>coordinates of the location from the project </br> example: <code>[longitude, latitude]</code></p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "topic",
-            "description": "<p>topic of the Course</p>"
+            "description": "<p>topic of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "description",
-            "description": "<p>a biref summary about the course contents</p>"
+            "description": "<p>a biref summary about the project contents</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "requirements",
-            "description": "<p>a brief summary about the course requirements</p>"
+            "description": "<p>a brief summary about the project requirements</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
             "optional": true,
             "field": "startdate",
-            "description": "<p>Date of the start of the course</p>"
+            "description": "<p>Date of the start of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
             "optional": true,
             "field": "enddate",
-            "description": "<p>Date of the end of the course</p>"
+            "description": "<p>Date of the end of the project</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": true,
             "field": "size",
-            "description": "<p>maximal amount of the course participants; must be greater (equal) than the current signed participants</p>"
+            "description": "<p>maximal amount of the project participants; must be greater (equal) than the current signed participants</p>"
           },
           {
             "group": "Parameter",
@@ -3281,14 +3379,14 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Course is updated successfully.</code></p>"
+            "description": "<p><code>Project is updated successfully.</code></p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "course",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;courseprovider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "field": "project",
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;badge&quot;= [&lt;badgeId&gt;, &lt;badgeId&gt;], &quot;creator&quot;: &lt;userId&gt;, &quot;provider&quot;: &lt;String&gt;, &quot;postalcode&quot;: &lt;Number&gt;, &quot;address&quot;: &lt;String&gt;, &quot;coordinates&quot;: [Number, Number], &quot;topic&quot;: &lt;String&gt;, &quot;description&quot;: &lt;String&gt;, &quot;requirements&quot;: &lt;String&gt;, &quot;startdate&quot;: &lt;Date&gt;, &quot;enddate&quot;: &lt;Date&gt;, &quot;participants&quot;: [&lt;UserId&gt;, &lt;UserId&gt;], &quot;size&quot;: &lt;Number&gt;, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -3301,21 +3399,21 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;All badges must be assignable by the course-creator.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;All badges must be assignable by the project-creator.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission putting the course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission putting the project.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -3328,16 +3426,16 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
   },
   {
     "type": "put",
-    "url": "/api/v1/course/:courseId/deactivation",
-    "title": "Deactivate course",
-    "name": "putCourseHidden",
-    "description": "<p>Deactivate a courseed. The course might be no longer in offer.</p>",
-    "group": "Course",
+    "url": "/api/v1/project/:projectId/deactivation",
+    "title": "Deactivate project",
+    "name": "putProjectHidden",
+    "description": "<p>Deactivate a project. The project might be no longer in offer.</p>",
+    "group": "Project",
     "header": {
       "fields": {
         "Header": [
@@ -3365,8 +3463,8 @@
             "group": "Parameter",
             "type": "ObjectId",
             "optional": false,
-            "field": "courseId",
-            "description": "<p>the ID of the course you are referring to</p>"
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
           }
         ]
       }
@@ -3379,7 +3477,7 @@
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p><code>Course is successfully deactivated.</code></p>"
+            "description": "<p><code>Project is successfully deactivated.</code></p>"
           }
         ]
       }
@@ -3392,21 +3490,21 @@
             "type": "Object",
             "optional": false,
             "field": "400",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission deactivating the course.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission deactivating the project.&quot;}</code></p>"
           },
           {
             "group": "On error",
             "type": "Object",
             "optional": false,
             "field": "409",
-            "description": "<p><code>{&quot;message&quot;: &quot;Course is already deactivated.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Project is already deactivated.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -3419,8 +3517,8 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./routes/api/v1/course/course.js",
-    "groupTitle": "Course"
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
   },
   {
     "type": "post",
@@ -3547,7 +3645,7 @@
     "url": "/api/v1/user/me",
     "title": "Delete me",
     "name": "deleteMe",
-    "description": "<p>Delete the user-account and every dependent course  of currently logged in user (exists to false).</p>",
+    "description": "<p>Delete the user-account and every dependent project  of currently logged in user (exists to false).</p>",
     "group": "User",
     "header": {
       "fields": {

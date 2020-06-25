@@ -27,6 +27,7 @@
     "requestPermissionAssignBadge",
     "grantPermissionAssignBadge",
     "revokePermissionAssignBadge",
+    "issuerBadge",
     "assigneProjectBadge",
     "unassigneProjectBadge",
     "assigneMultipleProjectBadges",
