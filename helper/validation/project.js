@@ -6,14 +6,14 @@
 const Joi = require('@hapi/joi');
 
 // Example validation
-const courseValidation = data => {
+const projectValidation = data => {
   const schema = Joi.object({
     name: Joi.string().min(4).max(50).required(),
     /// bei referenzen testen auf Länge und Art (zb. String ertc)
     //badges local and global
     //creator --> User
     badge: Joi.array().required(),
-    courseprovider: Joi.string().min(1).required(),
+    provider: Joi.string().min(1).required(),
     postalcode: Joi.string().min(5).max(5),
     address: Joi.string().min(4),
     coordinates: Joi.array(),
@@ -30,4 +30,4 @@ const courseValidation = data => {
 };
 
 
-module.exports.courseValidation = courseValidation;
+module.exports.projectValidation = projectValidation;

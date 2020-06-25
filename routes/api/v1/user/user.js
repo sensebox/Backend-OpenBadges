@@ -3,7 +3,7 @@
 "use strict";
 
 const User = require('../../../../models/user');
-const Course = require('../../../../models/user');
+const Project = require('../../../../models/user');
 
 const fs = require('fs');
 const path = require('path');
@@ -145,7 +145,7 @@ const putMe = async function(req, res){
 /**
  * @api {delete} /api/v1/user/me Delete me
  * @apiName deleteMe
- * @apiDescription Delete the user-account and every dependent course  of currently logged in user (exists to false).
+ * @apiDescription Delete the user-account and every dependent project  of currently logged in user (exists to false).
  * @apiGroup User
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -161,8 +161,8 @@ const deleteMe = async function(req, res){
   var id;
   if(req.user) id = req.user.id;
   try{
-    await Course.updateMany({participants: {$in: req.user.id}}, {$set: {participants: {$pull: req.user.id}}});
-    await Course.updateMany({creator: req.user.id}, {$set: {exists: false}});
+    await Project.updateMany({participants: {$in: req.user.id}}, {$set: {participants: {$pull: req.user.id}}});
+    await Project.updateMany({creator: req.user.id}, {$set: {exists: false}});
     // badges are only connected to user, if user is deleted, every dependecy is also deleted
     var user = await User.deleteOne({_id: id});
     if(user && user.deletedCount > 0){

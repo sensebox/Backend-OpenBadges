@@ -1,4 +1,4 @@
-<br />Documentation of the routes and methods to manage [users](#api-User), [badges](#api-Badge), [courses](#api-Course) and [admins](#api-Admin) in the OpenBadges API.
+<br />Documentation of the routes and methods to manage [users](#api-User), [badges](#api-Badge), [projects](#api-Project) and [admins](#api-Admin) in the OpenBadges API.
 You can find the API running at [http://localhost:3001/](http://localhost:3001/).
 
 ## Date
@@ -12,7 +12,7 @@ Example:
 
 ## IDs
 
-All users, courses and badges receive a unique public identifier. These identifiers are exactly 24 character long and only contain digits and characters a to f.
+All users, projects and badges receive a unique public identifier. These identifiers are exactly 24 character long and only contain digits and characters a to f.
 
 Example:
 
@@ -26,4 +26,4 @@ All requests assume the payload encoded as JSON with `Content-type: application/
 
 You can find the whole source code of the API at GitHub in the [OpenBadges](https://github.com/sensebox/Backend-OpenBadges) repository.
 
-If there is something unclear or there is a mistake in this documentation please open an [issue](https://github.com/dhenn12/OpenBadges/issues/new) in the original [GitHub](https://github.com/dhenn12/OpenBadges) repository.
+If there is something unclear or there is a mistake in this documentation please open an [issue](https://github.com/sensebox/Backend-OpenBadges/issues/new) in the [GitHub](https://github.com/sensebox/Backend-OpenBadges) repository.

@@ -5,7 +5,7 @@
 const mongoose = require('mongoose');
 
 //simple schema
-const CourseSchema = new mongoose.Schema({
+const ProjectSchema = new mongoose.Schema({
   // Kurs name
   name: {
     type: String,
@@ -23,7 +23,7 @@ const CourseSchema = new mongoose.Schema({
     required: true
   },
   // Falls der Nutzer es für eine organisation etc anbietet (zb. Kreativwerkstatt Münster)
-  courseprovider: {
+  provider: {
     type: String,
     required: true
   },
@@ -101,4 +101,4 @@ const CourseSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Course', CourseSchema);
+module.exports = mongoose.model('Project', ProjectSchema);

@@ -13,7 +13,7 @@ const AdminRouter = express.Router();
 const login = require('./login');
 const user = require('./user');
 const badge = require('./badge');
-const course = require('./course');
+const project = require('./project');
 const {adminAuthorization} = require('../../../../helper/authorization/middleware');
 const {upload} = require('../../../../helper/imageUpload');
 
@@ -39,14 +39,14 @@ AdminRouter.route('/badge')
 AdminRouter.route('/badge')
     .put(adminAuthorization, upload.single('image'), badge.putBadge);
 
-AdminRouter.route('/badge/:badgeId/course/:courseId/assigne/user/:userId')
-    .put(adminAuthorization, badge.assigneCourseBadge);
+AdminRouter.route('/badge/:badgeId/project/:projectId/assigne/user/:userId')
+    .put(adminAuthorization, badge.assigneProjectBadge);
 
-AdminRouter.route('/badge/:badgeId/course/:courseId/unassigne/user/:userId')
-    .put(adminAuthorization, badge.unassigneCourseBadge);
+AdminRouter.route('/badge/:badgeId/project/:projectId/unassigne/user/:userId')
+    .put(adminAuthorization, badge.unassigneProjectBadge);
 
-AdminRouter.route('/course/:courseId/participants')
-    .get(adminAuthorization, course.getParticipants);
+AdminRouter.route('/project/:projectId/participants')
+    .get(adminAuthorization, project.getParticipants);
 
 
 module.exports = AdminRouter;

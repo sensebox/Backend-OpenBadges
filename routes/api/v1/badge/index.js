@@ -32,11 +32,11 @@ BadgeRouter.route('/:badgeId')
 BadgeRouter.route('/:badgeId/deactivation')
     .put(userAuthorization, require('./badge').putBadgeHidden);
 
-BadgeRouter.route('/:badgeId/course/:courseId/assigne/user/:userId')
-    .put(userAuthorization, require('./user').assigneCourseBadge);
+BadgeRouter.route('/:badgeId/project/:projectId/assigne/user/:userId')
+    .put(userAuthorization, require('./user').assigneProjectBadge);
 
-BadgeRouter.route('/:badgeId/course/:courseId/unassigne/user/:userId')
-    .put(userAuthorization, require('./user').unassigneCourseBadge);
+BadgeRouter.route('/:badgeId/project/:projectId/unassigne/user/:userId')
+    .put(userAuthorization, require('./user').unassigneProjectBadge);
 
 BadgeRouter.route('/:badgeId/assigne/user/:userId')
     .put(userAuthorization, require('./user').assigneBadge);
@@ -44,7 +44,7 @@ BadgeRouter.route('/:badgeId/assigne/user/:userId')
 BadgeRouter.route('/:badgeId/unassigne/user/:userId')
     .put(userAuthorization, require('./user').unassigneBadge);
 
-BadgeRouter.route('/course/:courseId/assigne')
+BadgeRouter.route('/project/:projectId/assigne')
     .put(userAuthorization, require('./user').assigneMultipleBadges);
 
 BadgeRouter.route('/:badgeId/grant/:userId')

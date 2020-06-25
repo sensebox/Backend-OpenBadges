@@ -8,48 +8,48 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 
-const Course = require('../../../../models/course');
+const Project = require('../../../../models/project');
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
-const {courseValidation} = require('../../../../helper/validation/course');
+const {projectValidation} = require('../../../../helper/validation/project');
 
 
 
 /**
- * @api {post} /api/v1/course Create course
- * @apiName createCourse
- * @apiDescription Create a new Course.
- * @apiGroup Course
+ * @api {post} /api/v1/project Create project
+ * @apiName createProject
+ * @apiDescription Create a new project.
+ * @apiGroup Project
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam {String} name name of the course
- * @apiParam {ObjectId-Array} badge the ObjectId of global badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
- * @apiParam {String} courseprovider the provider of the course might be specified by the creator
- * @apiParam {String} [postalcode] postalcode of the building where the course take place
- * @apiParam {String} [address] adress of the location from the Course
- * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course </br> example: `[longitude, latitude]`
- * @apiParam {String} topic topic of the Course
- * @apiParam {String} description a brief summary about the course contents
- * @apiParam {String} requirements a brief summary about the course requirements
- * @apiParam {Date} startdate Date of the start of the course
- * @apiParam {Date} enddate Date of the end of the course
- * @apiParam {Number} size maximal amount of the course participants
+ * @apiParam {String} name name of the project
+ * @apiParam {ObjectId-Array} badge the ObjectId of global badges for the project (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
+ * @apiParam {String} provider the provider of the project might be specified by the creator
+ * @apiParam {String} [postalcode] postalcode of the building where the project take place
+ * @apiParam {String} [address] adress of the location from the project
+ * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the project </br> example: `[longitude, latitude]`
+ * @apiParam {String} topic topic of the project
+ * @apiParam {String} description a brief summary about the project contents
+ * @apiParam {String} requirements a brief summary about the project requirements
+ * @apiParam {Date} startdate Date of the start of the project
+ * @apiParam {Date} enddate Date of the end of the project
+ * @apiParam {Number} size maximal amount of the project participants
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
- * @apiSuccess (Created 201) {String} message `Course is successfully created.`
- * @apiSuccess (Created 201) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Created 201) {String} message `Project is successfully created.`
+ * @apiSuccess (Created 201) {Object} project `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "provider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
- * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the course-creator."}`
+ * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the project-creator."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const postCourse = async function(req, res){
+const postProject = async function(req, res){
   if(req.fileValidationError){
     return res.status(422).send({message: req.fileValidationError});
   }
-  const {error} = courseValidation(req.body);
+  const {error} = projectValidation(req.body);
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try{
@@ -57,14 +57,14 @@ const postCourse = async function(req, res){
     const badges = await Promise.all(promises);
     var badgesError = badges.filter(badge => badge.issuer.concat(badge.mentor).indexOf(req.user.id) < 0);
     if(badgesError.length > 0){
-      return res.status(400).send({message: "All badges must be assignable by the course-creator."});
+      return res.status(400).send({message: "All badges must be assignable by the project-creator."});
     }
     const body = {
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name,
       badge: req.body.badge,
       creator: req.user.id,
-      courseprovider: req.body.courseprovider,
+      provider: req.body.provider,
       topic: req.body.topic,
       description: req.body.description,
       requirements: req.body.requirements,
@@ -72,13 +72,13 @@ const postCourse = async function(req, res){
       enddate: req.body.enddate,
       size: req.body.size
     };
-    // presence course
+    // presence project
     if(req.body.coordinates && req.body.address && req.body.postalcode){
       body.coordinates = {type: 'Point', coordinates: req.body.coordinates};
       body.address = req.body.address;
       body.postalcode = req.body.postalcode;
     }
-    // course image
+    // project image
     if(req.file){
       const image = {
         path: req.file.filename,
@@ -88,15 +88,15 @@ const postCourse = async function(req, res){
       };
       body.image = image;
     }
-    const course = new Course(body);
-    const savedCourse = await course.save();
-    // updates the role to issuer, because the user issues a new course.
+    const project = new Project(body);
+    const savedProject = await project.save();
+    // updates the role to issuer, because the user issues a new project.
     if(req.user.role == 'earner'){
       await User.updateOne({_id: req.user.id}, {role: 'issuer'});
     }
     return res.status(201).send({
-      message: 'Course is successfully created.',
-      course: savedCourse
+      message: 'Project is successfully created.',
+      project: savedProject
     });
   }
   catch(err) {
@@ -107,26 +107,26 @@ const postCourse = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course Get courses
- * @apiName getCourses
- * @apiDescription Get all courses respectivly get courses by different parameters which exist.
- * @apiGroup Course
+ * @api {get} /api/v1/project Get projects
+ * @apiName getProjects
+ * @apiDescription Get all projects respectivly get projects by different parameters which exist.
+ * @apiGroup Project
  *
- * @apiParam {String} [name] course name
- * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course </br> example: `[longitude, latitude]`
+ * @apiParam {String} [name] project name
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an project </br> example: `[longitude, latitude]`
  * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
- * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
- * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
- * @apiParam {String} [topic] course topic
- * @apiParam {String} [type] course type (`online` or `presence`)
+ * @apiParam {Date} [startdate] greater (or equal) than the startdate of the project
+ * @apiParam {Date} [enddate] lower (or equal) than the enddate of the project
+ * @apiParam {String} [topic] project topic
+ * @apiParam {String} [type] project type (`online` or `presence`)
  *
- * @apiSuccess (Success 200) {String} message `Courses found successfully.`
- * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {String} message `Project found successfully.`
+ * @apiSuccess (Success 200) {Object} projects `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "provider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
- * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
+ * @apiError (On error) {Object} 404 `{"message": "To filter projects in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const getCourses = async function(req, res){
+const getProjects = async function(req, res){
   try{
     var qname = req.query.name;
     var qcoordinates = req.query.coordinates;
@@ -167,15 +167,15 @@ const getCourses = async function(req, res){
       }
       else {
         return res.status(404).send({
-          message: 'To filter courses in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
+          message: 'To filter projects in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
         });
       }
     }
 
-    var result = await Course.find(query);
+    var result = await Project.find(query);
     return res.status(200).send({
-      message: 'Courses found successfully.',
-      courses: result
+      message: 'Projects found successfully.',
+      projects: result
     });
   }
   catch(err){
@@ -186,33 +186,33 @@ const getCourses = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course/:courseId Get course
- * @apiName getCourse
- * @apiDescription Get one course by course-id.
- * @apiGroup Course
+ * @api {get} /api/v1/project/:projectId Get project
+ * @apiName getProject
+ * @apiDescription Get one project by project-id.
+ * @apiGroup Project
  *
- * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
  *
- * @apiSuccess (Success 200) {String} message `Course found successfully.`
- * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {String} message `Project found successfully.`
+ * @apiSuccess (Success 200) {Object} project `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "provider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
- * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "Project not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const getCourseID = async function(req, res){
+const getProjectID = async function(req, res){
   try{
-    var course = await Course.findOne({_id: req.params.courseId})
+    var project = await Project.findOne({_id: req.params.projectId})
                              .populate('creator', {firstname:1, lastname: 1})
                              .populate('badge');
-    if(course){
+    if(project){
       return res.status(200).send({
-        message: 'Course found successfully.',
-        course: course
+        message: 'Project found successfully.',
+        project: project
       });
     }
     else {
       return res.status(404).send({
-        message: 'Course not found.',
+        message: 'Project not found.',
       });
     }
   }
@@ -223,30 +223,30 @@ const getCourseID = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course/me Get my courses
- * @apiName getMyCourses
- * @apiDescription Get (all) courses of currently signed in User by different queries.
- * @apiGroup Course
+ * @api {get} /api/v1/project/me Get my projects
+ * @apiName getMyProjects
+ * @apiDescription Get (all) projects of currently signed in User by different queries.
+ * @apiGroup Project
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam {String} [name] course name
- * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course </br> example: `[longitude, latitude]`
+ * @apiParam {String} [name] project name
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an project </br> example: `[longitude, latitude]`
  * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
- * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
- * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
- * @apiParam {String} [topic] course topic
- * @apiParam {String} [type] course type (`online` or `presence`)
+ * @apiParam {Date} [startdate] greater (or equal) than the startdate of the project
+ * @apiParam {Date} [enddate] lower (or equal) than the enddate of the project
+ * @apiParam {String} [topic] project topic
+ * @apiParam {String} [type] project type (`online` or `presence`)
  *
- * @apiSuccess (Success 200) {String} message `Courses found successfully.`
- * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {String} message `Projects found successfully.`
+ * @apiSuccess (Success 200) {Object} projects `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "provider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
- * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
+ * @apiError (On error) {Object} 404 `{"message": "To filter projects in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const getMyCourses = async function(req, res){
+const getMyProjects = async function(req, res){
   try{
     var qname = req.query.name;
     var qcoordinates = req.query.coordinates;
@@ -288,15 +288,15 @@ const getMyCourses = async function(req, res){
       }
       else {
         return res.status(404).send({
-          message: 'To filter courses in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
+          message: 'To filter projects in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
         });
       }
     }
 
-    var result = await Course.find(query);
+    var result = await Project.find(query);
     return res.status(200).send({
-      message: 'Courses found successfully.',
-      courses: result
+      message: 'Projects found successfully.',
+      projects: result
     });
   }
   catch(err){
@@ -307,30 +307,30 @@ const getMyCourses = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course/creator/me/ Get my created courses
- * @apiName getMyCreatedCourses
- * @apiDescription Get (all) created courses of currently signed in User by different queries.
- * @apiGroup Course
+ * @api {get} /api/v1/project/creator/me/ Get my created projects
+ * @apiName getMyCreatedProjects
+ * @apiDescription Get (all) created projects of currently signed in User by different queries.
+ * @apiGroup Project
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam {String} [name] course name
- * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an course </br> example: `[longitude, latitude]`
+ * @apiParam {String} [name] project name
+ * @apiParam {Coordinates-Array} [coordinates] coordinates in which radius might be an project </br> example: `[longitude, latitude]`
  * @apiParam {Number} [radius] radius [in km] about a pair of coordinates
- * @apiParam {Date} [startdate] greater (or equal) than the startdate of the course
- * @apiParam {Date} [enddate] lower (or equal) than the enddate of the course
- * @apiParam {String} [topic] course topic
- * @apiParam {String} [type] course type (`online` or `presence`)
+ * @apiParam {Date} [startdate] greater (or equal) than the startdate of the project
+ * @apiParam {Date} [enddate] lower (or equal) than the enddate of the project
+ * @apiParam {String} [topic] project topic
+ * @apiParam {String} [type] project type (`online` or `presence`)
  *
- * @apiSuccess (Success 200) {String} message `Courses found successfully.`
- * @apiSuccess (Success 200) {Object} courses `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Success 200) {String} message `Projects found successfully.`
+ * @apiSuccess (Success 200) {Object} projects `[{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "provider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
- * @apiError (On error) {Object} 404 `{"message": "To filter courses in a certain radius, the parameters "coordinates" and "radius" are required."}`
+ * @apiError (On error) {Object} 404 `{"message": "To filter projects in a certain radius, the parameters "coordinates" and "radius" are required."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const getMyCreatedCourses = async function(req, res){
+const getMyCreatedProjects = async function(req, res){
   try{
     var qname = req.query.name;
     var qcoordinates = req.query.coordinates;
@@ -372,15 +372,15 @@ const getMyCreatedCourses = async function(req, res){
       }
       else {
         return res.status(404).send({
-          message: 'To filter courses in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
+          message: 'To filter projects in a certain radius, the parameters \'coordinates\' and \'radius\' are required.',
         });
       }
     }
 
-    var result = await Course.find(query);
+    var result = await Project.find(query);
     return res.status(200).send({
-      message: 'Courses found successfully.',
-      courses: result
+      message: 'Projects found successfully.',
+      projects: result
     });
   }
   catch(err){
@@ -391,49 +391,49 @@ const getMyCreatedCourses = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/course/:courseId Change course
- * @apiName putCourse
- * @apiDescription Change information of a course.
- * @apiGroup Course
+ * @api {put} /api/v1/project/:projectId Change project
+ * @apiName putProject
+ * @apiDescription Change information of a project.
+ * @apiGroup Project
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam {ObjectId} courseId the ID of the course you are referring to
- * @apiParam {String} [name] name of the course
- * @apiParam {ObjectId-Array} [badge] the ObjectId of global badges for the course (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
- * @apiParam {String} [courseprovider] the provider of the course might be specified by the creator
- * @apiParam {String} [postalcode] postalcode of the building where the course take place
- * @apiParam {String} [address] adress of the location from the Course
- * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the Course </br> example: `[longitude, latitude]`
- * @apiParam {String} [topic] topic of the Course
- * @apiParam {String} [description] a biref summary about the course contents
- * @apiParam {String} [requirements] a brief summary about the course requirements
- * @apiParam {Date} [startdate] Date of the start of the course
- * @apiParam {Date} [enddate] Date of the end of the course
- * @apiParam {Number} [size] maximal amount of the course participants; must be greater (equal) than the current signed participants
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
+ * @apiParam {String} [name] name of the project
+ * @apiParam {ObjectId-Array} [badge] the ObjectId of global badges for the project (min: 1) </br> example: `["5e1b0bafeafe4a84c4ac31a9"]`
+ * @apiParam {String} [provider] the provider of the project might be specified by the creator
+ * @apiParam {String} [postalcode] postalcode of the building where the project take place
+ * @apiParam {String} [address] adress of the location from the project
+ * @apiParam {Coordinates-Array} [coordinates] coordinates of the location from the project </br> example: `[longitude, latitude]`
+ * @apiParam {String} [topic] topic of the project
+ * @apiParam {String} [description] a biref summary about the project contents
+ * @apiParam {String} [requirements] a brief summary about the project requirements
+ * @apiParam {Date} [startdate] Date of the start of the project
+ * @apiParam {Date} [enddate] Date of the end of the project
+ * @apiParam {Number} [size] maximal amount of the project participants; must be greater (equal) than the current signed participants
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
- * @apiSuccess (Success 200) {String} message `Course is updated successfully.`
- * @apiSuccess (Success 200) {Object} course `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "courseprovider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {String} message `Project is updated successfully.`
+ * @apiSuccess (Success 200) {Object} project `{"name":"name", "badge"= [<badgeId>, <badgeId>], "creator": <userId>, "provider": <String>, "postalcode": <Number>, "address": <String>, "coordinates": [Number, Number], "topic": <String>, "description": <String>, "requirements": <String>, "startdate": <Date>, "enddate": <Date>, "participants": [<UserId>, <UserId>], "size": <Number>, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
- * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the course-creator."}`
- * @apiError (On error) {Object} 403 `{"message": "No permission putting the course."}`
- * @apiError (On error) {Object} 404 `{"message": "Course not found."}`
+ * @apiError (On error) {Object} 400 `{"message": "All badges must be assignable by the project-creator."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission putting the project."}`
+ * @apiError (On error) {Object} 404 `{"message": "Project not found."}`
  * @apiError (On error) {Obejct} 500 Complications during storage.
  *
  */
-const putCourse = async function(req, res){
-  const {error} = courseValidation(req.body);
+const putProject = async function(req, res){
+  const {error} = projectValidation(req.body);
   if(error) return res.status(422).send({message: error.details[0].message});
 
   try {
-    var result = await Course.findOne({_id: req.params.courseId});
+    var result = await Project.findOne({_id: req.params.projectId});
     if(result){
       if(result.creator == req.user.id){
         result.name = req.body.name || result.name;
-        result.courseprovider = req.body.courseprovider || result.courseprovider;
+        result.provider = req.body.provider || result.provider;
         result.postalcode = req.body.postalcode || result.postalcode;
         result.address = req.body.address || result.address;
         if(req.body.badge){
@@ -442,7 +442,7 @@ const putCourse = async function(req, res){
           console.log(badges);
           var badgesError = badges.filter(badge => badge.issuer.concat(badge.mentor).indexOf(req.user.id) < 0);
           if(badgesError.length > 0){
-            return res.status(400).send({message: "All badges must be assignable by the course-creator."});
+            return res.status(400).send({message: "All badges must be assignable by the project-creator."});
           }
           result.badge = req.body.badge;
         }
@@ -482,23 +482,23 @@ const putCourse = async function(req, res){
         }
 
         await result.save();
-        const updatedCourse = await Course.findById(result._id)
+        const updatedProject = await Project.findById(result._id)
                                           .populate('creator', {firstname:1, lastname: 1})
                                           .populate('badge');
         return res.status(200).send({
-          message: 'Course is updated successfully.',
-          course: updatedCourse
+          message: 'Project is updated successfully.',
+          project: updatedProject
         });
       }
       else {
         return res.status(403).send({
-          message: 'No permission putting the course.',
+          message: 'No permission putting the project.',
         });
       }
     }
     else {
       return res.status(400).send({
-        message: 'Course not found.',
+        message: 'Project not found.',
       });
     }
   }
@@ -509,31 +509,31 @@ const putCourse = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/course/:courseId/participants Get participants of one course
+ * @api {get} /api/v1/project/:projectId/participants Get participants of one project
  * @apiName getParticipants
- * @apiDescription Getting all participants of one course by ID.
- * @apiGroup Course
+ * @apiDescription Getting all participants of one project by ID.
+ * @apiGroup Project
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
  *
  * @apiSuccess (Success 200) {String} message `Participants found successfully.`
  * @apiSuccess (Success 200) {Object} participants `[{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
- * @apiError (On error) {Object} 400 `{"message": "Course not found."}`
- * @apiError (On error) {Object} 403 `{"message": "No permission getting the participants of the course."}`
+ * @apiError (On error) {Object} 400 `{"message": "Project not found."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission getting the participants of the project."}`
  * @apiError (On error) {Obejct} 500 Complications during storage.
  */
 const getParticipants = async function(req, res){
-  var courseId = req.params.courseId;
+  var projectId = req.params.projectId;
   try {
-    var course = await Course.findById(courseId);
-    if(course){
-      if(course.creator == req.user.id){
-        var participants = await User.find({_id: {$in: course.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    var project = await Project.findById(projectId);
+    if(project){
+      if(project.creator == req.user.id){
+        var participants = await User.find({_id: {$in: project.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
         return res.status(200).send({
           message: 'Participants found successfully.',
           participants: participants
@@ -541,13 +541,13 @@ const getParticipants = async function(req, res){
       }
       else {
         return res.status(403).send({
-          message: 'No permission getting the participants of the course.',
+          message: 'No permission getting the participants of the project.',
         });
       }
     }
     else {
       return res.status(404).send({
-        message: 'Course not found.',
+        message: 'Project not found.',
       });
     }
   }
@@ -558,50 +558,50 @@ const getParticipants = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/course/:courseId/deactivation Deactivate course
- * @apiName putCourseHidden
- * @apiDescription Deactivate a courseed. The course might be no longer in offer.
- * @apiGroup Course
+ * @api {put} /api/v1/project/:projectId/deactivation Deactivate project
+ * @apiName putProjectHidden
+ * @apiDescription Deactivate a project. The project might be no longer in offer.
+ * @apiGroup Project
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
  * @apiHeaderExample {String} Authorization Header Example
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
- * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
  *
- * @apiSuccess (Success 200) {String} message `Course is successfully deactivated.`
+ * @apiSuccess (Success 200) {String} message `Project is successfully deactivated.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Course not found."}`
- * @apiError (On error) {Object} 403 `{"message": "No permission deactivating the course."}`
- * @apiError (On error) {Object} 409 `{"message": "Course is already deactivated."}`
+ * @apiError (On error) {Object} 400 `{"message": "Project not found."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission deactivating the project."}`
+ * @apiError (On error) {Object} 409 `{"message": "Project is already deactivated."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
-const putCourseHidden = async function(req, res){
+const putProjectHidden = async function(req, res){
   try{
-    var result = await Course.findOne({_id: req.params.courseId});
+    var result = await Project.findOne({_id: req.params.projectId});
     if(result){
       if(result.creator == req.user.id){
         if(result.exists !== false){
-          await Course.updateOne({_id: req.params.courseId}, {exists: false});
+          await Project.updateOne({_id: req.params.projectId}, {exists: false});
           return res.status(200).send({
-            message: 'Course is successfully deactivated.'
+            message: 'Project is successfully deactivated.'
           });
         }
         else {
           return res.status(409).send({
-            message: 'Course is already deactivated.'
+            message: 'Project is already deactivated.'
           });
         }
       }
       else {
         return res.status(403).send({
-          message: 'No permission deactivating the course.',
+          message: 'No permission deactivating the project.',
         });
       }
     }
     else {
       return res.status(400).send({
-        message: 'Course not found.',
+        message: 'Project not found.',
       });
     }
   }
@@ -611,12 +611,12 @@ const putCourseHidden = async function(req, res){
 };
 
 module.exports = {
-  postCourse,
-  getCourses,
-  getMyCourses,
-  getMyCreatedCourses,
-  getCourseID,
-  putCourse,
+  postProject,
+  getProjects,
+  getMyProjects,
+  getMyCreatedProjects,
+  getProjectID,
+  putProject,
   getParticipants,
-  putCourseHidden
+  putProjectHidden
 };

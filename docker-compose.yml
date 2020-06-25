@@ -24,5 +24,5 @@ services:
       depends_on:
         - mongo
       command: [
-        "mongoimport --host=mongo \ --db=openBadges --collection=users --file=/data/users.json && mongoimport --host=mongo \ --db=openBadges --collection=courses --file=/data/courses.json && mongoimport --host=mongo \ --db=openBadges --collection=badges --file=/data/badges.json"
+        "mongoimport --host=mongo \ --db=openBadges --collection=users --file=/data/users.json && mongoimport --host=mongo \ --db=openBadges --collection=projects --file=/data/projects.json && mongoimport --host=mongo \ --db=openBadges --collection=badges --file=/data/badges.json"
       ]

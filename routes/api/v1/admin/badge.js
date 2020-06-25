@@ -8,7 +8,7 @@ const path = require('path');
 
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
-const Course = require('../../../../models/course');
+const Project = require('../../../../models/project');
 
 
 /**
@@ -165,9 +165,9 @@ const putBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/unassigne/user/:userId Unassigne a course-related Badge
- * @apiName adminUnassigneCourseBadge
- * @apiDescription Unassigne a course-related Badge to a specified user of given course.
+ * @api {put} /api/v1/admin/badge/:badgeId/project/:projectId/unassigne/user/:userId Unassigne a project-related Badge
+ * @apiName adminUnassigneProjectBadge
+ * @apiDescription Unassigne a project-related Badge to a specified user of given project.
  * @apiGroup Admin
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -175,28 +175,28 @@ const putBadge = async function(req, res){
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
- * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
  * @apiParam {ObjectId} userId the ID of the user you are referring to
  *
  * @apiSuccess (Success 200) {String} message `Badge is unassigned successfully to user.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Badge is already unassigned to user."}` or </br> `{"message": "User is not related to given course."}`
- * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
+ * @apiError (On error) {Object} 400 `{"message": "Badge is already unassigned to user."}` or </br> `{"message": "User is not related to given project."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Project not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
-const unassigneCourseBadge = async function(req, res){
+const unassigneProjectBadge = async function(req, res){
   var badgeId = req.params.badgeId;
   var userId = req.params.userId;
-  var courseId = req.params.courseId;
+  var projectId = req.params.projectId;
 
   try{
     var badge = await Badge.findById(badgeId);
     if(badge){
-      var course = await Course.findById(courseId);
-      if(course){
+      var project = await Project.findById(projectId);
+      if(project){
         var user = await User.findById(userId);
         if(user){
-          if(course.participants.indexOf(userId) > -1){
+          if(project.participants.indexOf(userId) > -1){
             if(user.badge.indexOf(badgeId) > -1){
               // badge is not unassigned to user
               user.badge.splice(user.badge.indexOf(badgeId), 1);
@@ -213,7 +213,7 @@ const unassigneCourseBadge = async function(req, res){
           }
           else {
             return res.status(400).send({
-              message: 'User is not related to given course.',
+              message: 'User is not related to given project.',
             });
           }
         }
@@ -225,7 +225,7 @@ const unassigneCourseBadge = async function(req, res){
       }
       else {
         return res.status(404).send({
-          message: 'Course not found.',
+          message: 'Project not found.',
         });
       }
     }
@@ -243,9 +243,9 @@ const unassigneCourseBadge = async function(req, res){
 
 
 /**
- * @api {put} /api/v1/admin/badge/:badgeId/course/:courseId/assigne/user/:userId Assigne a course-related Badge
- * @apiName adminAssigneCourseBadge
- * @apiDescription Assigne a course-related Badge to a specified user of given course.
+ * @api {put} /api/v1/admin/badge/:badgeId/project/:projectId/assigne/user/:userId Assigne a project-related Badge
+ * @apiName adminAssigneProjectBadge
+ * @apiDescription Assigne a project-related Badge to a specified user of given project.
  * @apiGroup Admin
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
@@ -253,28 +253,28 @@ const unassigneCourseBadge = async function(req, res){
  *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
  *
  * @apiParam {ObjectId} badgeId the ID of the Badge you are referring to
- * @apiParam {ObjectId} courseId the ID of the course you are referring to
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
  * @apiParam {ObjectId} userId the ID of the user you are referring to
  *
  * @apiSuccess (Success 200) {String} message `Badge is assigned successfully to user.`
  *
- * @apiError (On error) {Object} 400 `{"message": "Badge is already assigned to user."}` or </br> `{"message": "User is not related to given course."}`
- * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Course not found."}` or </br> `{"message": "User not found."}`
+ * @apiError (On error) {Object} 400 `{"message": "Badge is already assigned to user."}` or </br> `{"message": "User is not related to given project."}`
+ * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "Project not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
-const assigneCourseBadge = async function(req, res){
+const assigneProjectBadge = async function(req, res){
   var badgeId = req.params.badgeId;
   var userId = req.params.userId;
-  var courseId = req.params.courseId;
+  var projectId = req.params.projectId;
 
   try{
     var badge = await Badge.findById(badgeId);
     if(badge){
-      var course = await Course.findById(courseId);
-      if(course){
+      var project = await Project.findById(projectId);
+      if(project){
         var user = await User.findById(userId);
         if(user){
-          if(course.participants.indexOf(userId) > -1){
+          if(project.participants.indexOf(userId) > -1){
             if(user.badge.indexOf(badgeId) < 0){
               // badge is not assigned to user
               user.badge.push(badgeId);
@@ -291,7 +291,7 @@ const assigneCourseBadge = async function(req, res){
           }
           else {
             return res.status(400).send({
-              message: 'User is not related to given course.',
+              message: 'User is not related to given project.',
             });
           }
         }
@@ -303,7 +303,7 @@ const assigneCourseBadge = async function(req, res){
       }
       else {
         return res.status(404).send({
-          message: 'Course not found.',
+          message: 'Project not found.',
         });
       }
     }
@@ -322,6 +322,6 @@ const assigneCourseBadge = async function(req, res){
 module.exports = {
  getBadges,
  putBadge,
- assigneCourseBadge,
- unassigneCourseBadge
+ assigneProjectBadge,
+ unassigneProjectBadge
 };
