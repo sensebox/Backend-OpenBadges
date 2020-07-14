@@ -37,10 +37,12 @@ const getBadges = async function(req, res){
       exists: true
     };
     if(qname){
-      query.name = qname;
+      var regExpEscapeName = qname.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.name = new RegExp(regExpEscapeName, "i");
     }
     if(qdescription){
-      query.description=qdescription;
+      var regExpEscapeDescription = qdescription.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.description = new RegExp(regExpEscapeDescription, "i");
     }
     if(qissuer){
       query.$or=[{issuer:{$in: qissuer}},{mentor:{$in: qissuer}}];
@@ -96,10 +98,12 @@ const getBadgesMe = async function(req, res){
     var query = {_id: {$in: user.badge}};
 
     if(qname){
-      query.name = qname;
+      var regExpEscapeName = qname.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.name = new RegExp(regExpEscapeName, "i");
     }
     if(qdescription){
-      query.description=qdescription;
+      var regExpEscapeDescription = qdescription.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+      query.description = new RegExp(regExpEscapeDescription, "i");
     }
     if(qissuer){
       query.$or=[{issuer:{$in: qissuer}},{mentor:{$in: qissuer}}];
