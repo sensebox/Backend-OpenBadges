@@ -4,14 +4,21 @@ services:
     build: .
     ports:
       - "3001:3001"
+    volumes:
+      - ./upload:/usr/src/app/upload
     depends_on:
       - mongo
   mongo:
-    image: mongo
+    image: mongo:4.2
     ports:
       - "27017:27017"
     volumes:
       - ./data:/data/db
+      - ./init-mongo-user.js:/docker-entrypoint-initdb.d/init-mongo-user.js:ro
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=openBadges
 
   mongo-seed:
       image: stefanwalther/mongo-seed

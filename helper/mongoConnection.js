@@ -5,9 +5,12 @@
 const mongoose = require('mongoose');
 const chalk = require('chalk');
 
+const mongoUsername = process.env.MONGO_USERNAME
+const mongoPassword = process.env.MONGO_PASSWORD
+
 const connectMongoDB = async function(cb) {
   // set up default ("Docker") mongoose connection
-  await mongoose.connect('mongodb://mongo/openBadges', {
+  await mongoose.connect(`mongodb://${mongoUsername}:${mongoPassword}@mongo/openBadges`, {
     useNewUrlParser: true,
     useCreateIndex: true,
     autoReconnect: true,
@@ -18,7 +21,7 @@ const connectMongoDB = async function(cb) {
   }).catch(async err => {
     console.log(chalk.red('Connection to '+'mongodb://mongo/openBadges'+' failed, try to connect to '+'mongodb://localhost:27017/itemdb'));
     // set up "local" mongoose connection
-    await mongoose.connect('mongodb://localhost:27017/openBadges', {
+    await mongoose.connect(`mongodb://${mongoUsername}:${mongoPassword}@localhost/openBadges`, {
       useNewUrlParser: true,
       useCreateIndex: true,
       autoReconnect: true
