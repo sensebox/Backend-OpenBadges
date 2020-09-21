@@ -45,6 +45,7 @@
     "projectSignIn",
     "projectSignOut",
     "getParticipants",
+    "projectBadgeNotification",
 
     "Admin",
     "signUpAdmin",
