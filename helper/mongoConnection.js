@@ -22,6 +22,7 @@ const connectMongoDB = async function(cb) {
     console.log(chalk.red('Connection to '+'mongodb://mongo/openBadges'+' failed, try to connect to '+'mongodb://localhost:27017/itemdb'));
     // set up "local" mongoose connection
     await mongoose.connect(`mongodb://${mongoUsername}:${mongoPassword}@localhost/openBadges`, {
+      // authSource: "test", // db where user is stored, command in mongo-shell: 'show users'
       useNewUrlParser: true,
       useCreateIndex: true,
       autoReconnect: true
