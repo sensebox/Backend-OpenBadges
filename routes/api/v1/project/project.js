@@ -559,7 +559,7 @@ const getParticipants = async function(req, res){
 
 
 /**
- * @api {get} /api/v1/project/:projectId/badge/notification Notification of received project badges
+ * @api {post} /api/v1/project/:projectId/badge/notification Notification of received project badges
  * @apiName projectBadgeNotification
  * @apiDescription Sending an email to all project participants with their received project badges
  * @apiGroup Project

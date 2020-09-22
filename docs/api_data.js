@@ -3073,7 +3073,7 @@ define({ "api": [
     "groupTitle": "Project"
   },
   {
-    "type": "get",
+    "type": "post",
     "url": "/api/v1/project/:projectId/badge/notification",
     "title": "Notification of received project badges",
     "name": "projectBadgeNotification",

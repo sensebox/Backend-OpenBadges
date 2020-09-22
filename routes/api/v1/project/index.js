@@ -33,7 +33,7 @@ ProjectRouter.route('/:projectId/participants')
     .get(userAuthorization, require('./project').getParticipants);
 
 ProjectRouter.route('/:projectId/badge/notification')
-    .get(userAuthorization, require('./project').projectBadgeNotification);
+    .post(userAuthorization, require('./project').projectBadgeNotification);
 
 ProjectRouter.route('/:projectId/deactivation')
     .put(userAuthorization, require('./project').putProjectHidden);
