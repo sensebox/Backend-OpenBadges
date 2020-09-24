@@ -50,5 +50,8 @@ ProjectRouter.route('/:projectId/user/deregistration')
 ProjectRouter.route('/:projectId')
     .put(userAuthorization, upload.single('image'), require('./project').putProject);
 
+ProjectRouter.route('/code/:code')
+    .put(userAuthorization, user.putProjectSignInCode);
+
 
 module.exports = ProjectRouter;
