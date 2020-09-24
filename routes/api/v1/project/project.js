@@ -679,11 +679,10 @@ const projectBadgeNotification = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `Code generated successfully.`
  * @apiSuccess (Success 200) {String} code `generated code`
- * @apiSuccess (Success 200) {Array} rejected `array of rejected email addresses`
  *
  * @apiError (On error) {Object} 400 `{"message": "Project not found."}`
  * @apiError (On error) {Object} 403 `{"message": "No permission getting the participants of the project."}`
- * @apiError (On error) {Obejct} 500 Complications during storing the code.
+ * @apiError (On error) {Obejct} 500 Complications during storage.
  */
 const projectCreateCode = async function(req, res){
   var projectId = req.params.projectId;

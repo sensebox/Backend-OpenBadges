@@ -38,11 +38,13 @@ define({
     "createProject",
     "putProject",
     "putProjectHidden",
+    "projectCreateCode",
     "getProjects",
     "getMyProjects",
     "getMyCreatedProjects",
     "getProject",
     "projectSignIn",
+    "projectSignInCode",
     "projectSignOut",
     "getParticipants",
     "projectBadgeNotification",
@@ -70,7 +72,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-09-21T13:41:44.310Z",
+    "time": "2020-09-24T10:59:21.741Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }

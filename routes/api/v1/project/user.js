@@ -21,8 +21,8 @@ const Code = require('../../../../models/code');
  *
  * @apiSuccess (Success 200) {String} message `User registered successfully in project.`
  *
- * @apiError (On error) {Object} 404 `{"message": "Project not found."}`
  * @apiError (On error) {Object} 400 `{"message": "Project size is already reached."}` or </br> `{"message": "User is already registered in project."}`
+ * @apiError (On error) {Object} 404 `{"message": "Project not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
  const putProjectSignIn = async function(req, res){
@@ -126,8 +126,8 @@ const Code = require('../../../../models/code');
    *
    * @apiSuccess (Success 200) {String} message `User registered in project and all Badges are assigned successfully to user.`
    *
-   * @apiError (On error) {Object} 404 `{"message": "Code is invalid."}`
    * @apiError (On error) {Object} 400 `{"message": "Project size is already reached."}` or </br> `{"message": "User is already registered in project."}`
+   * @apiError (On error) {Object} 404 `{"message": "Code is invalid."}`
    * @apiError (On error) {Object} 500 Complications during querying the database.
    */
    const putProjectSignInCode = async function(req, res){
