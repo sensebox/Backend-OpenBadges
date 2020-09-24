@@ -12,6 +12,7 @@ const nodemailer = require('nodemailer');
 const Project = require('../../../../models/project');
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
+const Code = require('../../../../models/code');
 const {projectValidation} = require('../../../../helper/validation/project');
 
 
@@ -664,6 +665,64 @@ const projectBadgeNotification = async function(req, res){
   }
 };
 
+/**
+ * @api {post} /api/v1/project/:projectId/code Create code
+ * @apiName projectCreateCode
+ * @apiDescription Create a code that, when used, will automatically log you into the project and give you all corresponding badges
+ * @apiGroup Project
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Code generated successfully.`
+ * @apiSuccess (Success 200) {String} code `generated code`
+ * @apiSuccess (Success 200) {Array} rejected `array of rejected email addresses`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "Project not found."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission getting the participants of the project."}`
+ * @apiError (On error) {Obejct} 500 Complications during storing the code.
+ */
+const projectCreateCode = async function(req, res){
+  var projectId = req.params.projectId;
+  try {
+    var project = await Project.findById(projectId);
+    if(project){
+      if(project.creator == req.user.id || req.user.role[0] === 'admin'){
+        // create code (6 letters)
+        var code = Math.random().toString(36).substring(7).toUpperCase();
+        const body = {
+          _id: new mongoose.Types.ObjectId(),
+          code: code,
+          project: project._id,
+          badge: project.badge
+        };
+        const newCode = new Code(body);
+        const savedCode = await newCode.save();
+        return res.status(200).send({
+          message: `Code generated successfully.`,
+          code: code
+        });
+      }
+      else {
+        return res.status(403).send({
+          message: 'No permission getting the participants of the project.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Project not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
 
 /**
  * @api {put} /api/v1/project/:projectId/deactivation Deactivate project
@@ -727,5 +786,6 @@ module.exports = {
   putProject,
   getParticipants,
   putProjectHidden,
-  projectBadgeNotification
+  projectBadgeNotification,
+  projectCreateCode
 };
