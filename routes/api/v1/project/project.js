@@ -700,6 +700,49 @@ const projectCreateCode = async function(req, res){
         };
         const newCode = new Code(body);
         const savedCode = await newCode.save();
+        const user = await User.findById(req.user.id);
+
+        // send an email to participant of project to inform him about the badges received
+        const email = process.env.EMAIL;
+        const password = process.env.EMAIL_PASSWORD;
+        const host = process.env.EMAIL_HOST;
+
+        let transporter = nodemailer.createTransport({
+          host: host,
+          port: 465,
+          secure: true, // if false TLS
+          auth: {
+              user: email, // email of the sender
+              pass: password // Passwort of the sender
+          },
+          tls: {
+              // do not fail on invalid certs
+              rejectUnauthorized: false
+          }
+        });
+
+        const link =
+          process.env.NODE_ENV === "production" ?
+            `https://${process.env.APP_HOST}`
+          : `http://${process.env.APP_HOST}:${process.env.APP_PORT}`;
+
+        var htmlHead = `<head>
+                      <meta charset="utf-8"/>`+
+                      // <style>img { border-radius: 50%; width: 200px; height: 200px; object-fit: cover; }</style>
+                   `</head>`;
+        var htmlBody = `<body><b>Hallo ${user.firstname} ${user.lastname},</b><br>du hast erfolgreich folgenden 6-stelligen Code für das Projekt ${project.name} erstellt:<br><p>${code}</p>
+                        <p>Man kann sich nun auf <a href="${link}">MyBadges.org</a> anmelden, um den Code unter "belegte Kurse" einzulösen.</p><p>Viele Grüße<br>Dein MyBadges-Team</p></body>`;
+
+        var mailOptions = {
+            from: '"MyBadges"'+email, // sender address
+            to: user.email, // list of receiver
+            subject: `Code für Projekt ${project.name} erstellt`, // Subject line
+            html: `<!DOCTYPE html><html lang="de">${htmlHead}${htmlBody}</html>`
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions);
+
         return res.status(200).send({
           message: `Code generated successfully.`,
           code: code
