@@ -10,6 +10,7 @@ const CodeSchema = new mongoose.Schema({
   code: {
     type: String,
     required: true,
+    unique: true
   },
   project: {
     type: mongoose.Schema.Types.ObjectId,
@@ -27,6 +28,11 @@ const CodeSchema = new mongoose.Schema({
     default: moment.utc().add(Number(process.env.Code_ExpiresIn), 'ms').toDate(),
     expires: Number(process.env.Code_ExpiresIn)/1000
   }
+  // // useful if codes are not immediately passed on. is currently not the case.
+  // distributed: {
+  //   type: Boolean,
+  //   default: false
+  // }
 });
 
 
