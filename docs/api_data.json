@@ -3175,7 +3175,7 @@
     "url": "/api/v1/project/:projectId/code",
     "title": "Create code",
     "name": "projectCreateCode",
-    "description": "<p>Create a code that, when used, will automatically log you into the project and give you all corresponding badges</p>",
+    "description": "<p>Create a code that, when used, will automatically log you into the project and give you all corresponding badges. Code is sent by email to the person who made the request (project creator or admin).</p>",
     "group": "Project",
     "header": {
       "fields": {
@@ -3348,7 +3348,7 @@
   {
     "type": "put",
     "url": "/api/v1/project/code/:code",
-    "title": "Register by code",
+    "title": "Register me by code",
     "name": "projectSignInCode",
     "description": "<p>Register currently logged in user in a project, if the size is not reached, by a code. Furthermore all belonging project badges are automatically assigned to the user.</p>",
     "group": "Project",

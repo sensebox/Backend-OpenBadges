@@ -668,7 +668,7 @@ const projectBadgeNotification = async function(req, res){
 /**
  * @api {post} /api/v1/project/:projectId/code Create code
  * @apiName projectCreateCode
- * @apiDescription Create a code that, when used, will automatically log you into the project and give you all corresponding badges
+ * @apiDescription Create a code that, when used, will automatically log you into the project and give you all corresponding badges. Code is sent by email to the person who made the request (project creator or admin).
  * @apiGroup Project
  *
  * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.

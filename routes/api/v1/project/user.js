@@ -113,7 +113,7 @@ const Code = require('../../../../models/code');
 
 
   /**
-   * @api {put} /api/v1/project/code/:code Register by code
+   * @api {put} /api/v1/project/code/:code Register me by code
    * @apiName projectSignInCode
    * @apiDescription Register currently logged in user in a project, if the size is not reached, by a code. Furthermore all belonging project badges are automatically assigned to the user.
    * @apiGroup Project
