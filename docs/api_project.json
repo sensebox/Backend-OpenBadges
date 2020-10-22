@@ -38,13 +38,16 @@
     "createProject",
     "putProject",
     "putProjectHidden",
+    "projectCreateCode",
     "getProjects",
     "getMyProjects",
     "getMyCreatedProjects",
     "getProject",
     "projectSignIn",
+    "projectSignInCode",
     "projectSignOut",
     "getParticipants",
+    "projectBadgeNotification",
     "Admin",
     "signUpAdmin",
     "signInAdmin",
@@ -69,7 +72,7 @@
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-06-25T11:37:01.352Z",
+    "time": "2020-09-24T10:59:21.741Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }

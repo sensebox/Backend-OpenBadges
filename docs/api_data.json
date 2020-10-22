@@ -3073,6 +3073,195 @@
     "groupTitle": "Project"
   },
   {
+    "type": "post",
+    "url": "/api/v1/project/:projectId/badge/notification",
+    "title": "Notification of received project badges",
+    "name": "projectBadgeNotification",
+    "description": "<p>Sending an email to all project participants with their received project badges</p>",
+    "group": "Project",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Email sent successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "accepted",
+            "description": "<p><code>count of accepted email addresses</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "rejected",
+            "description": "<p><code>array of rejected email addresses</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission getting the participants of the project.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Obejct",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during sending emails.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/project/:projectId/code",
+    "title": "Create code",
+    "name": "projectCreateCode",
+    "description": "<p>Create a code that, when used, will automatically log you into the project and give you all corresponding badges. Code is sent by email to the person who made the request (project creator or admin).</p>",
+    "group": "Project",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "projectId",
+            "description": "<p>the ID of the project you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Code generated successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p><code>generated code</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "403",
+            "description": "<p><code>{&quot;message&quot;: &quot;No permission getting the participants of the project.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Obejct",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during storage.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/project/project.js",
+    "groupTitle": "Project"
+  },
+  {
     "type": "put",
     "url": "/api/v1/project/:projectId/user/registration",
     "title": "Register me",
@@ -3132,6 +3321,13 @@
             "group": "On error",
             "type": "Object",
             "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Project size is already reached.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is already registered in project.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
             "field": "404",
             "description": "<p><code>{&quot;message&quot;: &quot;Project not found.&quot;}</code></p>"
           },
@@ -3139,8 +3335,85 @@
             "group": "On error",
             "type": "Object",
             "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/project/user.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/project/code/:code",
+    "title": "Register me by code",
+    "name": "projectSignInCode",
+    "description": "<p>Register currently logged in user in a project, if the size is not reached, by a code. Furthermore all belonging project badges are automatically assigned to the user.</p>",
+    "group": "Project",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Code",
+            "optional": false,
+            "field": "code",
+            "description": "<p>the code (6 letters) to sign in project and get all badges automatically</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User registered in project and all Badges are assigned successfully to user.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
             "field": "400",
             "description": "<p><code>{&quot;message&quot;: &quot;Project size is already reached.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User is already registered in project.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Code is invalid.&quot;}</code></p>"
           },
           {
             "group": "On error",

@@ -7,10 +7,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
 
 const Project = require('../../../../models/project');
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
+const Code = require('../../../../models/code');
 const {projectValidation} = require('../../../../helper/validation/project');
 
 
@@ -558,6 +560,213 @@ const getParticipants = async function(req, res){
 
 
 /**
+ * @api {post} /api/v1/project/:projectId/badge/notification Notification of received project badges
+ * @apiName projectBadgeNotification
+ * @apiDescription Sending an email to all project participants with their received project badges
+ * @apiGroup Project
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Email sent successfully.`
+ * @apiSuccess (Success 200) {Number} accepted `count of accepted email addresses`
+ * @apiSuccess (Success 200) {Array} rejected `array of rejected email addresses`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "Project not found."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission getting the participants of the project."}`
+ * @apiError (On error) {Obejct} 500 Complications during sending emails.
+ */
+const projectBadgeNotification = async function(req, res){
+  var projectId = req.params.projectId;
+  try {
+    var project = await Project.findById(projectId);
+    if(project){
+      if(project.creator == req.user.id){
+        var participants = await User.find({_id: {$in: project.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0, image: 0, role: 0, date: 0, birthday: 0, city: 0, postalcode: 0, username: 0, _id: 0});
+        var projectBadges = await Project.findById(projectId).populate('badge');
+
+        // send an email to participant of project to inform him about the badges received
+        const email = process.env.EMAIL;
+        const password = process.env.EMAIL_PASSWORD;
+        const host = process.env.EMAIL_HOST;
+
+        let transporter = nodemailer.createTransport({
+          host: host,
+          port: 465,
+          secure: true, // if false TLS
+          auth: {
+              user: email, // email of the sender
+              pass: password // Passwort of the sender
+          },
+          tls: {
+              // do not fail on invalid certs
+              rejectUnauthorized: false
+          }
+        });
+
+        const link =
+          process.env.NODE_ENV === "production" ?
+            `https://${process.env.APP_HOST}`
+          : `http://${process.env.APP_HOST}:${process.env.APP_PORT}`;
+
+
+        var promises = participants.map(async participant => {
+          var correspondingBadges = participant.badge.filter(badge => project.badge.includes(badge));
+          var badges = await Badge.find({_id: {$in: correspondingBadges}});
+
+          var head = `<head>
+                        <meta charset="utf-8"/>`+
+                        // <style>img { border-radius: 50%; width: 200px; height: 200px; object-fit: cover; }</style>
+                     `</head>`;
+          var body = `<body><b>Hallo ${participant.firstname} ${participant.lastname},</b><br>du hast das Projekt ${project.name} mit folgenden Badges abgeschlossen:<br><ul>`;
+          badges.map(badge => {
+            body += '<li>'+
+                      //<img style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;" src="${link}/media/${badge.image.path}" alt="${badge.name}"/>
+                      `<p>${badge.name}</p>
+                    </li>`;
+          });
+
+          body += `</ul><p>Du kannst dich auf <a href="${link}">MyBadges.org</a> anmelden, um weitere Badges zu sammeln und dein Konto zu pflegen.</p><p>Viele Grüße<br>Dein MyBadges-Team</p></body>`;
+
+          var mailOptions = {
+              from: '"MyBadges"'+email, // sender address
+              to: participant.email, // list of receiver
+              subject: `Projekt ${project.name} abgeschlossen`, // Subject line
+              html: `<!DOCTYPE html><html lang="de">${head}${body}</html>`
+          };
+          // send mail with defined transport object
+          return transporter.sendMail(mailOptions);
+        });
+
+        var send = await Promise.all(promises);
+        return res.status(200).send({
+          message: `Emails sent successfully.`,
+          accepted: send.filter(email => email.accepted.length > 0).length,
+          rejected: send.filter(email => email.rejected.length > 0).map(email => email.rejected[0])
+        });
+      }
+      else {
+        return res.status(403).send({
+          message: 'No permission getting the participants of the project.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Project not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+/**
+ * @api {post} /api/v1/project/:projectId/code Create code
+ * @apiName projectCreateCode
+ * @apiDescription Create a code that, when used, will automatically log you into the project and give you all corresponding badges. Code is sent by email to the person who made the request (project creator or admin).
+ * @apiGroup Project
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} projectId the ID of the project you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `Code generated successfully.`
+ * @apiSuccess (Success 200) {String} code `generated code`
+ *
+ * @apiError (On error) {Object} 400 `{"message": "Project not found."}`
+ * @apiError (On error) {Object} 403 `{"message": "No permission getting the participants of the project."}`
+ * @apiError (On error) {Obejct} 500 Complications during storage.
+ */
+const projectCreateCode = async function(req, res){
+  var projectId = req.params.projectId;
+  try {
+    var project = await Project.findById(projectId);
+    if(project){
+      if(project.creator == req.user.id || req.user.role[0] === 'admin'){
+        // create code (6 letters)
+        var code = Math.random().toString(36).substring(7).toUpperCase();
+        const body = {
+          _id: new mongoose.Types.ObjectId(),
+          code: code,
+          project: project._id,
+          badge: project.badge
+        };
+        const newCode = new Code(body);
+        const savedCode = await newCode.save();
+        const user = await User.findById(req.user.id);
+
+        // send an email to participant of project to inform him about the badges received
+        const email = process.env.EMAIL;
+        const password = process.env.EMAIL_PASSWORD;
+        const host = process.env.EMAIL_HOST;
+
+        let transporter = nodemailer.createTransport({
+          host: host,
+          port: 465,
+          secure: true, // if false TLS
+          auth: {
+              user: email, // email of the sender
+              pass: password // Passwort of the sender
+          },
+          tls: {
+              // do not fail on invalid certs
+              rejectUnauthorized: false
+          }
+        });
+
+        const link =
+          process.env.NODE_ENV === "production" ?
+            `https://${process.env.APP_HOST}`
+          : `http://${process.env.APP_HOST}:${process.env.APP_PORT}`;
+
+        var htmlHead = `<head>
+                      <meta charset="utf-8"/>`+
+                      // <style>img { border-radius: 50%; width: 200px; height: 200px; object-fit: cover; }</style>
+                   `</head>`;
+        var htmlBody = `<body><b>Hallo ${user.firstname} ${user.lastname},</b><br>du hast erfolgreich folgenden 6-stelligen Code für das Projekt ${project.name} erstellt:<br><p>${code}</p>
+                        <p>Man kann sich nun auf <a href="${link}">MyBadges.org</a> anmelden, um den Code unter "belegte Kurse" einzulösen.</p><p>Viele Grüße<br>Dein MyBadges-Team</p></body>`;
+
+        var mailOptions = {
+            from: '"MyBadges"'+email, // sender address
+            to: user.email, // list of receiver
+            subject: `Code für Projekt ${project.name} erstellt`, // Subject line
+            html: `<!DOCTYPE html><html lang="de">${htmlHead}${htmlBody}</html>`
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions);
+
+        return res.status(200).send({
+          message: `Code generated successfully.`,
+          code: code
+        });
+      }
+      else {
+        return res.status(403).send({
+          message: 'No permission getting the participants of the project.',
+        });
+      }
+    }
+    else {
+      return res.status(404).send({
+        message: 'Project not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
+/**
  * @api {put} /api/v1/project/:projectId/deactivation Deactivate project
  * @apiName putProjectHidden
  * @apiDescription Deactivate a project. The project might be no longer in offer.
@@ -618,5 +827,7 @@ module.exports = {
   getProjectID,
   putProject,
   getParticipants,
-  putProjectHidden
+  putProjectHidden,
+  projectBadgeNotification,
+  projectCreateCode
 };

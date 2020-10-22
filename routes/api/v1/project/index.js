@@ -32,6 +32,12 @@ ProjectRouter.route('/:projectId')
 ProjectRouter.route('/:projectId/participants')
     .get(userAuthorization, require('./project').getParticipants);
 
+ProjectRouter.route('/:projectId/badge/notification')
+    .post(userAuthorization, require('./project').projectBadgeNotification);
+
+ProjectRouter.route('/:projectId/code')
+    .post(userAuthorization, require('./project').projectCreateCode);
+
 ProjectRouter.route('/:projectId/deactivation')
     .put(userAuthorization, require('./project').putProjectHidden);
 
@@ -43,6 +49,9 @@ ProjectRouter.route('/:projectId/user/deregistration')
 
 ProjectRouter.route('/:projectId')
     .put(userAuthorization, upload.single('image'), require('./project').putProject);
+
+ProjectRouter.route('/code/:code')
+    .put(userAuthorization, user.putProjectSignInCode);
 
 
 module.exports = ProjectRouter;
