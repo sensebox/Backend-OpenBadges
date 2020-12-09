@@ -16,5 +16,6 @@ V1Router.use('/user', require('./user'));
 V1Router.use('/admin', require('./admin'));
 V1Router.use('/project', require('./project'));
 V1Router.use('/badge', require('./badge'));
+V1Router.use('/domain', require('./domain'));
 
 module.exports = V1Router;

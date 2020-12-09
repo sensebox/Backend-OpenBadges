@@ -58,7 +58,14 @@
     "adminFindBadge",
     "adminAssigneProjectBadge",
     "adminUnassigneProjectBadge",
-    "adminGetParticipants"
+    "adminGetParticipants",
+    "adminPostDomain",
+    "adminGetDomains",
+    "adminDeleteDomain",
+
+    "Domain",
+    "domainFindBadge",
+    "domainAssigneBadge"
   ],
   "template": {
     "withCompare": false,

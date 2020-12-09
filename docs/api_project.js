@@ -57,7 +57,13 @@ define({
     "adminFindBadge",
     "adminAssigneProjectBadge",
     "adminUnassigneProjectBadge",
-    "adminGetParticipants"
+    "adminGetParticipants",
+    "adminPostDomain",
+    "adminGetDomains",
+    "adminDeleteDomain",
+    "Domain",
+    "domainFindBadge",
+    "domainAssigneBadge"
   ],
   "template": {
     "withCompare": false,
@@ -72,7 +78,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-09-24T10:59:21.741Z",
+    "time": "2020-12-09T18:16:35.479Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }
