@@ -158,7 +158,7 @@
             "type": "Object",
             "optional": false,
             "field": "404",
-            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+            "description": "<p><code>{&quot;message&quot;: &quot;Domain not found.&quot;}</code></p>"
           },
           {
             "group": "On error",
@@ -505,7 +505,14 @@
             "type": "Object",
             "optional": false,
             "field": "domain",
-            "description": "<p><code>{&quot;domain&quot;:&quot;http://localhost:3000&quot;, &quot;description&quot;: &quot;further information&quot;, &quot;access&quot;: String}</code></p>"
+            "description": "<p><code>{&quot;domain&quot;:&quot;http://localhost:3000&quot;, &quot;description&quot;: &quot;further information&quot;}</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>valid JSON Web Token</p>"
           }
         ]
       }
@@ -2690,13 +2697,6 @@
             "group": "On error",
             "type": "Object",
             "optional": false,
-            "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission assigning the Badge to an user.&quot;}</code></p>"
-          },
-          {
-            "group": "On error",
-            "type": "Object",
-            "optional": false,
             "field": "404",
             "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
@@ -2818,9 +2818,86 @@
             "group": "On error",
             "type": "Object",
             "optional": false,
-            "field": "403",
-            "description": "<p><code>{&quot;message&quot;: &quot;No permission getting badges.&quot;}</code></p>"
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
           },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/domain/badge.js",
+    "groupTitle": "Domain"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/domain/user/:userId",
+    "title": "Get one user",
+    "name": "domainGetOneUser",
+    "description": "<p>Get details about one user. Only accessible for certain domains.</p>",
+    "group": "Domain",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p><code>{&quot;firstname&quot;:&quot;full firstname&quot;, &quot;lastname&quot;:&quot;full lastname&quot;, &quot;city&quot;:&quot;cityname&quot;, &quot;postalcode&quot;:&quot;123456&quot;, &quot;birthday&quot;:&quot;ISODate(&quot;1970-12-01T00:00:00Z&quot;)&quot;, &quot;email&quot;:&quot;test@test.de&quot;, &quot;username&quot;:&quot;nickname&quot;, &quot;role&quot;:&quot;earner&quot;, &quot;emailIsConfirmed&quot;: false, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
           {
             "group": "On error",
             "type": "Object",

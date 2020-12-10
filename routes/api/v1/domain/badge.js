@@ -28,7 +28,6 @@ const User = require('../../../../models/user');
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
  * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
- * @apiError (On error) {Object} 403 `{"message": "No permission getting badges."}`
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -101,7 +100,6 @@ const getBadges = async function(req, res){
  * @apiSuccess (Success 200) {String} message `Badge is assigned successfully to user.`
  *
  * @apiError (On error) {Object} 400 `{"message": "Badge is already assigned to user."}`
- * @apiError (On error) {Object} 403 `{"message": "No permission assigning the Badge to an user."}`
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}` or </br> `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
  */
@@ -147,7 +145,47 @@ const assigneBadge = async function(req, res){
 };
 
 
+/**
+ * @api {get} /api/v1/domain/user/:userId Get one user
+ * @apiName domainGetOneUser
+ * @apiDescription Get details about one user. Only accessible for certain domains.
+ * @apiGroup Domain
+ *
+ * @apiHeader {String} Authorization allows to send a valid JSON Web Token along with this request with `Bearer` prefix.
+ * @apiHeaderExample {String} Authorization Header Example
+ *   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo
+ *
+ * @apiParam {ObjectId} userId the ID of the user you are referring to
+ *
+ * @apiSuccess (Success 200) {String} message `User found successfully.`
+ * @apiSuccess (Success 200) {Object} user `{"firstname":"full firstname", "lastname":"full lastname", "city":"cityname", "postalcode":"123456", "birthday":"ISODate("1970-12-01T00:00:00Z")", "email":"test@test.de", "username":"nickname", "role":"earner", "emailIsConfirmed": false, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ *
+ * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 500 Complications during querying the database.
+ */
+const getOneUser = async function(req, res){
+  const userId = req.params.userId;
+  try{
+    const user = await User.findById(userId, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    if(user){
+      console.log(user);
+      return res.status(200).send({
+        message: 'User found successfully.',
+        user: user
+      });
+    }
+    return res.status(404).send({
+      message: 'User not found.',
+    });
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
 module.exports = {
  getBadges,
- assigneBadge
+ assigneBadge,
+ getOneUser
 };

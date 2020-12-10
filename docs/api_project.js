@@ -63,7 +63,8 @@ define({
     "adminDeleteDomain",
     "Domain",
     "domainFindBadge",
-    "domainAssigneBadge"
+    "domainAssigneBadge",
+    "domainGetOneUser"
   ],
   "template": {
     "withCompare": false,
@@ -78,7 +79,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-12-09T18:16:35.479Z",
+    "time": "2020-12-10T09:28:44.831Z",
     "url": "http://apidocjs.com",
     "version": "0.19.0"
   }

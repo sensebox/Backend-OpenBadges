@@ -21,5 +21,8 @@ DomainRouter.route('/badge')
 DomainRouter.route('/badge/:badgeId/assigne/user/:userId')
     .put(originAuthorization, badge.assigneBadge);
 
+DomainRouter.route('/user/:userId')
+    .get(originAuthorization, badge.getOneUser);
+
 
 module.exports = DomainRouter;

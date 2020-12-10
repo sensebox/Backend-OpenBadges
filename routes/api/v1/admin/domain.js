@@ -21,7 +21,8 @@ const Domain = require('../../../../models/domain');
  * @apiParam {String} description further information about the domain
  *
  * @apiSuccess (Success 200) {String} message `Domain is successfully added.`
- * @apiSuccess (Success 200) {Object} domain `{"domain":"http://localhost:3000", "description": "further information", "access": String}`
+ * @apiSuccess (Success 200) {Object} domain `{"domain":"http://localhost:3000", "description": "further information"}`
+ * @apiSuccess (Success 200) {String} token valid JSON Web Token
  *
  * @apiError (On error) {Object} 500 Complications during storage.
  */
@@ -65,7 +66,7 @@ const postDomain = async function(req, res){
  *
  * @apiSuccess (Success 200) {String} message `Domain deleted successfully.`
  *
- * @apiError (On error) {Object} 404 `{"message": "User not found."}`
+ * @apiError (On error) {Object} 404 `{"message": "Domain not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
  */
 const deleteDomain = async function(req, res){

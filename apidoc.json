@@ -65,7 +65,8 @@
 
     "Domain",
     "domainFindBadge",
-    "domainAssigneBadge"
+    "domainAssigneBadge",
+    "domainGetOneUser"
   ],
   "template": {
     "withCompare": false,
