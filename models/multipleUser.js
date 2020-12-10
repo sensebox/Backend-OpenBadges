@@ -7,23 +7,16 @@ const moment = require('moment');
 
 
 //simple schema
-const UserSchema = new mongoose.Schema({
+const MultipleUserSchema = new mongoose.Schema({
   firstname: {
     type: String,
     required: true,
+    default: 'Max'
   },
   lastname: {
     type: String,
     required: true,
-  },
-  birthday: {
-    type: Date,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true
+    default: 'Mustermann'
   },
   username: {
     type: String,
@@ -35,41 +28,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minlength: 6
   },
-  city: {
-    type: String,
-    required: true
-  },
-  postalcode: {
-    type: String,
-    required: true
-  },
-  image: {
-    path: {
-      type: String
-    },
-    size: {
-      type: Number
-    },
-    contentType: {
-      type: String
-    },
-    originalName: {
-      type: String
-    }
-  },
   role: {
     type: [String],
     required: true,
     enum: ['earner', 'issuer', 'teacher', 'admin'],
     default: 'earner'
-  },
-  emailConfirmationToken: {
-    type: String
-  },
-  emailIsConfirmed: {
-    type: Boolean,
-    required: true,
-    default: false
   },
   resetPasswordToken: {
     type: String
@@ -95,4 +58,4 @@ const UserSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('MultipleUser', MultipleUserSchema);

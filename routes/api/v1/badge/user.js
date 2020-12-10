@@ -5,6 +5,7 @@
 const mongoose = require('mongoose');
 
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 const Badge = require('../../../../models/badge');
 const Project = require('../../../../models/project');
 
@@ -43,6 +44,9 @@ const unassigneProjectBadge = async function(req, res){
         // only the project creator has the permission to assigne a Badge
         if(project.creator == req.user.id && project.badge.indexOf(badgeId) > -1){
           var user = await User.findById(userId);
+          if(!user){
+            user = await MultipleUser.findById(userId);
+          }
           if(user){
             if(project.participants.indexOf(userId) > -1){
               if(user.badge.indexOf(badgeId) > -1){
@@ -130,6 +134,9 @@ const assigneProjectBadge = async function(req, res){
         // only the project creator has the permission to assigne a Badge
         if(project.creator == req.user.id && project.badge.indexOf(badgeId) > -1){
           var user = await User.findById(userId);
+          if(!user){
+            user = await MultipleUser.findById(userId);
+          }
           if(user){
             if(project.participants.indexOf(userId) > -1){
               // user is related to given project
@@ -214,6 +221,9 @@ const assigneMultipleBadges = async function(req, res){
         var info = {alreadyAssigned: 0, userNotFound: 0, badgeNotFound: 0, badgeNotRelatedToProject: 0, userNotRelatedToProject: 0};
         const promises = Object.keys(badges).map(async function(key){
           var user = await User.findById(key);
+          if(!user){
+            user = await MultipleUser.findById(key);
+          }
           if(user){
             if(project.participants.indexOf(key) > -1){
               // user is related to given project
@@ -302,6 +312,9 @@ const grantPermissionAssignBadge = async function(req, res){
       // only the original issuer has the permission to grant permission regarding the Badge
       if(badge.issuer.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
+        if(!user){
+          user = await MultipleUser.findById(userId);
+        }
         if(user){
           if(badge.mentor.indexOf(userId) < 0){
             // user has no permission to assign the badge
@@ -374,6 +387,9 @@ const revokePermissionAssignBadge = async function(req, res){
       // only the original issuer has the permission to grant permission regarding the Badge
       if(badge.issuer.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
+        if(!user){
+          user = await MultipleUser.findById(userId);
+        }
         if(user){
           if(badge.mentor.indexOf(userId) > -1){
             // user has permission to assign the badge
@@ -503,6 +519,9 @@ const nominateIssuerBadge = async function(req, res){
       // only the original issuer has the permission to grant permission regarding the Badge
       if(badge.issuer.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
+        if(!user){
+          user = await MultipleUser.findById(userId);
+        }
         if(user){
           if(badge.issuer.indexOf(userId) < 0){
             // user has no permission to manage the badge
@@ -580,6 +599,9 @@ const unassigneBadge = async function(req, res){
       // only the badge issuers and mentors have the permission to assigne the Badge
       if(badge.issuer.indexOf(req.user.id) > -1 || badge.mentor.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
+        if(!user){
+          user = await MultipleUser.findById(userId);
+        }
         if(user){
           if(user.badge.indexOf(badgeId) > -1){
             // badge is not unassigned to user
@@ -650,6 +672,9 @@ const assigneBadge = async function(req, res){
       // only the badge issuers and mentors have the permission to assigne the Badge
       if(badge.issuer.indexOf(req.user.id) > -1 || badge.mentor.indexOf(req.user.id) > -1){
         var user = await User.findById(userId);
+        if(!user){
+          user = await MultipleUser.findById(userId);
+        }
         if(user){
           if(user.badge.indexOf(badgeId) < 0){
             // badge is not assigned to user

@@ -4,6 +4,7 @@
 
 const Project = require('../../../../models/project');
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 const Code = require('../../../../models/code');
 
 
@@ -142,6 +143,9 @@ const Code = require('../../../../models/code');
              project.participants.push(req.user.id);
              var test = await project.save();
              var user = await User.findById(req.user.id);
+             if(!user){
+               user = await MultipleUser.findById(req.user.id);
+             }
              code.badge.map(badgeId => {
                if(user.badge.indexOf(badgeId) < 0){
                  user.badge.push(badgeId);

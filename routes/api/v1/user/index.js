@@ -40,6 +40,9 @@ UserRouter.route('/me')
     .get(userAuthorization, user.getMe);
 
 UserRouter.route('/me')
+    .post(userAuthorization, upload.single('profile'), user.postMe);
+
+UserRouter.route('/me')
     .put(userAuthorization, upload.single('profile'), user.putMe);
 
 UserRouter.route('/me')

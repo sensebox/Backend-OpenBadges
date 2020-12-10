@@ -5,6 +5,7 @@
 const moment = require('moment');
 
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 const {createToken, invalidateToken} = require('../../../../helper/authorization/jwt');
 
 
@@ -27,7 +28,10 @@ const {createToken, invalidateToken} = require('../../../../helper/authorization
 const postRefreshToken = async function(req, res){
   var refreshToken = req.body.refreshToken;
   try{
-    const user = await User.findOne({refreshToken: refreshToken, refreshTokenExpiresIn: { $gte: moment.utc().toDate() } }, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    var user = await User.findOne({refreshToken: refreshToken, refreshTokenExpiresIn: { $gte: moment.utc().toDate() } }, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    if(!user){
+      user = await MultipleUser.findOne({refreshToken: refreshToken, refreshTokenExpiresIn: { $gte: moment.utc().toDate() } }, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    }
     if (!user) {
       return res.status(403).send({
         message: 'Refresh token is invalid or too old. Please sign in with your user credentials.'

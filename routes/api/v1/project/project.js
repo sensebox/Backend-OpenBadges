@@ -12,6 +12,7 @@ const nodemailer = require('nodemailer');
 const Project = require('../../../../models/project');
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 const Code = require('../../../../models/code');
 const {projectValidation} = require('../../../../helper/validation/project');
 
@@ -94,7 +95,11 @@ const postProject = async function(req, res){
     const savedProject = await project.save();
     // updates the role to issuer, because the user issues a new project.
     if(req.user.role == 'earner'){
-      await User.updateOne({_id: req.user.id}, {role: 'issuer'});
+      await User.updateOne({_id: req.user.id}, {role: 'issuer'}).then(async user => {
+        if(!user){
+          await MultipleUser.updateOne({_id: req.user.id}, {role: 'issuer'});
+        }
+      });
     }
     return res.status(201).send({
       message: 'Project is successfully created.',
@@ -102,7 +107,6 @@ const postProject = async function(req, res){
     });
   }
   catch(err) {
-    console.log(err);
     return res.status(500).send(err);
   }
 };
@@ -203,9 +207,14 @@ const getProjects = async function(req, res){
  */
 const getProjectID = async function(req, res){
   try{
-    var project = await Project.findOne({_id: req.params.projectId})
-                             .populate('creator', {firstname:1, lastname: 1})
-                             .populate('badge');
+    var project = await Project.findOne({_id: req.params.projectId}).lean()
+                              .populate({path: 'creator', model: 'User', select: {firstname:1, lastname: 1}})
+                              .populate('badge');
+    var projectMultipleUser = await Project.findOne({_id: req.params.projectId}).lean()
+                                           .populate({path: 'creator', model: 'MultipleUser', select: {firstname:1, lastname: 1}});
+    if(!project.creator){
+      project.creator = projectMultipleUser.creator;
+    }
     if(project){
       return res.status(200).send({
         message: 'Project found successfully.',
@@ -441,7 +450,6 @@ const putProject = async function(req, res){
         if(req.body.badge){
           const promises = req.body.badge.map(async function(badgeId){return await Badge.findById(badgeId);});
           const badges = await Promise.all(promises);
-          console.log(badges);
           var badgesError = badges.filter(badge => badge.issuer.concat(badge.mentor).indexOf(req.user.id) < 0);
           if(badgesError.length > 0){
             return res.status(400).send({message: "All badges must be assignable by the project-creator."});
@@ -484,9 +492,14 @@ const putProject = async function(req, res){
         }
 
         await result.save();
-        const updatedProject = await Project.findById(result._id)
-                                          .populate('creator', {firstname:1, lastname: 1})
-                                          .populate('badge');
+        var updatedProject = await Project.findOne({_id: req.params.projectId}).lean()
+                                              .populate({path: 'creator', model: 'User', select: {firstname:1, lastname: 1}})
+                                              .populate('badge');
+        var updatedProjectMultipleUser = await Project.findOne({_id: req.params.projectId}).lean()
+                                                      .populate({path: 'creator', model: 'MultipleUser', select: {firstname:1, lastname: 1}});
+        if(!updatedProject.creator){
+          updatedProject.creator = updatedProjectMultipleUser.creator;
+        }
         return res.status(200).send({
           message: 'Project is updated successfully.',
           project: updatedProject
@@ -535,7 +548,9 @@ const getParticipants = async function(req, res){
     var project = await Project.findById(projectId);
     if(project){
       if(project.creator == req.user.id){
-        var participants = await User.find({_id: {$in: project.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+        var participantsUser = await User.find({_id: {$in: project.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+        var participantsMultipleUser = await MultipleUser.find({_id: {$in: project.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+        var participants = participantsUser.concat(participantsMultipleUser);
         return res.status(200).send({
           message: 'Participants found successfully.',
           participants: participants
@@ -586,6 +601,7 @@ const projectBadgeNotification = async function(req, res){
     if(project){
       if(project.creator == req.user.id){
         var participants = await User.find({_id: {$in: project.participants}}, {__v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0, image: 0, role: 0, date: 0, birthday: 0, city: 0, postalcode: 0, username: 0, _id: 0});
+        // participants of database "MultipleUser" do not have an email
         var projectBadges = await Project.findById(projectId).populate('badge');
 
         // send an email to participant of project to inform him about the badges received
@@ -701,6 +717,7 @@ const projectCreateCode = async function(req, res){
         const newCode = new Code(body);
         const savedCode = await newCode.save();
         const user = await User.findById(req.user.id);
+        // participants of database "MultipleUser" do not have an email
 
         // send an email to participant of project to inform him about the badges received
         const email = process.env.EMAIL;

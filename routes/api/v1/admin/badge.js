@@ -8,6 +8,7 @@ const path = require('path');
 
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 const Project = require('../../../../models/project');
 
 
@@ -29,7 +30,7 @@ const Project = require('../../../../models/project');
  * @apiParam {String} [category] 'achievement', 'professional skill' or 'meta skill'
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
- * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "requestor":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
@@ -61,6 +62,9 @@ const getBadges = async function(req, res){
     }
     if(quserId){
       var user = await User.findById(quserId, {badge: 1, _id:0});
+      if(!user){
+        user = await MultipleUser.findById(quserId, {badge: 1, _id:0});
+      }
       if(user){
         query._id = {$in: user.badge};
       }
@@ -70,10 +74,20 @@ const getBadges = async function(req, res){
         });
       }
     }
-    const badge= new Badge();
-    var result = await badge.find(query)
-                            .populate('issuer', {firstname:1, lastname: 1})
-                            .populate('request', {firstname:1, lastname: 1});
+    var resultUser = await Badge.find(query).lean()
+                            .populate({path: 'issuer', model: 'User', select: {firstname:1, lastname: 1}})
+                            .populate({path: 'mentor', model: 'User', select: {firstname:1, lastname: 1}})
+                            .populate({path: 'requestor', model: 'User', select: {firstname:1, lastname: 1}});
+    var resultMultipleUser = await Badge.find(query).lean()
+                            .populate({path: 'issuer', model: 'MultipleUser', select: {firstname:1, lastname: 1}})
+                            .populate({path: 'mentor', model: 'MultipleUser', select: {firstname:1, lastname: 1}})
+                            .populate({path: 'requestor', model: 'MultipleUser', select: {firstname:1, lastname: 1}});
+    var result = resultUser.map((res, i) => {
+      res.issuer.push(...resultMultipleUser[i].issuer);
+      res.mentor.push(...resultMultipleUser[i].mentor);
+      res.requestor.push(...resultMultipleUser[i].requestor);
+      return res;
+    });
     return res.status(200).send({
       message: 'Badges found succesfully.',
       badges: result
@@ -104,7 +118,7 @@ const getBadges = async function(req, res){
  * @apiParam {File} [image] image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)
  *
  * @apiSuccess (Success 200) {String} message `Badge updated successfully.` or </br> `Badge not changed.`
- * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "request":[], "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
+ * @apiSuccess (Success 200) {Object} badge `{"name":"name", "issuer": user, "requestor":[], "description": "description", "criteria":"criteria", "global": false, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}`
  *
  * @apiError (On error) {Object} 404 `{"message": "Badge not found."}`
  * @apiError (On error) {Object} 500 Complications during storage.
@@ -195,6 +209,9 @@ const unassigneProjectBadge = async function(req, res){
       var project = await Project.findById(projectId);
       if(project){
         var user = await User.findById(userId);
+        if(!user){
+          user = await MultipleUser.findById(userId);
+        }
         if(user){
           if(project.participants.indexOf(userId) > -1){
             if(user.badge.indexOf(badgeId) > -1){
@@ -273,6 +290,9 @@ const assigneProjectBadge = async function(req, res){
       var project = await Project.findById(projectId);
       if(project){
         var user = await User.findById(userId);
+        if(!user){
+          user = await MultipleUser.findById(userId);
+        }
         if(user){
           if(project.participants.indexOf(userId) > -1){
             if(user.badge.indexOf(badgeId) < 0){

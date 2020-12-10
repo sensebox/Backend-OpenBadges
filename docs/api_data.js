@@ -266,7 +266,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;requestor&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -631,7 +631,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;:[], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;requestor&quot;:[], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: false, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1535,7 +1535,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;requestor&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1592,7 +1592,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;request&quot;: [], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;: user, &quot;requestor&quot;: [], &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -1677,7 +1677,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;requestor&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -1775,7 +1775,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;requestor&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -2083,7 +2083,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badge",
-            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+            "description": "<p><code>{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;requestor&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;category&quot;: &quot;achievement&quot;, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
           }
         ]
       }
@@ -2806,7 +2806,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "badges",
-            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;requestor&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
           }
         ]
       }
@@ -4323,6 +4323,63 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/v1/teacher/users",
+    "title": "Create users",
+    "name": "teacherCreateUsers",
+    "description": "<p>Sign up new (multiple) OpenBadges-Users.</p>",
+    "group": "Teacher",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "count",
+            "description": "<p>number of accounts to create</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Created 201": [
+          {
+            "group": "Created 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Users are successfully registered.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Count has to be a positive number.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during storage</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/teacher/user.js",
+    "groupTitle": "Teacher"
+  },
+  {
+    "type": "post",
     "url": "/api/v1/user/email/:emailToken",
     "title": "Confirm email",
     "name": "confirmEmail",
@@ -4717,6 +4774,132 @@ define({ "api": [
             "optional": true,
             "field": "email",
             "description": "<p>the new email of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": true,
+            "field": "profile",
+            "description": "<p>image-File (Only images with extension 'PNG', 'JPEG', 'JPG' and 'GIF' are allowed.)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User information updated successfully.</code> or </br> <code>User information not changed.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p><code>{&quot;firstname&quot;:&quot;full firstname&quot;, &quot;lastname&quot;:&quot;full lastname&quot;, &quot;city&quot;:&quot;cityname&quot;, &quot;postalcode&quot;:&quot;123456&quot;, &quot;birthday&quot;:&quot;ISODate(&quot;1970-12-01T00:00:00Z&quot;)&quot;, &quot;email&quot;:&quot;test@test.de&quot;, &quot;username&quot;:&quot;nickname&quot;, &quot;role&quot;:&quot;earner&quot;, &quot;emailIsConfirmed&quot;: false, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Obejct",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/user/user.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/user/me",
+    "title": "Create user",
+    "name": "putMeMultiple",
+    "description": "<p>Create an user based on an existing user that is not complete.</p>",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "firstname",
+            "description": "<p>Name the new full first name of the user; must consist of at least 6 characters</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lastname",
+            "description": "<p>Name the new full last name of the user; must consist of at least 6 characters</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "city",
+            "description": "<p>the user's new place of residence; must consist of at least 2 characters</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "postalcode",
+            "description": "<p>the new postal code of the user's place of residence; minimum 01067, maximal 99998</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>the new email of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "birthday",
+            "description": "<p>the day of birth of the user</p>"
           },
           {
             "group": "Parameter",
