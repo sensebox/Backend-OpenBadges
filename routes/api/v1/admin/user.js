@@ -3,6 +3,7 @@
 "use strict";
 
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 
 
 /**
@@ -26,7 +27,10 @@ const User = require('../../../../models/user');
 const getOneUser = async function(req, res){
   const userId = req.params.userId;
   try{
-    const user = await User.findById(userId, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    var user = await User.findById(userId, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    if(!user){
+      user = await MultipleUser.findById(userId, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    }
     if(user){
       return res.status(200).send({
         message: 'User found successfully.',
@@ -60,11 +64,12 @@ const getOneUser = async function(req, res){
  */
 const getAllUser = async function (req, res){
   try{
-    const user = await User.find({role: {$in: ['earner', 'issuer']}}, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    const user = await User.find({role: {$in: ['earner', 'issuer', 'teacher']}}, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    const multipleUser = await MultipleUser.find({role: {$in: ['earner', 'issuer', 'teacher']}}, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
     if(user){
       return res.status(200).send({
         message: 'All users found successfully.',
-        users: user
+        users: user.concat(multipleUser)
       });
     }
   }

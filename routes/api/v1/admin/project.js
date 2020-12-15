@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const Project = require('../../../../models/project');
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 
 
 /**
@@ -31,7 +32,9 @@ const getParticipants = async function(req, res){
     var projectId = req.params.projectId;
     var project = await Project.findById(projectId);
     if(project){
-      var participants = await User.find({_id: {$in: project.participants}}, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+      var participantsUser = await User.find({_id: {$in: project.participants}}, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+      var participantsMultipleUser = await MultipleUser.find({_id: {$in: project.participants}}, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+      var participants = participantsUser.concat(participantsMultipleUser);
       return res.status(200).send({
         message: 'Participants found successfully.',
         participants: participants

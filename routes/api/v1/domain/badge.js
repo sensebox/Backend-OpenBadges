@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const Domain = require('../../../../models/domain');
 const Badge = require('../../../../models/badge');
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 
 /**
  * @api {get} /api/v1/domain/badge Get Badges
@@ -26,7 +27,7 @@ const User = require('../../../../models/user');
  * @apiParam {String} [category] 'achievement', 'professional skill' or 'meta skill'
  *
  * @apiSuccess (Success 200) {String} message `Badges found successfully.`
- * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "request":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
+ * @apiSuccess (Created 201) {Object} badges `[{"name":"name", "issuer":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "requestor":{"_id": ObjectId, "firstname":"Max", "lastname":"Mustermann"}, "description": "description", "criteria":"criteria", "global": true, "exists": true, "image": {"path": <String>, "size": <Number>, "contentType": "image/jpeg", "originalName": "originalName.jpeg"}}]`
  *
  * @apiError (On error) {Object} 404 `{"message": "User not found."}`
  * @apiError (On error) {Object} 500 Complications during querying the database.
@@ -60,6 +61,9 @@ const getBadges = async function(req, res){
       }
       if(quserId){
         var user = await User.findById(quserId, {badge: 1, _id:0});
+        if(!user){
+          user = await MultipleUser.findById(quserId, {badge: 1, _id:0});
+        }
         if(user){
           query._id = {$in: user.badge};
         }
@@ -69,16 +73,26 @@ const getBadges = async function(req, res){
           });
         }
       }
-      var result = await Badge.find(query)
-                              .populate('issuer', {firstname:1, lastname: 1})
-                              .populate('request', {firstname:1, lastname: 1});
+      var resultUser = await Badge.find(query).lean()
+                              .populate({path: 'issuer', model: 'User', select: {firstname:1, lastname: 1}})
+                              .populate({path: 'mentor', model: 'User', select: {firstname:1, lastname: 1}})
+                              .populate({path: 'requestor', model: 'User', select: {firstname:1, lastname: 1}});
+      var resultMultipleUser = await Badge.find(query).lean()
+                              .populate({path: 'issuer', model: 'MultipleUser', select: {firstname:1, lastname: 1}})
+                              .populate({path: 'mentor', model: 'MultipleUser', select: {firstname:1, lastname: 1}})
+                              .populate({path: 'requestor', model: 'MultipleUser', select: {firstname:1, lastname: 1}});
+      var result = resultUser.map((res, i) => {
+        res.mentor.push(...resultMultipleUser[i].mentor);
+        res.requestor.push(...resultMultipleUser[i].requestor);
+        res.issuer.push(...resultMultipleUser[i].issuer);
+        return res;
+      });
       return res.status(200).send({
         message: 'Badges found succesfully.',
         badges: result
       });
   }
   catch(err){
-    console.log(err);
     return res.status(500).send(err);
   }
 };
@@ -110,6 +124,9 @@ const assigneBadge = async function(req, res){
     var badge = await Badge.findById(badgeId);
     if(badge){
       var user = await User.findById(userId);
+      if(!user){
+        user = await MultipleUser.findById(userId);
+      }
       if(user){
         if(user.badge.indexOf(badgeId) < 0){
           // badge is not assigned to user
@@ -166,9 +183,11 @@ const assigneBadge = async function(req, res){
 const getOneUser = async function(req, res){
   const userId = req.params.userId;
   try{
-    const user = await User.findById(userId, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    var user = await User.findById(userId, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    if(!user){
+      user = await MultipleUser.findById(userId, {_id: 0, __v: 0, password: 0, emailConfirmationToken: 0, resetPasswordToken: 0, resetPasswordExpiresIn: 0, refreshToken: 0, refreshTokenExpiresIn: 0});
+    }
     if(user){
-      console.log(user);
       return res.status(200).send({
         message: 'User found successfully.',
         user: user

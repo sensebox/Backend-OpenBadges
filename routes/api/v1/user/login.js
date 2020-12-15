@@ -9,6 +9,7 @@ const uuid = require('uuid');
 const nodemailer = require('nodemailer');
 
 const User = require('../../../../models/user');
+const MultipleUser = require('../../../../models/multipleUser');
 const {registerValidation, resetPasswordValidation} = require('../../../../helper/validation');
 const {createToken, isTokenValid, invalidateToken} = require('../../../../helper/authorization/jwt');
 const {hashJWT} = require('../../../../helper/authorization/refreshToken');
@@ -45,9 +46,15 @@ const postRegister = async function(req, res){
   const {error} = registerValidation(req.body);
   if(error) return res.status(422).send({message: error.details[0].message});
   // checking if user is already in db
-  const emailExists = await User.findOne({email: req.body.email});
+  var emailExists = await User.findOne({email: req.body.email});
+  if(!emailExists){
+    emailExists = await MultipleUser.findOne({email: req.body.email});
+  }
   if(emailExists) return res.status(409).send({message: 'Email already exists'});
-  const usernameExists = await User.findOne({username: req.body.username});
+  var usernameExists = await User.findOne({username: req.body.username});
+  if(!usernameExists){
+    usernameExists = await MultipleUser.findOne({username: req.body.username});
+  }
   if(usernameExists) return res.status(409).send({message: 'Username already exists'});
   // hash password
   const salt = await bcrypt.genSalt(10);
@@ -98,10 +105,10 @@ const postRegister = async function(req, res){
       }
     });
 
-    const link = 
-      process.env.NODE_ENV === "production" 
+    const link =
+      process.env.NODE_ENV === "production"
       ? `https://${process.env.APP_HOST}${process.env.EMAIL_TOKEN_URL}?token=${savedUser.emailConfirmationToken}`
-      : `http://${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.EMAIL_TOKEN_URL}?token=${savedUser.emailConfirmationToken}`      
+      : `http://${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.EMAIL_TOKEN_URL}?token=${savedUser.emailConfirmationToken}`
 
     var mailOptions = {
         from: '"MyBadges"'+email, // sender address
@@ -190,7 +197,10 @@ const confirmEmail = async function (req, res){
 const postLogin = async function(req, res){
   try{
     // checking if the username exists
-    const user = await User.findOne({username: req.body.username});
+    var user = await User.findOne({username: req.body.username});
+    if(!user){
+      user = await MultipleUser.findOne({username: req.body.username});
+    }
     if(!user) return res.status(403).send({message:'Username or password is wrong'});
     // checking if password is correct
     const validPassword = await bcrypt.compare(req.body.password, user.password);
@@ -253,10 +263,10 @@ const requestResetPassword = async function (req, res){
         }
       });
 
-      const link = 
-        process.env.NODE_ENV === "production" 
+      const link =
+        process.env.NODE_ENV === "production"
         ? `https://${process.env.APP_HOST}${process.env.PASSWORD_TOKEN_URL}?token=${token}`
-        : `http://${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.PASSWORD_TOKEN_URL}?token=${token}`      
+        : `http://${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.PASSWORD_TOKEN_URL}?token=${token}`
 
       var mailOptions = {
           from: '"MyBadges"'+email, // sender address
@@ -350,6 +360,7 @@ const postLogout = async function(req, res){
     // invalidate JWT
     await invalidateToken(token);
     await User.updateOne({_id: req.user.id}, {refreshToken: '', refreshTokenExpiresIn: moment.utc().subtract(1, 'h').toDate()});
+    await MultipleUser.updateOne({_id: req.user.id}, {refreshToken: '', refreshTokenExpiresIn: moment.utc().subtract(1, 'h').toDate()});
     res.status(200).send({
       message: 'Signed out successfully.'});
   }
