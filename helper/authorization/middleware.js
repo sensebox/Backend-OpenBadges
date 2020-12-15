@@ -1,11 +1,13 @@
 // jshint esversion: 8
 // jshint node: true
 "use strict";
- 
+
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const User = require('../../models/user');
+const Domain = require('../../models/domain');
 const TokenBlacklist = require('../../models/tokenBlacklist');
 const isTokenInvalid = require('./jwt');
 
@@ -119,7 +121,30 @@ const adminAuthorization = async function(req, res, next){
   }
 };
 
+const originAuthorization = async function(req, res, next){
+  try{
+    // get JWT from authorization-header
+    const rawAuthorizationHeader = req.header('authorization');
+    var token;
+    if(rawAuthorizationHeader){
+      [, token] = rawAuthorizationHeader.split(' ');
+    }
+    var decoded = jwt.verify(token, process.env.JWT_Token_Secret);
+    var domain = await Domain.findOne({_id: decoded.id});
+    if(domain){
+      next();
+    }
+    else {
+      return res.status(401).send({message:'Unauthorized'});
+    }
+  }
+  catch(err){
+    return res.status(401).send({message:'Unauthorized'});
+  }
+};
+
 module.exports = {
   userAuthorization,
-  adminAuthorization
+  adminAuthorization,
+  originAuthorization
 };

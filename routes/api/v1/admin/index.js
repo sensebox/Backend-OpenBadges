@@ -14,6 +14,7 @@ const login = require('./login');
 const user = require('./user');
 const badge = require('./badge');
 const project = require('./project');
+const domain = require('./domain');
 const {adminAuthorization} = require('../../../../helper/authorization/middleware');
 const {upload} = require('../../../../helper/imageUpload');
 
@@ -47,6 +48,15 @@ AdminRouter.route('/badge/:badgeId/project/:projectId/unassigne/user/:userId')
 
 AdminRouter.route('/project/:projectId/participants')
     .get(adminAuthorization, project.getParticipants);
+
+AdminRouter.route('/domain')
+    .post(adminAuthorization, domain.postDomain);
+
+AdminRouter.route('/domain')
+    .get(adminAuthorization, domain.getDomains);
+
+AdminRouter.route('/domain/:domainId')
+    .delete(adminAuthorization, domain.deleteDomain);
 
 
 module.exports = AdminRouter;

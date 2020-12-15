@@ -98,6 +98,83 @@
     "groupTitle": "Admin"
   },
   {
+    "type": "delete",
+    "url": "/api/v1/admin/domain/domainId",
+    "title": "Ban domain",
+    "name": "adminDeleteDomain",
+    "description": "<p>Ban domain from collection, which can access specific routes.</p>",
+    "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "domainId",
+            "description": "<p>the ID of the Domain you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Domain deleted successfully.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Domain not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during storage.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/domain.js",
+    "groupTitle": "Admin"
+  },
+  {
     "type": "get",
     "url": "/api/v1/admin/badge",
     "title": "Get Badges",
@@ -220,6 +297,70 @@
   },
   {
     "type": "get",
+    "url": "/api/v1/admin/domain",
+    "title": "Get all domains",
+    "name": "adminGetDomains",
+    "description": "<p>Get domains, which can access specific routes.</p>",
+    "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Domain found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "domain",
+            "description": "<p><code>{&quot;domain&quot;:&quot;http://localhost:3000&quot;, &quot;description&quot;: &quot;further information&quot;}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during storage.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/domain.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "get",
     "url": "/api/v1/project/:projectId/participants",
     "title": "Get participants of one project",
     "name": "adminGetParticipants",
@@ -300,6 +441,97 @@
     },
     "version": "0.0.0",
     "filename": "./routes/api/v1/admin/project.js",
+    "groupTitle": "Admin"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/admin/domain",
+    "title": "Allow domain",
+    "name": "adminPostDomain",
+    "description": "<p>Add domain to collection, which can access specific routes.</p>",
+    "group": "Admin",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "domain",
+            "description": "<p>name of the domain, e.g. http://localhost:3000</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>further information about the domain</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Domain is successfully added.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "domain",
+            "description": "<p><code>{&quot;domain&quot;:&quot;http://localhost:3000&quot;, &quot;description&quot;: &quot;further information&quot;}</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>valid JSON Web Token</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during storage.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/admin/domain.js",
     "groupTitle": "Admin"
   },
   {
@@ -2390,6 +2622,302 @@
     "group": "C__Users_LucNi_OneDrive_Documents_Studium_Semester_6_SHK_senseBox_OpenBadges_Backend_docs_main_js",
     "groupTitle": "C__Users_LucNi_OneDrive_Documents_Studium_Semester_6_SHK_senseBox_OpenBadges_Backend_docs_main_js",
     "name": ""
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/domain/badge/:badgeId/assigne/user/:userId",
+    "title": "Assigne a Badge",
+    "name": "domainAssigneBadge",
+    "description": "<p>Assigne a Badge to an user. Only accessible for certain domains.</p>",
+    "group": "Domain",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badge is assigned successfully to user.</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "400",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge is already assigned to user.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;Badge not found.&quot;}</code> or </br> <code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/domain/badge.js",
+    "groupTitle": "Domain"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/domain/badge",
+    "title": "Get Badges",
+    "name": "domainFindBadge",
+    "description": "<p>Get (all) Badges by different query. Only accessible for certain domains.</p>",
+    "group": "Domain",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>find Badges by its name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>find Badges by its description</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "issuer",
+            "description": "<p>the ID of the issuer you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "badgeId",
+            "description": "<p>the ID of the Badge you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObejctId",
+            "optional": true,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "category",
+            "description": "<p>'achievement', 'professional skill' or 'meta skill'</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>Badges found successfully.</code></p>"
+          }
+        ],
+        "Created 201": [
+          {
+            "group": "Created 201",
+            "type": "Object",
+            "optional": false,
+            "field": "badges",
+            "description": "<p><code>[{&quot;name&quot;:&quot;name&quot;, &quot;issuer&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;request&quot;:{&quot;_id&quot;: ObjectId, &quot;firstname&quot;:&quot;Max&quot;, &quot;lastname&quot;:&quot;Mustermann&quot;}, &quot;description&quot;: &quot;description&quot;, &quot;criteria&quot;:&quot;criteria&quot;, &quot;global&quot;: true, &quot;exists&quot;: true, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}]</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/domain/badge.js",
+    "groupTitle": "Domain"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/domain/user/:userId",
+    "title": "Get one user",
+    "name": "domainGetOneUser",
+    "description": "<p>Get details about one user. Only accessible for certain domains.</p>",
+    "group": "Domain",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>allows to send a valid JSON Web Token along with this request with <code>Bearer</code> prefix.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Authorization Header Example",
+          "content": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMTk5OTEwY2QxMDgyMjA3Y2Y1ZGM2ZiIsImlhdCI6MTU3ODg0NDEwOSwiZXhwIjoxNTc4ODUwMTA5fQ.D4NKx6uT3J329j7JrPst6p02d311u7AsXVCUEyvoiTo",
+          "type": "String"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>the ID of the user you are referring to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p><code>User found successfully.</code></p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p><code>{&quot;firstname&quot;:&quot;full firstname&quot;, &quot;lastname&quot;:&quot;full lastname&quot;, &quot;city&quot;:&quot;cityname&quot;, &quot;postalcode&quot;:&quot;123456&quot;, &quot;birthday&quot;:&quot;ISODate(&quot;1970-12-01T00:00:00Z&quot;)&quot;, &quot;email&quot;:&quot;test@test.de&quot;, &quot;username&quot;:&quot;nickname&quot;, &quot;role&quot;:&quot;earner&quot;, &quot;emailIsConfirmed&quot;: false, &quot;image&quot;: {&quot;path&quot;: &lt;String&gt;, &quot;size&quot;: &lt;Number&gt;, &quot;contentType&quot;: &quot;image/jpeg&quot;, &quot;originalName&quot;: &quot;originalName.jpeg&quot;}}</code></p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "On error": [
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "404",
+            "description": "<p><code>{&quot;message&quot;: &quot;User not found.&quot;}</code></p>"
+          },
+          {
+            "group": "On error",
+            "type": "Object",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Complications during querying the database.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./routes/api/v1/domain/badge.js",
+    "groupTitle": "Domain"
   },
   {
     "type": "post",
