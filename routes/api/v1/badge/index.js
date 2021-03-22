@@ -23,6 +23,9 @@ BadgeRouter.route('/')
 BadgeRouter.route('/me')
     .get(userAuthorization, require('./badge').getBadgesMe);
 
+BadgeRouter.route('/:badgeId.json')
+    .get(require('./badge').getBadgeJSON);
+
 BadgeRouter.route('/:badgeId')
     .get(require('./badge').getBadge);
 

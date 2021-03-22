@@ -16,6 +16,7 @@ V1Router.use('/user', require('./user'));
 V1Router.use('/admin', require('./admin'));
 V1Router.use('/project', require('./project'));
 V1Router.use('/badge', require('./badge'));
+V1Router.use('/assertion', require('./assertion'));
 V1Router.use('/domain', require('./domain'));
 V1Router.use('/teacher', require('./teacher'));
 

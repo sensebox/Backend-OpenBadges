@@ -7,9 +7,11 @@ const fs = require('fs');
 const path = require('path');
 
 const Badge = require('../../../../models/badge');
+const Assertion = require('../../../../models/assertion');
 const User = require('../../../../models/user');
 const MultipleUser = require('../../../../models/multipleUser');
 const {badgeValidation} = require('../../../../helper/validation/badge');
+const BadgeClass = require('../../../../models/badgeClass');
 
 /**
  * @api {get} /api/v1/badge Get Badges
@@ -188,6 +190,26 @@ const getBadge = async function(req, res){
 };
 
 
+const getBadgeJSON = async function(req, res){
+  try{
+    var id = req.params.badgeId;
+    var badgeClass = await BadgeClass.findById(id);
+
+    if(badgeClass){
+      return res.status(200).send(badgeClass);
+    }
+    else {
+      return res.status(404).send({
+        message: 'BadgeClass not found.',
+      });
+    }
+  }
+  catch(err){
+    return res.status(500).send(err);
+  }
+};
+
+
 /**
  * @api {post} /api/v1/badge Create Badge
  * @apiName createBadge
@@ -237,12 +259,47 @@ const postBadge = async function(req, res){
 
     const badge = new Badge(body);
     const savedBadge = await badge.save();
+
+
+    const badgeClassData = {
+        name: badge.name,
+        description: badge.description,
+        image: badge.image.path || '' ,
+        criteria: badge.criteria,
+        issuer: badge.issuer[0]
+      }
+
+      const badgeClass = new BadgeClass(badgeClassData)
+      const savedBadgeClass = await badgeClass.save()
+  
+    let assertionData = {
+      _id: new mongoose.Types.ObjectId(),
+      type: "testAssertion",
+      recipient: req.user.id,
+      badge: savedBadgeClass,
+      verification: false,
+    };
+    if(req.file){
+      const image = {
+        path: req.file.filename,
+        size: req.file.size,
+        contentType: req.file.mimetype,
+        originalName: req.file.originalname,
+      };
+      assertionData.image = image;
+    }
+
+    
+    const assertion = new Assertion(assertionData);
+    const savedAssertion = await assertion.save();
+
     return res.status(201).send({
       message: 'Badge is succesfully created.',
       badge: savedBadge
     });
   }
   catch(err){
+    console.log(err)
     return res.status(500).send(err);
   }
 };
@@ -405,6 +462,7 @@ module.exports = {
   getBadges,
   getBadgesMe,
   getBadge,
+  getBadgeJSON,
   postBadge,
   putBadge,
   putBadgeHidden
